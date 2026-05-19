@@ -250,22 +250,42 @@ function Tarneeb400RoundForm({
   const minTotal = tarneeb400MinTotalBid(totals);
   const bidTotal = bids.reduce((sum, bid) => sum + (Number(bid) || 0), 0);
   const tricksTotal = tricks.reduce((sum, trick) => sum + (Number(trick) || 0), 0);
+  const bidReady = bidTotal >= minTotal;
+  const tricksReady = tricksTotal === 13;
 
   return (
     <div className="space-y-3">
-      <div className="rounded-xl border border-slate-200 p-3 text-xs text-slate-500 dark:border-white/10">
-        {en ? 'Total bids minimum' : 'أقل مجموع للطلبات'}: {minTotal} • {en ? 'Current' : 'الحالي'}: {bidTotal}
+      <div className="grid grid-cols-2 gap-2">
+        <div className={'rounded-2xl border p-3 text-center ' + (bidReady ? 'border-emerald-500/40 bg-emerald-500/10' : 'border-amber-500/40 bg-amber-500/10')}>
+          <div className="text-[11px] font-bold text-slate-500 dark:text-slate-400">{en ? 'Bids' : 'الطلبات'}</div>
+          <div className="mt-1 text-xl font-extrabold text-slate-900 dark:text-white">{bidTotal}</div>
+          <div className="text-[11px] text-slate-500 dark:text-slate-400">{en ? 'minimum' : 'الأقل'} {minTotal}</div>
+        </div>
+        <div className={'rounded-2xl border p-3 text-center ' + (tricksReady ? 'border-emerald-500/40 bg-emerald-500/10' : 'border-slate-300/70 dark:border-white/10')}>
+          <div className="text-[11px] font-bold text-slate-500 dark:text-slate-400">{en ? 'Tricks' : 'اللمات'}</div>
+          <div className="mt-1 text-xl font-extrabold text-slate-900 dark:text-white">{tricksTotal}</div>
+          <div className="text-[11px] text-slate-500 dark:text-slate-400">/ 13</div>
+        </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-3">
+      <div className="overflow-hidden rounded-2xl border border-slate-200 dark:border-white/10">
+        <div className="grid grid-cols-[1fr_5rem_5.5rem] gap-2 border-b border-slate-200 bg-slate-50 px-3 py-2 text-[11px] font-extrabold text-slate-500 dark:border-white/10 dark:bg-white/5 dark:text-slate-400">
+          <span>{en ? 'Player' : 'اللاعب'}</span>
+          <span className="text-center">{en ? 'Bid' : 'الطلب'}</span>
+          <span className="text-center">{en ? 'Tricks' : 'اللمات'}</span>
+        </div>
         {players.map((player, i) => {
           const minBid = tarneeb400MinBid(totals[i]);
           return (
-            <div key={player} className="rounded-xl border border-slate-200 p-2 dark:border-white/10">
-              <div className="mb-2 truncate text-xs font-bold text-slate-500">{player} ({totals[i]})</div>
-              <label className="mb-1 block text-[10px] font-bold text-slate-400">{en ? 'Bid' : 'الطلب'}</label>
+            <div key={player} className="grid grid-cols-[1fr_5rem_5.5rem] items-center gap-2 border-b border-slate-200 px-3 py-2 last:border-b-0 dark:border-white/10">
+              <div className="min-w-0">
+                <div className="truncate text-sm font-extrabold text-slate-800 dark:text-slate-100">{player}</div>
+                <div className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">
+                  {en ? 'Score' : 'النقاط'}: {totals[i] ?? 0}
+                </div>
+              </div>
               <select
-                className="input mb-2"
+                className="input h-11 px-2 text-center text-base font-bold"
                 value={bids[i]}
                 onChange={(e) => {
                   const next = [...bids];
@@ -277,14 +297,14 @@ function Tarneeb400RoundForm({
                   <option key={value} value={value}>{value}</option>
                 ))}
               </select>
-              <label className="mb-1 block text-[10px] font-bold text-slate-400">{en ? 'Tricks' : 'اللمات'}</label>
               <input
                 type="number"
                 inputMode="numeric"
                 min={0}
                 max={13}
-                className="input"
+                className="input h-11 px-2 text-center text-base font-bold"
                 value={tricks[i]}
+                placeholder="0"
                 onChange={(e) => {
                   const next = [...tricks];
                   next[i] = e.target.value === '' ? '' : String(Math.max(0, Math.min(13, Number(e.target.value) || 0)));
@@ -294,9 +314,6 @@ function Tarneeb400RoundForm({
             </div>
           );
         })}
-      </div>
-      <div className={'text-xs ' + (tricksTotal === 13 ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-500')}>
-        {en ? 'Tricks total' : 'مجموع اللمات'}: {tricksTotal} / 13
       </div>
     </div>
   );

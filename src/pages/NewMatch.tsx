@@ -6,6 +6,7 @@ import { useMatches } from '../store/matches';
 import { useState } from 'react';
 import { copy, gameText } from '../i18n';
 import { useSettings } from '../store/settings';
+import { TARNEEB_DEFAULT_TARGET, TARNEEB_TARGETS } from '../logic/tarneeb';
 
 const COUNT: Record<GameKind, number> = {
   likha: 4,
@@ -13,6 +14,8 @@ const COUNT: Record<GameKind, number> = {
   'hand-partners': 4,
   trix: 4,
   complex: 4,
+  tarneeb: 4,
+  'tarneeb-400': 4,
 };
 
 export default function NewMatch() {
@@ -21,11 +24,13 @@ export default function NewMatch() {
   const { createMatch } = useMatches();
   const { language } = useSettings();
   const t = copy[language];
-  const isPartners = kind === 'hand-partners';
+  const isPartners = kind === 'hand-partners' || kind === 'tarneeb';
   const isLikha = kind === 'likha';
   const isHandSolo = kind === 'hand-solo';
+  const isTarneeb = kind === 'tarneeb';
 
   const [target, setTarget] = useState(101);
+  const [tarneebTarget, setTarneebTarget] = useState<number>(TARNEEB_DEFAULT_TARGET);
   const [handSoloPlayers, setHandSoloPlayers] = useState(2);
 
   if (!kind || !(kind in COUNT)) {
@@ -57,6 +62,27 @@ export default function NewMatch() {
                 value={target}
                 onChange={(e) => setTarget(Number(e.target.value))}
               />
+            </div>
+          ) : isTarneeb ? (
+            <div>
+              <label className="label">{language === 'ar' ? 'هدف المباراة' : 'Match target'}</label>
+              <div className="grid grid-cols-3 gap-2">
+                {TARNEEB_TARGETS.map((value) => (
+                  <button
+                    key={value}
+                    type="button"
+                    className={
+                      'rounded-xl border px-3 py-2 text-sm font-bold ' +
+                      (tarneebTarget === value
+                        ? 'border-emerald-600 bg-emerald-600 text-white'
+                        : 'border-slate-300 dark:border-slate-700')
+                    }
+                    onClick={() => setTarneebTarget(value)}
+                  >
+                    {value}
+                  </button>
+                ))}
+              </div>
             </div>
           ) : isHandSolo ? (
             <div>
@@ -95,6 +121,8 @@ export default function NewMatch() {
             teams,
             config: isLikha
               ? { target, originalNames: names }
+              : isTarneeb
+                ? { target: tarneebTarget, originalNames: names }
               : isHandSolo
                 ? { playerCount: handSoloPlayers, originalNames: names }
               : { originalNames: names },

@@ -7,7 +7,7 @@ import { useSettings } from '../store/settings';
 import { PlayerAvatar } from '../components/PlayerAvatar';
 import { Trophy, Target, TrendingDown, Hash, Crown, Medal, Flame, Percent } from 'lucide-react';
 
-const GAME_FILTERS: ('all' | GameKind)[] = ['all', 'likha', 'hand-solo', 'hand-partners'];
+const GAME_FILTERS: ('all' | GameKind)[] = ['all', 'likha', 'hand-solo', 'hand-partners', 'trix', 'complex', 'tarneeb', 'tarneeb-400'];
 
 const GRADIENTS: Record<string, string> = {
   all: 'from-[#10b981] to-[#059669]',
@@ -16,6 +16,8 @@ const GRADIENTS: Record<string, string> = {
   'hand-partners': 'from-[#f59e0b] to-[#ef4444]',
   trix: 'from-[#0ea5e9] to-[#2563eb]',
   complex: 'from-[#10b981] to-[#0d9488]',
+  tarneeb: 'from-[#7c3aed] to-[#db2777]',
+  'tarneeb-400': 'from-[#0891b2] to-[#16a34a]',
 };
 
 interface PStat {
@@ -66,7 +68,7 @@ function buildStats(matches: Match[], gameFilter: 'all' | GameKind): PStat[] {
     const playerNames: string[] = [];
     const playerScores: number[] = [];
 
-    if (m.kind === 'hand-partners' && m.config?.originalNames?.length >= 4) {
+    if ((m.kind === 'hand-partners' || m.kind === 'tarneeb') && m.config?.originalNames?.length >= 4) {
       // Team 1: originalNames[0] + originalNames[2], Team 2: originalNames[1] + originalNames[3]
       const oNames = m.config.originalNames as string[];
       playerNames.push(oNames[0], oNames[1], oNames[2], oNames[3]);

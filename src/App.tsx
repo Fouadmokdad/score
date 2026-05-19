@@ -10,6 +10,7 @@ import HandSoloGame from './pages/games/HandSoloGame';
 import HandPartnersGame from './pages/games/HandPartnersGame';
 import TrixGame from './pages/games/TrixGame';
 import ComplexGame from './pages/games/ComplexGame';
+import TarneebGame from './pages/games/TarneebGame';
 
 export default function App() {
   const { theme, language, accentColor } = useSettings();
@@ -28,6 +29,8 @@ export default function App() {
       <Route path="/match/:id/hand-partners" element={<HandPartnersGame />} />
       <Route path="/match/:id/trix" element={<TrixGame />} />
       <Route path="/match/:id/complex" element={<ComplexGame />} />
+      <Route path="/match/:id/tarneeb" element={<TarneebGame variant="regular" />} />
+      <Route path="/match/:id/tarneeb-400" element={<TarneebGame variant="400" />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );

@@ -1,4 +1,4 @@
-export type GameKind = 'likha' | 'hand-solo' | 'hand-partners' | 'trix' | 'complex';
+export type GameKind = 'likha' | 'hand-solo' | 'hand-partners' | 'trix' | 'complex' | 'tarneeb' | 'tarneeb-400';
 
 export const GAME_LABELS: Record<GameKind, string> = {
   likha: 'ليخة',
@@ -6,6 +6,8 @@ export const GAME_LABELS: Record<GameKind, string> = {
   'hand-partners': 'هند شراكة',
   trix: 'تركس',
   complex: 'كومبلكس',
+  tarneeb: 'طرنيب',
+  'tarneeb-400': 'طرنيب 400',
 };
 
 export const GAME_DESCRIPTIONS: Record<GameKind, string> = {
@@ -14,6 +16,8 @@ export const GAME_DESCRIPTIONS: Record<GameKind, string> = {
   'hand-partners': 'هند شراكة 2×2، أول فريق يربح 5 جولات من 9',
   trix: '5 عقود × 4 جولات مع التتويج والمضاعفة',
   complex: 'مزيج بلوت/هند مع تركس على مرحلتين',
+  tarneeb: 'طرنيب شراكة 2×2، طلب ولمّات حتى الهدف',
+  'tarneeb-400': 'طرنيب 400 بحساب فردي وشراكة للفوز',
 };
 
 /** A single round entry; structure depends on game kind. */

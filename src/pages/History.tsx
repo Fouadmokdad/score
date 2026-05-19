@@ -16,6 +16,8 @@ const GRADIENTS: Record<GameKind, string> = {
   'hand-partners': 'from-[#f59e0b] to-[#ef4444]',
   trix: 'from-[#0ea5e9] to-[#2563eb]',
   complex: 'from-[#10b981] to-[#0d9488]',
+  tarneeb: 'from-[#7c3aed] to-[#db2777]',
+  'tarneeb-400': 'from-[#0891b2] to-[#16a34a]',
 };
 
 /* ─── helpers ─── */

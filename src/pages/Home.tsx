@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Layout } from '../components/Layout';
 import { type GameKind } from '../types';
 import { useMatches, computeTotals } from '../store/matches';
-import { Spade, Trophy, Users, Layers, Crown, Heart, Trash2, Sparkles, Plus, X, ChevronLeft } from 'lucide-react';
+import { Spade, Users, Layers, Crown, Heart, Trash2, Sparkles, Plus, ChevronLeft, Gem } from 'lucide-react';
 import { copy, gameText } from '../i18n';
 import { useSettings } from '../store/settings';
 import { PlayerAvatarGroup, PlayerAvatar } from '../components/PlayerAvatar';
@@ -16,6 +16,8 @@ const ICONS: Record<GameKind, React.ReactNode> = {
   'hand-partners': <Users className="h-7 w-7 drop-shadow-sm" />,
   trix: <Crown className="h-7 w-7 drop-shadow-sm" />,
   complex: <Layers className="h-7 w-7 drop-shadow-sm" />,
+  tarneeb: <Gem className="h-7 w-7 drop-shadow-sm" />,
+  'tarneeb-400': <Spade className="h-7 w-7 drop-shadow-sm" />,
 };
 
 const GRADIENTS: Record<GameKind, string> = {
@@ -24,9 +26,11 @@ const GRADIENTS: Record<GameKind, string> = {
   'hand-partners': 'from-[#f59e0b] to-[#ef4444]',
   trix: 'from-[#0ea5e9] to-[#2563eb]',
   complex: 'from-[#10b981] to-[#0d9488]',
+  tarneeb: 'from-[#7c3aed] to-[#db2777]',
+  'tarneeb-400': 'from-[#0891b2] to-[#16a34a]',
 };
 
-const GAMES: GameKind[] = ['likha', 'hand-solo', 'hand-partners'];
+const GAMES: GameKind[] = ['likha', 'hand-solo', 'hand-partners', 'trix', 'complex', 'tarneeb', 'tarneeb-400'];
 
 export default function Home() {
   const navigate = useNavigate();

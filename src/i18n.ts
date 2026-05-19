@@ -95,6 +95,8 @@ export const gameText: Record<Language, { labels: Record<GameKind, string>; desc
       'hand-partners': 'هند شراكة',
       trix: 'تركس',
       complex: 'كومبلكس',
+      tarneeb: 'طرنيب',
+      'tarneeb-400': 'طرنيب 400',
     },
     descriptions: {
       likha: 'أدخل نقاط الجولة مباشرة، مجموع كل جولة 36، وأول من يصل 101 تنتهي اللعبة',
@@ -102,6 +104,8 @@ export const gameText: Record<Language, { labels: Record<GameKind, string>; desc
       'hand-partners': 'هند شراكة 2 ضد 2، أول فريق يربح 5 جولات من 9',
       trix: '5 عقود × 4 جولات مع التتويج والمضاعفة',
       complex: 'مزيج ليخة وتركس على مرحلتين',
+      tarneeb: 'طرنيب شراكة 2 ضد 2، الطلب من 7 إلى 13 والهدف قابل للتحديد',
+      'tarneeb-400': 'طرنيب 400: حساب فردي، القلوب حكم، والفوز عند 41 مع الشريك فوق الصفر',
     },
   },
   en: {
@@ -111,6 +115,8 @@ export const gameText: Record<Language, { labels: Record<GameKind, string>; desc
       'hand-partners': 'Hand Partners',
       trix: 'Trix',
       complex: 'Complex',
+      tarneeb: 'Tarneeb',
+      'tarneeb-400': 'Tarneeb 400',
     },
     descriptions: {
       likha: 'Enter round scores directly. Each round totals 36. Game ends at 101.',
@@ -118,6 +124,8 @@ export const gameText: Record<Language, { labels: Record<GameKind, string>; desc
       'hand-partners': '2v2 Hand. First team to win 5 of 9 rounds wins.',
       trix: '5 contracts across 4 kingdoms with crown doubling.',
       complex: 'Likha and Trix combined in two phases.',
+      tarneeb: '2v2 Tarneeb with 7-13 bids and a configurable target.',
+      'tarneeb-400': 'Individual 400 scoring with partnership win condition at 41.',
     },
   },
 };

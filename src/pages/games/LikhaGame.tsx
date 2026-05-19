@@ -40,6 +40,21 @@ export default function LikhaGame() {
   const parsedScores = scores.map((score) => Number(score) || 0);
   const roundTotal = parsedScores.reduce((a, b) => a + b, 0);
 
+  const fillRemainingScore = (nextScores: string[]) => {
+    const emptyIndexes = nextScores
+      .map((score, idx) => (score === '' ? idx : -1))
+      .filter((idx) => idx !== -1);
+
+    if (emptyIndexes.length !== 1) return nextScores;
+
+    const sum = nextScores.reduce((acc, val) => acc + (Number(val) || 0), 0);
+    if (sum > LIKHA_PER_HAND) return nextScores;
+
+    const filled = [...nextScores];
+    filled[emptyIndexes[0]] = String(LIKHA_PER_HAND - sum);
+    return filled;
+  };
+
   const submit = () => {
     const r = calcLikhaRound({ scores: parsedScores });
     if (!r.ok) {
@@ -147,17 +162,13 @@ export default function LikhaGame() {
                       const next = [...scores];
                       const value = e.target.value;
                       next[i] = value === '' ? '' : String(Math.max(0, Math.min(LIKHA_PER_HAND, Number(value) || 0)));
-                      
-                      const emptyCount = next.filter((s) => s === '').length;
-                      if (emptyCount === 1) {
-                        const sum = next.reduce((acc, val) => acc + (Number(val) || 0), 0);
-                        if (sum <= LIKHA_PER_HAND) {
-                          const emptyIdx = next.findIndex((s) => s === '');
-                          next[emptyIdx] = String(LIKHA_PER_HAND - sum);
-                        }
-                      }
-                      
                       setScores(next);
+                    }}
+                    onBlur={() => setScores((current) => fillRemainingScore(current))}
+                    onFocus={() => {
+                      if (scores[i] === '' && scores.filter((score) => score === '').length === 1) {
+                        setScores((current) => fillRemainingScore(current));
+                      }
                     }}
                   />
                 </div>

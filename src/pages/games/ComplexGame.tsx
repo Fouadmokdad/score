@@ -55,6 +55,10 @@ export default function ComplexGame({ variant = 'solo' }: { variant?: 'solo' | '
     `${match.players[0]} ${en ? '&' : 'و'} ${match.players[2]}`,
     `${match.players[1]} ${en ? '&' : 'و'} ${match.players[3]}`,
   ];
+  const teamAvatarGroups = [
+    [match.players[0], match.players[2]],
+    [match.players[1], match.players[3]],
+  ];
   const teamTotals = [displayTotals[0] + displayTotals[2], displayTotals[1] + displayTotals[3]];
   const tableMatch = variant === 'partners'
     ? {
@@ -134,7 +138,12 @@ export default function ComplexGame({ variant = 'solo' }: { variant?: 'solo' | '
   return (
     <Layout back title={title} headerAction={<ShareButton targetId="score-table-capture" />}>
       <div id="score-table-capture" className="bg-[#f8fafc] dark:bg-[#1b1a17] -mx-1 px-1 pb-2">
-        <GameScoreHeader match={match} totals={variant === 'partners' ? teamTotals : undefined} labels={variant === 'partners' ? teamLabels : undefined} />
+        <GameScoreHeader
+          match={match}
+          totals={variant === 'partners' ? teamTotals : undefined}
+          labels={variant === 'partners' ? teamLabels : undefined}
+          avatarGroups={variant === 'partners' ? teamAvatarGroups : undefined}
+        />
         <div className="game-status">
           <span>{en ? 'Round' : 'جولة'} {match.rounds.length + 1} {en ? 'of' : 'من'} {TOTAL_COMPLEX_ROUNDS}</span>
           <span>{en ? 'Remaining' : 'المتبقي'}: {remaining}</span>

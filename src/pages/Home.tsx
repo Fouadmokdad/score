@@ -40,6 +40,37 @@ const GRADIENTS: Record<GameKind, string> = {
 
 const GAMES: GameKind[] = ['likha', 'hand-solo', 'hand-partners', 'trix-solo', 'trix-partners', 'complex-solo', 'complex-partners', 'tarneeb', 'tarneeb-400'];
 
+const GAME_IMAGES: Partial<Record<GameKind, string>> = {
+  likha: '/games/likha.png',
+  'hand-solo': '/games/hand.png',
+  'hand-partners': '/games/hand-partners.png',
+  'trix-solo': '/games/trix.png',
+  'trix-partners': '/games/trix.png',
+  'complex-solo': '/games/trix-complex.png',
+  'complex-partners': '/games/trix-complex.png',
+  tarneeb: '/games/tarneeb.png',
+  'tarneeb-400': '/games/tarneeb-400.png',
+};
+
+function GameArt({ game, label }: { game: GameKind; label: string }) {
+  const [failed, setFailed] = useState(false);
+  const image = GAME_IMAGES[game];
+
+  if (!image || failed) {
+    return <>{ICONS[game]}</>;
+  }
+
+  return (
+    <img
+      src={image}
+      alt=""
+      aria-label={label}
+      className="h-full w-full object-cover"
+      onError={() => setFailed(true)}
+    />
+  );
+}
+
 export default function Home() {
   const navigate = useNavigate();
   const { matches, deleteMatch } = useMatches();
@@ -259,31 +290,14 @@ export default function Home() {
             
             <div className="grid max-h-[68vh] grid-cols-2 gap-2 overflow-y-auto pe-1 sm:grid-cols-3">
               {GAMES.map((g) => {
-                const gameImages: Record<string, string> = {
-                  'hand-solo': '/games/hand.png',
-                  'hand-partners': '/games/hand-partners.png',
-                  'likha': '/games/likha.png',
-                  'trix-solo': '/games/trix.png',
-                  'trix-partners': '/games/trix.png',
-                  'complex-solo': '/games/trix-complex.png',
-                  'complex-partners': '/games/trix-complex.png',
-                  tarneeb: '/games/tarneeb.png',
-                  'tarneeb-400': '/games/tarneeb-400.png',
-                };
-                const hasImg = !!gameImages[g];
-
                 return (
                   <button
                     key={g}
                     onClick={() => navigate(`/new/${g}`)}
                     className="group flex min-h-28 w-full flex-col items-stretch justify-between overflow-hidden rounded-2xl border border-black/5 bg-white text-slate-800 shadow-sm transition-colors hover:bg-slate-50 active:scale-[0.98] dark:border-white/10 dark:bg-white/5 dark:text-white dark:hover:bg-white/10"
                   >
-                    <div className={'flex h-20 w-full shrink-0 items-center justify-center overflow-hidden rounded-t-2xl text-white shadow-inner ' + (hasImg ? '' : `bg-gradient-to-br ${GRADIENTS[g]}`)}>
-                      {hasImg ? (
-                        <img src={gameImages[g]} alt={gameText[language].labels[g]} className="h-full w-full object-cover" />
-                      ) : (
-                        ICONS[g]
-                      )}
+                    <div className={'flex h-20 w-full shrink-0 items-center justify-center overflow-hidden rounded-t-2xl bg-gradient-to-br text-white shadow-inner ' + GRADIENTS[g]}>
+                      <GameArt game={g} label={gameText[language].labels[g]} />
                     </div>
                     
                     <span className="flex min-h-10 items-center justify-center px-2 py-2 text-center text-sm font-extrabold leading-tight">{gameText[language].labels[g]}</span>

@@ -8,6 +8,7 @@ import { useSettings } from '../store/settings';
 import { PlayerAvatar } from '../components/PlayerAvatar';
 import type { GameKind, Match } from '../types';
 import { countHandWins } from '../logic/hand';
+import { useConfirm } from '../components/ConfirmDialog';
 
 const GRADIENTS: Record<GameKind, string> = {
   likha: 'from-[#6366f1] to-[#a855f7]',
@@ -39,6 +40,8 @@ const EN_DAYS = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
 /* ─── Match Card (inline) ─── */
 function MatchCard({ match, language, onDelete }: { match: Match; language: 'en' | 'ar'; onDelete: (id: string) => void }) {
   const t = copy[language];
+  const confirm = useConfirm();
+  const en = language === 'en';
   const totals = computeTotals(match);
   const matchDate = new Date(match.createdAt);
   const dateStr = language === 'en'
@@ -145,7 +148,20 @@ function MatchCard({ match, language, onDelete }: { match: Match; language: 'en'
         <div className="flex items-center gap-3">
           <ChevronLeft className="h-5 w-5 text-slate-400 transition-colors group-hover:text-slate-800 dark:text-slate-500 dark:group-hover:text-white" />
           <button
-            onClick={(e) => { e.preventDefault(); e.stopPropagation(); if (confirm(t.deleteMatch)) onDelete(match.id); }}
+            onClick={async (e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              const ok = await confirm({
+                title: en ? 'Delete match?' : 'حذف المباراة؟',
+                message: en
+                  ? 'This match and all of its rounds will be permanently removed.'
+                  : 'سيتم حذف المباراة وكل جولاتها بشكل نهائي.',
+                confirmText: en ? 'Delete' : 'حذف',
+                cancelText: en ? 'Cancel' : 'إلغاء',
+                tone: 'danger',
+              });
+              if (ok) onDelete(match.id);
+            }}
             className="flex h-8 w-8 items-center justify-center rounded-full bg-red-500/10 text-red-500 transition-all hover:bg-red-500 hover:text-white"
             aria-label="Delete"
           >
@@ -280,7 +296,9 @@ function CalendarPicker({
 export default function History() {
   const { matches, deleteMatch, clearAll } = useMatches();
   const { language } = useSettings();
+  const confirm = useConfirm();
   const t = copy[language];
+  const en = language === 'en';
   const today = startOfDay(new Date());
   const [selectedDate, setSelectedDate] = useState<Date>(today);
   const [showCalendar, setShowCalendar] = useState(false);
@@ -335,7 +353,18 @@ export default function History() {
         {matches.length > 0 && (
           <button
             className="rounded-xl px-3 py-2 text-xs font-bold text-red-500 transition hover:bg-red-50 dark:hover:bg-red-900/20"
-            onClick={() => { if (confirm(t.clearMatches)) clearAll(); }}
+            onClick={async () => {
+              const ok = await confirm({
+                title: en ? 'Delete all matches?' : 'حذف كل المباريات؟',
+                message: en
+                  ? 'All match history and saved rounds will be permanently removed.'
+                  : 'سيتم حذف كل سجل المباريات والجولات المحفوظة بشكل نهائي.',
+                confirmText: en ? 'Delete all' : 'حذف الكل',
+                cancelText: en ? 'Cancel' : 'إلغاء',
+                tone: 'danger',
+              });
+              if (ok) clearAll();
+            }}
           >
             {t.clearAll}
           </button>

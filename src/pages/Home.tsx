@@ -8,6 +8,7 @@ import { copy, gameText } from '../i18n';
 import { useSettings } from '../store/settings';
 import { PlayerAvatarGroup, PlayerAvatar } from '../components/PlayerAvatar';
 import { countHandWins } from '../logic/hand';
+import { useConfirm } from '../components/ConfirmDialog';
 
 const ICONS: Record<GameKind, React.ReactNode> = {
   likha: <Spade className="h-7 w-7 drop-shadow-sm" />,
@@ -31,7 +32,9 @@ export default function Home() {
   const navigate = useNavigate();
   const { matches, deleteMatch } = useMatches();
   const { language } = useSettings();
+  const confirm = useConfirm();
   const t = copy[language];
+  const en = language === 'en';
   const ongoing = matches.filter((m) => !m.finished).slice(0, 5);
   
   useEffect(() => {
@@ -186,10 +189,19 @@ export default function Home() {
                     <div className="flex items-center gap-3">
                       <ChevronLeft className="h-5 w-5 text-slate-400 transition-colors group-hover:text-slate-800 dark:text-slate-500 dark:group-hover:text-white" />
                       <button
-                        onClick={(e) => {
+                        onClick={async (e) => {
                           e.preventDefault();
                           e.stopPropagation();
-                          if (confirm(t.deleteMatch)) deleteMatch(m.id);
+                          const ok = await confirm({
+                            title: en ? 'Delete match?' : 'حذف المباراة؟',
+                            message: en
+                              ? 'This match and all of its rounds will be permanently removed.'
+                              : 'سيتم حذف المباراة وكل جولاتها بشكل نهائي.',
+                            confirmText: en ? 'Delete' : 'حذف',
+                            cancelText: en ? 'Cancel' : 'إلغاء',
+                            tone: 'danger',
+                          });
+                          if (ok) deleteMatch(m.id);
                         }}
                         className="flex h-8 w-8 items-center justify-center rounded-full bg-red-500/10 text-red-500 transition-all hover:bg-red-500 hover:text-white"
                         aria-label="Delete"

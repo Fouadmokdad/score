@@ -10,6 +10,7 @@ import { PlayerAvatar } from './PlayerAvatar';
 import { MatchChart } from './MatchChart';
 import { countHandWins } from '../logic/hand';
 import { playHaptic } from '../utils/haptics';
+import { useConfirm } from './ConfirmDialog';
 
 interface Props {
   match: Match;
@@ -23,6 +24,7 @@ interface Props {
 export function ScoreTable({ match, names, lowerIsBetter, editTotalRequired }: Props) {
   const { language } = useSettings();
   const { updateRound } = useMatches();
+  const confirm = useConfirm();
   const t = copy[language];
   const en = language === 'en';
   const totals = computeTotals(match);
@@ -135,9 +137,18 @@ export function ScoreTable({ match, names, lowerIsBetter, editTotalRequired }: P
                   </button>
                   <button
                     className="inline-flex h-7 w-7 items-center justify-center rounded-lg text-slate-400 transition hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-900/30"
-                    onClick={() => {
+                    onClick={async () => {
                       playHaptic(); // uses default ImpactStyle.Light
-                      if (confirm(en ? 'Are you sure you want to delete this round?' : 'هل أنت متأكد من حذف هذه الجولة؟')) {
+                      const ok = await confirm({
+                        title: en ? 'Delete round?' : 'حذف الجولة؟',
+                        message: en
+                          ? 'This round will be removed from the match score. This action cannot be undone.'
+                          : 'سيتم حذف هذه الجولة من نتيجة المباراة. لا يمكن التراجع عن هذا الإجراء.',
+                        confirmText: en ? 'Delete' : 'حذف',
+                        cancelText: en ? 'Cancel' : 'إلغاء',
+                        tone: 'danger',
+                      });
+                      if (ok) {
                         useMatches.getState().removeRound(match.id, r.id);
                       }
                     }}

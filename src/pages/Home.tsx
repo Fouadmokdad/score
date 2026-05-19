@@ -65,7 +65,7 @@ function GameArt({ game, label }: { game: GameKind; label: string }) {
       src={image}
       alt=""
       aria-label={label}
-      className="h-full w-full object-cover"
+      className="h-full w-full object-contain p-1"
       onError={() => setFailed(true)}
     />
   );

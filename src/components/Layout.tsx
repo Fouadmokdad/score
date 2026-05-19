@@ -1,5 +1,5 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Moon, Sun, Home, History, BarChart3, ArrowRight, ArrowLeft, Palette } from 'lucide-react';
+import { Moon, Sun, Home, History, BarChart3, ArrowRight, ArrowLeft, Palette, MoreVertical } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { applyPreferences, useSettings, ACCENT_PRESETS, type AccentColor } from '../store/settings';
 import { copy } from '../i18n';
@@ -18,13 +18,18 @@ export function Layout({ children, title, back, headerAction }: LayoutProps) {
   const navigate = useNavigate();
   const location = useLocation();
   const t = copy[language];
-  const [showColors, setShowColors] = useState(false);
+  const [showHeaderMenu, setShowHeaderMenu] = useState(false);
 
   useEffect(() => {
     applyPreferences(theme, language, accentColor);
   }, [theme, language, accentColor]);
 
+  useEffect(() => {
+    setShowHeaderMenu(false);
+  }, [location.pathname]);
+
   const isActive = (p: string) => location.pathname === p;
+  const closeMenu = () => setShowHeaderMenu(false);
 
   return (
     <div className="app-shell min-h-full flex flex-col">
@@ -48,46 +53,54 @@ export function Layout({ children, title, back, headerAction }: LayoutProps) {
               <h1 className="truncate text-base font-extrabold leading-tight sm:text-lg">{title ?? t.appName}</h1>
             </div>
           </div>
-          <div className="flex shrink-0 items-center gap-1 sm:gap-2">
-            {headerAction}
-            {/* Accent color picker */}
-            <div className="relative">
-              <button
-                onClick={() => setShowColors(!showColors)}
-                className="btn-ghost px-2 py-2"
-                aria-label="Theme color"
-              >
-                <Palette className="h-5 w-5" style={{ color: 'var(--accent-swatch)' }} />
-              </button>
-              {showColors && (
-                <>
-                  <div className="fixed inset-0 z-40" onClick={() => setShowColors(false)} />
-                  <div className="absolute end-0 top-full z-50 mt-2 flex gap-2 rounded-2xl border border-slate-200 bg-white p-3 shadow-xl dark:border-white/10 dark:bg-[#201f1b]">
-                    {ACCENT_KEYS.map((key) => (
-                      <button
-                        key={key}
-                        onClick={() => { setAccentColor(key); setShowColors(false); }}
-                        className={
-                          'h-8 w-8 rounded-full border-2 transition-all hover:scale-110 ' +
-                          (accentColor === key ? 'border-white ring-2 scale-110' : 'border-transparent')
-                        }
-                        style={{
-                          backgroundColor: ACCENT_PRESETS[key].swatch,
-                          ...(accentColor === key ? { boxShadow: `0 0 0 2px ${ACCENT_PRESETS[key].swatch}` } : {}),
-                        }}
-                        title={language === 'ar' ? ACCENT_PRESETS[key].labelAr : ACCENT_PRESETS[key].label}
-                      />
-                    ))}
+          <div className="relative shrink-0">
+            <button
+              onClick={() => setShowHeaderMenu((value) => !value)}
+              className="btn-ghost px-2 py-2"
+              aria-label="Open settings"
+              aria-expanded={showHeaderMenu}
+            >
+              <MoreVertical className="h-5 w-5" />
+            </button>
+            {showHeaderMenu && (
+              <>
+                <div className="fixed inset-0 z-40" onClick={closeMenu} />
+                <div className="absolute end-0 top-full z-50 mt-2 w-56 rounded-2xl border border-slate-200 bg-white p-2 shadow-xl dark:border-white/10 dark:bg-[#201f1b]">
+                  <div className="flex items-center justify-between gap-2 border-b border-slate-200/70 px-1 pb-2 dark:border-white/10">
+                    {headerAction ? <div onClick={closeMenu}>{headerAction}</div> : <span />}
+                    <button onClick={() => { toggleLanguage(); closeMenu(); }} className="btn-ghost h-11 px-3 text-sm" aria-label="Toggle language">
+                      {t.language}
+                    </button>
+                    <button onClick={() => { toggleTheme(); closeMenu(); }} className="btn-ghost h-11 w-11 px-0" aria-label={t.theme}>
+                      {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+                    </button>
                   </div>
-                </>
-              )}
-            </div>
-            <button onClick={toggleLanguage} className="btn-ghost px-3 py-2 text-sm" aria-label="Toggle language">
-              {t.language}
-            </button>
-            <button onClick={toggleTheme} className="btn-ghost px-2 py-2" aria-label={t.theme}>
-              {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-            </button>
+                  <div className="px-1 pt-2">
+                    <div className="mb-2 flex items-center gap-2 text-xs font-bold text-slate-500 dark:text-slate-400">
+                      <Palette className="h-4 w-4" style={{ color: 'var(--accent-swatch)' }} />
+                      <span>{language === 'ar' ? 'لون التطبيق' : 'App color'}</span>
+                    </div>
+                    <div className="grid grid-cols-5 gap-2">
+                      {ACCENT_KEYS.map((key) => (
+                        <button
+                          key={key}
+                          onClick={() => { setAccentColor(key); closeMenu(); }}
+                          className={
+                            'h-9 w-9 rounded-full border-2 transition-all hover:scale-105 ' +
+                            (accentColor === key ? 'border-white ring-2 scale-105' : 'border-transparent')
+                          }
+                          style={{
+                            backgroundColor: ACCENT_PRESETS[key].swatch,
+                            ...(accentColor === key ? { boxShadow: `0 0 0 2px ${ACCENT_PRESETS[key].swatch}` } : {}),
+                          }}
+                          title={language === 'ar' ? ACCENT_PRESETS[key].labelAr : ACCENT_PRESETS[key].label}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </header>

@@ -50,6 +50,23 @@ export default function ComplexGame({ variant = 'solo' }: { variant?: 'solo' | '
 
   const remaining = TOTAL_COMPLEX_ROUNDS - match.rounds.length;
   const isPlayed = played[`${declarer}-${contract}`];
+  const displayTotals = computeTotals(match);
+  const teamLabels = [
+    `${match.players[0]} ${en ? '&' : 'و'} ${match.players[2]}`,
+    `${match.players[1]} ${en ? '&' : 'و'} ${match.players[3]}`,
+  ];
+  const teamTotals = [displayTotals[0] + displayTotals[2], displayTotals[1] + displayTotals[3]];
+  const tableMatch = variant === 'partners'
+    ? {
+        ...match,
+        players: teamLabels,
+        teams: 2,
+        rounds: match.rounds.map((round) => ({
+          ...round,
+          deltas: [(round.deltas[0] || 0) + (round.deltas[2] || 0), (round.deltas[1] || 0) + (round.deltas[3] || 0)],
+        })),
+      }
+    : match;
 
   const submit = () => {
     if (isPlayed) return setError(en ? 'This request was already played for this player' : 'هذا الطلب لُعب مسبقاً لهذا اللاعب');
@@ -102,11 +119,10 @@ export default function ComplexGame({ variant = 'solo' }: { variant?: 'solo' | '
   };
 
   const finish = () => {
-    const totals = computeTotals(match);
     if (variant === 'partners') {
-      const teamTotals = [totals[0] + totals[2], totals[1] + totals[3]];
       finishMatch(match.id, teamTotals[0] >= teamTotals[1] ? 0 : 1);
     } else {
+      const totals = computeTotals(match);
       const max = Math.max(...totals);
       finishMatch(match.id, totals.indexOf(max));
     }
@@ -118,15 +134,15 @@ export default function ComplexGame({ variant = 'solo' }: { variant?: 'solo' | '
   return (
     <Layout back title={`${title} • ${match.players.join(' / ')}`} headerAction={<ShareButton targetId="score-table-capture" />}>
       <div id="score-table-capture" className="bg-[#f8fafc] dark:bg-[#1b1a17] -mx-1 px-1 pb-2">
-        <GameScoreHeader match={match} />
+        <GameScoreHeader match={match} totals={variant === 'partners' ? teamTotals : undefined} labels={variant === 'partners' ? teamLabels : undefined} />
         <div className="game-status">
           <span>{en ? 'Round' : 'جولة'} {match.rounds.length + 1} {en ? 'of' : 'من'} {TOTAL_COMPLEX_ROUNDS}</span>
           <span>{en ? 'Remaining' : 'المتبقي'}: {remaining}</span>
         </div>
-        <ScoreTable match={match} />
+        <ScoreTable match={tableMatch} />
       </div>
 
-      {remaining > 0 && <ManualFinishMatch match={match} />}
+      {remaining > 0 && <ManualFinishMatch match={match} winnerIndex={variant === 'partners' ? (teamTotals[0] >= teamTotals[1] ? 0 : 1) : undefined} />}
 
       {remaining > 0 && !showRoundForm && (
         <button className="btn-primary mt-4 w-full py-4 text-lg" onClick={() => setShowRoundForm(true)}>

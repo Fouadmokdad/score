@@ -2,9 +2,9 @@ import type { Match } from '../types';
 import { computeTotals } from '../store/matches';
 import { PlayerAvatar } from './PlayerAvatar';
 
-export function GameScoreHeader({ match, totals: totalsOverride }: { match: Match; totals?: number[] }) {
+export function GameScoreHeader({ match, totals: totalsOverride, labels: labelsOverride }: { match: Match; totals?: number[]; labels?: string[] }) {
   const totals = totalsOverride ?? computeTotals(match);
-  const labels = match.players;
+  const labels = labelsOverride ?? match.players;
 
   return (
     <div className="card mb-3">

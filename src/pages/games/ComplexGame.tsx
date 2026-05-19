@@ -132,7 +132,7 @@ export default function ComplexGame({ variant = 'solo' }: { variant?: 'solo' | '
   const title = gameText[language].labels[variant === 'partners' ? 'complex-partners' : 'complex-solo'];
 
   return (
-    <Layout back title={`${title} • ${match.players.join(' / ')}`} headerAction={<ShareButton targetId="score-table-capture" />}>
+    <Layout back title={title} headerAction={<ShareButton targetId="score-table-capture" />}>
       <div id="score-table-capture" className="bg-[#f8fafc] dark:bg-[#1b1a17] -mx-1 px-1 pb-2">
         <GameScoreHeader match={match} totals={variant === 'partners' ? teamTotals : undefined} labels={variant === 'partners' ? teamLabels : undefined} />
         <div className="game-status">

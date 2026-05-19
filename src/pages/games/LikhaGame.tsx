@@ -80,7 +80,7 @@ export default function LikhaGame() {
   const timeStr = matchDate.toLocaleTimeString(en ? 'en-US' : 'ar-SY-u-nu-latn', { hour: 'numeric', minute: '2-digit', hour12: true });
 
   return (
-    <Layout back title={`${gameText[language].labels.likha} • ${en ? 'Target' : 'هدف'} ${target}`} headerAction={<ShareButton targetId="score-table-capture" />}>
+    <Layout back title={gameText[language].labels.likha} headerAction={<ShareButton targetId="score-table-capture" />}>
       <div id="score-table-capture" className="bg-[#f8fafc] dark:bg-[#1b1a17] -mx-1 px-1 pb-2">
       {/* Hero card — players, scores, date */}
       <div className="card mb-3 space-y-4">

@@ -88,7 +88,7 @@ export default function TarneebGame({ variant }: { variant: Variant }) {
   const title = variant === '400' ? gameText[language].labels['tarneeb-400'] : gameText[language].labels.tarneeb;
 
   return (
-    <Layout back title={`${title} • ${en ? 'Target' : 'هدف'} ${target}`} headerAction={<ShareButton targetId="score-table-capture" />}>
+    <Layout back title={title} headerAction={<ShareButton targetId="score-table-capture" />}>
       <div id="score-table-capture" className="bg-[#f8fafc] dark:bg-[#1b1a17] -mx-1 px-1 pb-2">
         <GameScoreHeader match={match} />
         <div className="game-status">

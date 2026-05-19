@@ -10,7 +10,6 @@ import { useMatches, computeTotals } from '../../store/matches';
 import {
   HAND_KINDS,
   HAND_MAX_ROUNDS,
-  HAND_ROUNDS_TO_WIN,
   calcHandRound,
   countHandWins,
   isHandMatchOver,
@@ -124,9 +123,7 @@ export default function HandGame({ variant }: Props) {
     navigate('/');
   };
 
-  const title =
-    gameText[language].labels[variant === 'solo' ? 'hand-solo' : 'hand-partners'] +
-    ` • ${HAND_ROUNDS_TO_WIN}/${HAND_MAX_ROUNDS}`;
+  const title = gameText[language].labels[variant === 'solo' ? 'hand-solo' : 'hand-partners'];
 
   // Get original individual player names (for partners mode)
   const originalNames: string[] = match.config?.originalNames ?? match.players;

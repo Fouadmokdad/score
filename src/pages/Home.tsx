@@ -48,7 +48,7 @@ const GAME_IMAGES: Partial<Record<GameKind, string>> = {
   'trix-partners': '/games/trix.png',
   'complex-solo': '/games/trix-complex.png',
   'complex-partners': '/games/trix-complex.png',
-  tarneeb: '/games/tarneeb.png',
+  tarneeb: '/games/tarneeb-400.png',
   'tarneeb-400': '/games/tarneeb-400.png',
 };
 

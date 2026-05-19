@@ -7,7 +7,7 @@ import { useSettings } from '../store/settings';
 import { PlayerAvatar } from '../components/PlayerAvatar';
 import { Trophy, Target, TrendingDown, Hash, Crown, Medal, Flame, Percent } from 'lucide-react';
 
-const GAME_FILTERS: ('all' | GameKind)[] = ['all', 'likha', 'hand-solo', 'hand-partners', 'trix', 'complex', 'tarneeb', 'tarneeb-400'];
+const GAME_FILTERS: ('all' | GameKind)[] = ['all', 'likha', 'hand-solo', 'hand-partners', 'trix-solo', 'trix-partners', 'complex-solo', 'complex-partners', 'tarneeb', 'tarneeb-400'];
 
 const GRADIENTS: Record<string, string> = {
   all: 'from-[#10b981] to-[#059669]',
@@ -15,7 +15,11 @@ const GRADIENTS: Record<string, string> = {
   'hand-solo': 'from-[#f43f5e] to-[#fb923c]',
   'hand-partners': 'from-[#f59e0b] to-[#ef4444]',
   trix: 'from-[#0ea5e9] to-[#2563eb]',
+  'trix-solo': 'from-[#b91c1c] to-[#ef4444]',
+  'trix-partners': 'from-[#991b1b] to-[#dc2626]',
   complex: 'from-[#10b981] to-[#0d9488]',
+  'complex-solo': 'from-[#991b1b] to-[#ef4444]',
+  'complex-partners': 'from-[#7f1d1d] to-[#dc2626]',
   tarneeb: 'from-[#7c3aed] to-[#db2777]',
   'tarneeb-400': 'from-[#0891b2] to-[#16a34a]',
 };
@@ -68,7 +72,7 @@ function buildStats(matches: Match[], gameFilter: 'all' | GameKind): PStat[] {
     const playerNames: string[] = [];
     const playerScores: number[] = [];
 
-    if ((m.kind === 'hand-partners' || m.kind === 'tarneeb') && m.config?.originalNames?.length >= 4) {
+    if ((m.kind === 'hand-partners' || m.kind === 'tarneeb' || m.kind === 'trix-partners' || m.kind === 'complex-partners') && m.config?.originalNames?.length >= 4) {
       // Team 1: originalNames[0] + originalNames[2], Team 2: originalNames[1] + originalNames[3]
       const oNames = m.config.originalNames as string[];
       playerNames.push(oNames[0], oNames[1], oNames[2], oNames[3]);

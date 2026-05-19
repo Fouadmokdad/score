@@ -5,6 +5,7 @@ import { Layout } from '../../components/Layout';
 import { ManualFinishMatch } from '../../components/ManualFinishMatch';
 import { ScoreTable } from '../../components/ScoreTable';
 import { ShareButton } from '../../components/ShareButton';
+import { GameScoreHeader } from '../../components/GameScoreHeader';
 import { copy, gameText } from '../../i18n';
 import {
   calcTarneeb400Round,
@@ -89,6 +90,7 @@ export default function TarneebGame({ variant }: { variant: Variant }) {
   return (
     <Layout back title={`${title} • ${en ? 'Target' : 'هدف'} ${target}`} headerAction={<ShareButton targetId="score-table-capture" />}>
       <div id="score-table-capture" className="bg-[#f8fafc] dark:bg-[#1b1a17] -mx-1 px-1 pb-2">
+        <GameScoreHeader match={match} />
         <div className="game-status">
           <span>{t.round} {match.rounds.length + 1}</span>
           <span>{en ? 'Target' : 'الهدف'}: {target}</span>

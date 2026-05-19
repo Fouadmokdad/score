@@ -9,8 +9,9 @@ import { Plus, Undo2, Flag, Crown } from 'lucide-react';
 import { copy, gameText } from '../../i18n';
 import { useSettings } from '../../store/settings';
 import { ShareButton } from '../../components/ShareButton';
+import { GameScoreHeader } from '../../components/GameScoreHeader';
 
-export default function TrixGame() {
+export default function TrixGame({ variant = 'solo' }: { variant?: 'solo' | 'partners' }) {
   const { id } = useParams();
   const navigate = useNavigate();
   const { getMatch, addRound, removeLastRound, finishMatch } = useMatches();
@@ -33,7 +34,7 @@ export default function TrixGame() {
 
   if (!match) {
     return (
-      <Layout back title={gameText[language].labels.trix}>
+      <Layout back title={gameText[language].labels[variant === 'partners' ? 'trix-partners' : 'trix-solo']}>
         <div className="card">{en ? 'Match not found.' : 'المباراة غير موجودة.'}</div>
       </Layout>
     );
@@ -91,14 +92,20 @@ export default function TrixGame() {
 
   const finish = () => {
     const totals = computeTotals(match);
-    const max = Math.max(...totals);
-    finishMatch(match.id, totals.indexOf(max));
+    if (variant === 'partners') {
+      const teamTotals = [totals[0] + totals[2], totals[1] + totals[3]];
+      finishMatch(match.id, teamTotals[0] >= teamTotals[1] ? 0 : 1);
+    } else {
+      const max = Math.max(...totals);
+      finishMatch(match.id, totals.indexOf(max));
+    }
     navigate('/');
   };
 
   return (
-    <Layout back title={`${gameText[language].labels.trix} • ${match.players.join(' / ')}`} headerAction={<ShareButton targetId="score-table-capture" />}>
+    <Layout back title={`${gameText[language].labels[variant === 'partners' ? 'trix-partners' : 'trix-solo']} • ${match.players.join(' / ')}`} headerAction={<ShareButton targetId="score-table-capture" />}>
       <div id="score-table-capture" className="bg-[#f8fafc] dark:bg-[#1b1a17] -mx-1 px-1 pb-2">
+      <GameScoreHeader match={match} />
       <div className="game-status">
         <span>{t.round} {match.rounds.length + 1} {en ? 'of' : 'من'} {total}</span>
         <span>{en ? 'Remaining' : 'المتبقي'}: {remaining}</span>

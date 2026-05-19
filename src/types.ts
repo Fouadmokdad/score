@@ -1,11 +1,26 @@
-export type GameKind = 'likha' | 'hand-solo' | 'hand-partners' | 'trix' | 'complex' | 'tarneeb' | 'tarneeb-400';
+export type GameKind =
+  | 'likha'
+  | 'hand-solo'
+  | 'hand-partners'
+  | 'trix'
+  | 'trix-solo'
+  | 'trix-partners'
+  | 'complex'
+  | 'complex-solo'
+  | 'complex-partners'
+  | 'tarneeb'
+  | 'tarneeb-400';
 
 export const GAME_LABELS: Record<GameKind, string> = {
   likha: 'ليخة',
   'hand-solo': 'هند فردي',
   'hand-partners': 'هند شراكة',
   trix: 'تركس',
+  'trix-solo': 'تركس فردي',
+  'trix-partners': 'تركس شراكة',
   complex: 'كومبلكس',
+  'complex-solo': 'كومبلكس فردي',
+  'complex-partners': 'كومبلكس شراكة',
   tarneeb: 'طرنيب',
   'tarneeb-400': 'طرنيب 400',
 };
@@ -15,7 +30,11 @@ export const GAME_DESCRIPTIONS: Record<GameKind, string> = {
   'hand-solo': 'هند فردي 1×1، أول من يربح 5 جولات من 9',
   'hand-partners': 'هند شراكة 2×2، أول فريق يربح 5 جولات من 9',
   trix: '5 عقود × 4 جولات مع التتويج والمضاعفة',
-  complex: 'مزيج بلوت/هند مع تركس على مرحلتين',
+  'trix-solo': 'تركس فردي: 5 عقود لكل لاعب',
+  'trix-partners': 'تركس شراكة: نقاط الشركاء تُجمع',
+  complex: 'كومبلكس: 4 ممالك، بكل مملكة كومبلكس وتركس',
+  'complex-solo': 'كومبلكس فردي: كومبلكس وتركس في كل مملكة',
+  'complex-partners': 'كومبلكس شراكة: نقاط اللاعبين المقابلين تُجمع',
   tarneeb: 'طرنيب شراكة 2×2، طلب ولمّات حتى الهدف',
   'tarneeb-400': 'طرنيب 400 بحساب فردي وشراكة للفوز',
 };

@@ -15,7 +15,11 @@ const GRADIENTS: Record<GameKind, string> = {
   'hand-solo': 'from-[#f43f5e] to-[#fb923c]',
   'hand-partners': 'from-[#f59e0b] to-[#ef4444]',
   trix: 'from-[#0ea5e9] to-[#2563eb]',
+  'trix-solo': 'from-[#b91c1c] to-[#ef4444]',
+  'trix-partners': 'from-[#991b1b] to-[#dc2626]',
   complex: 'from-[#10b981] to-[#0d9488]',
+  'complex-solo': 'from-[#991b1b] to-[#ef4444]',
+  'complex-partners': 'from-[#7f1d1d] to-[#dc2626]',
   tarneeb: 'from-[#7c3aed] to-[#db2777]',
   'tarneeb-400': 'from-[#0891b2] to-[#16a34a]',
 };

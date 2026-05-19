@@ -13,7 +13,11 @@ const COUNT: Record<GameKind, number> = {
   'hand-solo': 2,
   'hand-partners': 4,
   trix: 4,
+  'trix-solo': 4,
+  'trix-partners': 4,
   complex: 4,
+  'complex-solo': 4,
+  'complex-partners': 4,
   tarneeb: 4,
   'tarneeb-400': 4,
 };
@@ -25,6 +29,7 @@ export default function NewMatch() {
   const { language } = useSettings();
   const t = copy[language];
   const isPartners = kind === 'hand-partners' || kind === 'tarneeb';
+  const isFourSeatPartnership = kind === 'trix-partners' || kind === 'complex-partners' || kind === 'tarneeb-400';
   const isLikha = kind === 'likha';
   const isHandSolo = kind === 'hand-solo';
   const isTarneeb = kind === 'tarneeb';
@@ -46,7 +51,7 @@ export default function NewMatch() {
       <PlayerSetup
         count={isHandSolo ? handSoloPlayers : COUNT[kind]}
         labels={
-          isPartners
+          isPartners || isFourSeatPartnership
             ? language === 'ar'
               ? ['الفريق 1 - لاعب 1', 'الفريق 2 - لاعب 1', 'الفريق 1 - لاعب 2', 'الفريق 2 - لاعب 2']
               : ['Team 1 - Player 1', 'Team 2 - Player 1', 'Team 1 - Player 2', 'Team 2 - Player 2']
@@ -125,7 +130,7 @@ export default function NewMatch() {
                 ? { target: tarneebTarget, originalNames: names }
               : isHandSolo
                 ? { playerCount: handSoloPlayers, originalNames: names }
-              : { originalNames: names },
+              : { originalNames: names, partnership: isFourSeatPartnership },
           });
           navigate(`/match/${id}/${kind}`);
         }}

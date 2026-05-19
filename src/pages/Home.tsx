@@ -15,7 +15,11 @@ const ICONS: Record<GameKind, React.ReactNode> = {
   'hand-solo': <Heart className="h-7 w-7 drop-shadow-sm" />,
   'hand-partners': <Users className="h-7 w-7 drop-shadow-sm" />,
   trix: <Crown className="h-7 w-7 drop-shadow-sm" />,
+  'trix-solo': <Crown className="h-7 w-7 drop-shadow-sm" />,
+  'trix-partners': <Crown className="h-7 w-7 drop-shadow-sm" />,
   complex: <Layers className="h-7 w-7 drop-shadow-sm" />,
+  'complex-solo': <Layers className="h-7 w-7 drop-shadow-sm" />,
+  'complex-partners': <Layers className="h-7 w-7 drop-shadow-sm" />,
   tarneeb: <Gem className="h-7 w-7 drop-shadow-sm" />,
   'tarneeb-400': <Spade className="h-7 w-7 drop-shadow-sm" />,
 };
@@ -25,12 +29,16 @@ const GRADIENTS: Record<GameKind, string> = {
   'hand-solo': 'from-[#f43f5e] to-[#fb923c]',
   'hand-partners': 'from-[#f59e0b] to-[#ef4444]',
   trix: 'from-[#0ea5e9] to-[#2563eb]',
+  'trix-solo': 'from-[#b91c1c] to-[#ef4444]',
+  'trix-partners': 'from-[#991b1b] to-[#dc2626]',
   complex: 'from-[#10b981] to-[#0d9488]',
+  'complex-solo': 'from-[#991b1b] to-[#ef4444]',
+  'complex-partners': 'from-[#7f1d1d] to-[#dc2626]',
   tarneeb: 'from-[#7c3aed] to-[#db2777]',
   'tarneeb-400': 'from-[#0891b2] to-[#16a34a]',
 };
 
-const GAMES: GameKind[] = ['likha', 'hand-solo', 'hand-partners', 'trix', 'complex', 'tarneeb', 'tarneeb-400'];
+const GAMES: GameKind[] = ['likha', 'hand-solo', 'hand-partners', 'trix-solo', 'trix-partners', 'complex-solo', 'complex-partners', 'tarneeb', 'tarneeb-400'];
 
 export default function Home() {
   const navigate = useNavigate();
@@ -241,20 +249,26 @@ export default function Home() {
       {showPicker && (
         <div className="fixed inset-0 z-50 flex flex-col justify-end p-0 sm:items-center sm:justify-center sm:p-4">
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setShowPicker(false)} />
-          <div className="relative w-full max-w-md animate-in slide-in-from-bottom-full rounded-t-[2rem] bg-[#F9F6EE] dark:bg-[#1a1915] p-5 pb-10 shadow-2xl sm:rounded-[2rem] sm:pb-6 sm:zoom-in-95 border border-black/5 dark:border-white/5">
+          <div className="relative w-full max-w-md animate-in slide-in-from-bottom-full rounded-t-[2rem] bg-[#F9F6EE] dark:bg-[#1a1915] p-4 pb-8 shadow-2xl sm:rounded-[2rem] sm:pb-6 sm:zoom-in-95 border border-black/5 dark:border-white/5">
             {/* Drag Handle */}
             <div className="mx-auto mb-4 h-1.5 w-12 rounded-full bg-black/10 dark:bg-white/10" />
             
-            <div className="mb-6 text-center">
+            <div className="mb-4 text-center">
               <h3 className="text-xl font-bold text-slate-900 dark:text-white">{language === 'en' ? 'Choose your game' : 'اختر لعبتك'}</h3>
             </div>
             
-            <div className="flex flex-col gap-3">
+            <div className="grid max-h-[68vh] grid-cols-2 gap-2 overflow-y-auto pe-1 sm:grid-cols-3">
               {GAMES.map((g) => {
                 const gameImages: Record<string, string> = {
                   'hand-solo': '/games/hand.png',
                   'hand-partners': '/games/hand-partners.png',
-                  'likha': '/games/likha.png'
+                  'likha': '/games/likha.png',
+                  'trix-solo': '/games/trix.png',
+                  'trix-partners': '/games/trix.png',
+                  'complex-solo': '/games/trix-complex.png',
+                  'complex-partners': '/games/trix-complex.png',
+                  tarneeb: '/games/tarneeb.png',
+                  'tarneeb-400': '/games/tarneeb-400.png',
                 };
                 const hasImg = !!gameImages[g];
 
@@ -262,9 +276,9 @@ export default function Home() {
                   <button
                     key={g}
                     onClick={() => navigate(`/new/${g}`)}
-                    className="group flex w-full items-center gap-4 overflow-hidden rounded-[1.25rem] border border-black/5 dark:border-white/10 bg-white dark:bg-white/5 p-2.5 text-slate-800 dark:text-white shadow-sm transition-colors hover:bg-slate-50 dark:hover:bg-white/10 active:scale-[0.98]"
+                    className="group flex min-h-28 w-full flex-col items-stretch justify-between overflow-hidden rounded-2xl border border-black/5 bg-white text-slate-800 shadow-sm transition-colors hover:bg-slate-50 active:scale-[0.98] dark:border-white/10 dark:bg-white/5 dark:text-white dark:hover:bg-white/10"
                   >
-                    <div className={'flex h-14 w-14 shrink-0 items-center justify-center rounded-xl shadow-inner text-white overflow-hidden ' + (hasImg ? '' : `bg-gradient-to-br ${GRADIENTS[g]}`)}>
+                    <div className={'flex h-20 w-full shrink-0 items-center justify-center overflow-hidden rounded-t-2xl text-white shadow-inner ' + (hasImg ? '' : `bg-gradient-to-br ${GRADIENTS[g]}`)}>
                       {hasImg ? (
                         <img src={gameImages[g]} alt={gameText[language].labels[g]} className="h-full w-full object-cover" />
                       ) : (
@@ -272,9 +286,7 @@ export default function Home() {
                       )}
                     </div>
                     
-                    <span className="flex-1 text-start text-lg font-bold">{gameText[language].labels[g]}</span>
-                    
-                    <ChevronLeft className={"mr-2 h-5 w-5 text-slate-400 dark:text-white/50 transition-transform " + (language === 'en' ? 'rotate-180' : '')} />
+                    <span className="flex min-h-10 items-center justify-center px-2 py-2 text-center text-sm font-extrabold leading-tight">{gameText[language].labels[g]}</span>
                   </button>
                 );
               })}

@@ -27,8 +27,12 @@ export default function App() {
       <Route path="/match/:id/likha" element={<LikhaGame />} />
       <Route path="/match/:id/hand-solo" element={<HandSoloGame />} />
       <Route path="/match/:id/hand-partners" element={<HandPartnersGame />} />
-      <Route path="/match/:id/trix" element={<TrixGame />} />
-      <Route path="/match/:id/complex" element={<ComplexGame />} />
+      <Route path="/match/:id/trix" element={<TrixGame variant="solo" />} />
+      <Route path="/match/:id/trix-solo" element={<TrixGame variant="solo" />} />
+      <Route path="/match/:id/trix-partners" element={<TrixGame variant="partners" />} />
+      <Route path="/match/:id/complex" element={<ComplexGame variant="solo" />} />
+      <Route path="/match/:id/complex-solo" element={<ComplexGame variant="solo" />} />
+      <Route path="/match/:id/complex-partners" element={<ComplexGame variant="partners" />} />
       <Route path="/match/:id/tarneeb" element={<TarneebGame variant="regular" />} />
       <Route path="/match/:id/tarneeb-400" element={<TarneebGame variant="400" />} />
       <Route path="*" element={<Navigate to="/" replace />} />

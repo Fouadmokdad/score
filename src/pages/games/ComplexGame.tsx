@@ -1,161 +1,98 @@
-import { useNavigate, useParams } from 'react-router-dom';
 import { useMemo, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Flag, Plus, Crown } from 'lucide-react';
 import { Layout } from '../../components/Layout';
-import { ScoreTable } from '../../components/ScoreTable';
 import { ManualFinishMatch } from '../../components/ManualFinishMatch';
-import { useMatches, computeTotals } from '../../store/matches';
-import { calcLikhaRound, LIKHA_PER_HAND } from '../../logic/likha';
-import { TRIX_CONTRACTS, calcTrixRound, type TrixContract } from '../../logic/trix';
-import { Plus, Undo2, Flag } from 'lucide-react';
+import { ScoreTable } from '../../components/ScoreTable';
+import { ShareButton } from '../../components/ShareButton';
+import { GameScoreHeader } from '../../components/GameScoreHeader';
+import { gameText } from '../../i18n';
+import { calcTrixRound } from '../../logic/trix';
+import { computeTotals, useMatches } from '../../store/matches';
+import { useSettings } from '../../store/settings';
 
-type Phase = 'likha' | 'trix';
+type ComplexContract = 'complex' | 'trix';
 
-/**
- * Complex (كومبلكس) — Likha (Hearts) phase (10 hands) then Trix (5×4 = 20 rounds).
- * Total = 30 rounds. Phase auto-switches when likha phase done.
- */
-const COMPLEX_LIKHA_HANDS = 10;
-const COMPLEX_TRIX_HANDS = 20;
-const COMPLEX_TOTAL = COMPLEX_LIKHA_HANDS + COMPLEX_TRIX_HANDS;
-export default function ComplexGame() {
+const TOTAL_COMPLEX_ROUNDS = 8;
+
+export default function ComplexGame({ variant = 'solo' }: { variant?: 'solo' | 'partners' }) {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { getMatch, addRound, removeLastRound, finishMatch } = useMatches();
+  const { getMatch, addRound, finishMatch } = useMatches();
+  const { language } = useSettings();
+  const en = language === 'en';
   const match = id ? getMatch(id) : undefined;
+
+  const [showRoundForm, setShowRoundForm] = useState(false);
+  const [contract, setContract] = useState<ComplexContract>('complex');
+  const [declarer, setDeclarer] = useState(0);
+  const [kingTaker, setKingTaker] = useState(0);
+  const [queens, setQueens] = useState<string[]>(['', '', '', '']);
+  const [diamonds, setDiamonds] = useState<string[]>(['', '', '', '']);
+  const [tricks, setTricks] = useState<string[]>(['', '', '', '']);
+  const [trixOrder, setTrixOrder] = useState<number[]>([]);
+  const [doubleCards, setDoubleCards] = useState(false);
+  const [error, setError] = useState('');
 
   if (!match) {
     return (
-      <Layout back title="كومبلكس">
-        <div className="card">المباراة غير موجودة.</div>
+      <Layout back title={gameText[language].labels[variant === 'partners' ? 'complex-partners' : 'complex-solo']}>
+        <div className="card">{en ? 'Match not found.' : 'المباراة غير موجودة.'}</div>
       </Layout>
     );
   }
 
-  // Determine phase based on phaseTag in meta
-  const likhaCount = match.rounds.filter((r) => r.meta?.phase === 'likha').length;
-  const phase: Phase = likhaCount < COMPLEX_LIKHA_HANDS ? 'likha' : 'trix';
-  const trixCount = match.rounds.filter((r) => r.meta?.phase === 'trix').length;
-  const totalCount = COMPLEX_TOTAL;
-  const done = match.rounds.length;
+  const played = useMemo(() => {
+    const map: Record<string, boolean> = {};
+    for (const r of match.rounds) map[`${r.meta?.declarer}-${r.meta?.contract}`] = true;
+    return map;
+  }, [match.rounds]);
 
-  return phase === 'likha' ? (
-    <ComplexLikhaPhase match={match} done={done} totalCount={totalCount} likhaCount={likhaCount}
-      addRound={addRound} removeLastRound={removeLastRound} finishMatch={finishMatch} navigate={navigate} />
-  ) : (
-    <ComplexTrixPhase match={match} done={done} totalCount={totalCount} trixCount={trixCount}
-      addRound={addRound} removeLastRound={removeLastRound} finishMatch={finishMatch} navigate={navigate} />
-  );
-}
-
-function ComplexLikhaPhase({ match, done, totalCount, likhaCount, addRound, removeLastRound }: any) {
-  const [scores, setScores] = useState<string[]>(['', '', '', '']);
-  const [showRoundForm, setShowRoundForm] = useState(false);
-  const [error, setError] = useState('');
-  const parsedScores = scores.map((score) => Number(score) || 0);
+  const remaining = TOTAL_COMPLEX_ROUNDS - match.rounds.length;
+  const isPlayed = played[`${declarer}-${contract}`];
 
   const submit = () => {
-    const r = calcLikhaRound({ scores: parsedScores });
-    if (!r.ok) return setError(r.error);
+    if (isPlayed) return setError(en ? 'This request was already played for this player' : 'هذا الطلب لُعب مسبقاً لهذا اللاعب');
+
+    if (contract === 'trix') {
+      const r = calcTrixRound({ contract: 'trix', declarerIndex: declarer, trixOrder });
+      if (!r.ok) return setError(r.error);
+      setError('');
+      addRound(match.id, { deltas: r.deltas, meta: { contract, declarer, contractLabel: r.contractLabel } });
+      setTrixOrder([]);
+      setShowRoundForm(false);
+      return;
+    }
+
+    const parsedQueens = queens.map((value) => Number(value) || 0);
+    const parsedDiamonds = diamonds.map((value) => Number(value) || 0);
+    const parsedTricks = tricks.map((value) => Number(value) || 0);
+    const queenTotal = parsedQueens.reduce((sum, value) => sum + value, 0);
+    const diamondTotal = parsedDiamonds.reduce((sum, value) => sum + value, 0);
+    const trickTotal = parsedTricks.reduce((sum, value) => sum + value, 0);
+
+    if (queenTotal !== 4) return setError(en ? `Queens total must be 4. Current total is ${queenTotal}.` : `مجموع البنات يجب أن يكون 4 (الحالي ${queenTotal})`);
+    if (diamondTotal !== 13) return setError(en ? `Diamonds total must be 13. Current total is ${diamondTotal}.` : `مجموع الديناري يجب أن يكون 13 (الحالي ${diamondTotal})`);
+    if (trickTotal !== 13) return setError(en ? `Tricks total must be 13. Current total is ${trickTotal}.` : `مجموع اللطوش يجب أن يكون 13 (الحالي ${trickTotal})`);
+
+    const mul = doubleCards ? 2 : 1;
+    const deltas = [0, 0, 0, 0];
+    deltas[kingTaker] -= 75 * mul;
+    for (let i = 0; i < 4; i++) {
+      deltas[i] -= parsedQueens[i] * 25 * mul;
+      deltas[i] -= parsedDiamonds[i] * 10;
+      deltas[i] -= parsedTricks[i] * 15;
+    }
+
     setError('');
     addRound(match.id, {
-      deltas: r.deltas,
-      meta: { phase: 'likha', contractLabel: r.contractLabel },
+      deltas,
+      meta: { contract, declarer, contractLabel: doubleCards ? 'كومبلكس ×2' : 'كومبلكس' },
     });
-    setScores(['', '', '', '']);
-    setShowRoundForm(false);
-  };
-
-  const roundTotal = parsedScores.reduce((a, b) => a + b, 0);
-
-  return (
-    <Layout back title={`كومبلكس • مرحلة الليخة (${likhaCount}/${COMPLEX_LIKHA_HANDS})`}>
-      <div className="game-status">
-        الجولة {done + 1} من {totalCount}
-      </div>
-
-      <ScoreTable match={match} lowerIsBetter editTotalRequired={LIKHA_PER_HAND} />
-      <ManualFinishMatch match={match} />
-
-      {!showRoundForm && (
-        <button className="btn-primary mt-4 w-full py-4 text-lg" onClick={() => setShowRoundForm(true)}>
-          <Plus className="h-4 w-4" /> جولة جديدة
-        </button>
-      )}
-
-      {showRoundForm && (
-      <div className="card mt-4 space-y-3">
-        <p className="text-xs text-slate-500">
-          أدخل نقاط كل لاعب مباشرة. مجموع الجولة يجب أن يكون 36.
-        </p>
-
-        <div>
-          <label className="label">نقاط كل لاعب (المجموع = 36)</label>
-          <div className="choice-grid">
-            {match.players.map((p: string, i: number) => (
-              <div key={i}>
-                <div className="mb-1 text-xs text-slate-500">{p}</div>
-                <input
-                  type="number"
-                  min={0}
-                  max={LIKHA_PER_HAND}
-                  className="input text-center"
-                  value={scores[i]}
-                  onChange={(e) => {
-                    const n = [...scores];
-                    const value = e.target.value;
-                    n[i] = value === '' ? '' : String(Math.max(0, Math.min(LIKHA_PER_HAND, Number(value) || 0)));
-                    setScores(n);
-                  }}
-                />
-              </div>
-            ))}
-          </div>
-          <div className={'mt-1 text-xs ' + (roundTotal === LIKHA_PER_HAND ? 'text-emerald-600' : 'text-slate-500')}>
-            المجموع الحالي: {roundTotal} / {LIKHA_PER_HAND}
-          </div>
-        </div>
-
-        {error && <div className="rounded-lg bg-red-100 p-2 text-sm text-red-700 dark:bg-red-900/40 dark:text-red-300">{error}</div>}
-
-        <div className="flex gap-2">
-          <button className="btn-primary flex-1" onClick={submit}><Plus className="h-4 w-4" /> حفظ الجولة</button>
-          <button className="btn-secondary" onClick={() => { setShowRoundForm(false); setError(''); }}>
-            إلغاء
-          </button>
-          <button className="btn-secondary" onClick={() => removeLastRound(match.id)} disabled={match.rounds.length === 0}>
-            <Undo2 className="h-4 w-4" /> تراجع
-          </button>
-        </div>
-      </div>
-      )}
-    </Layout>
-  );
-}
-
-function ComplexTrixPhase({ match, done, totalCount, trixCount, addRound, removeLastRound, finishMatch, navigate }: any) {
-  const [contract, setContract] = useState<TrixContract>('kingHearts');
-  const [declarer, setDeclarer] = useState(0);
-  const [counts, setCounts] = useState<string[]>(['', '', '', '']);
-  const [taker, setTaker] = useState(0);
-  const [trixOrder, setTrixOrder] = useState<number[]>([]);
-  const [showRoundForm, setShowRoundForm] = useState(false);
-  const [error, setError] = useState('');
-  const def = useMemo(() => TRIX_CONTRACTS.find((c) => c.id === contract)!, [contract]);
-  const parsedCounts = counts.map((count) => Number(count) || 0);
-
-  const submit = () => {
-    const r = calcTrixRound({
-      contract,
-      declarerIndex: declarer,
-      counts: def.type === 'negative-count' ? parsedCounts : undefined,
-      takerIndex: def.type === 'negative-taker' ? taker : undefined,
-      trixOrder: def.type === 'positive-trix' ? trixOrder : undefined,
-    });
-    if (!r.ok) return setError(r.error);
-    setError('');
-    addRound(match.id, { deltas: r.deltas, meta: { phase: 'trix', contract, declarer, contractLabel: r.contractLabel } });
-    setCounts(['', '', '', '']);
-    setTrixOrder([]);
+    setQueens(['', '', '', '']);
+    setDiamonds(['', '', '', '']);
+    setTricks(['', '', '', '']);
+    setDoubleCards(false);
     setShowRoundForm(false);
   };
 
@@ -166,92 +103,98 @@ function ComplexTrixPhase({ match, done, totalCount, trixCount, addRound, remove
 
   const finish = () => {
     const totals = computeTotals(match);
-    const max = Math.max(...totals);
-    finishMatch(match.id, totals.indexOf(max));
+    if (variant === 'partners') {
+      const teamTotals = [totals[0] + totals[2], totals[1] + totals[3]];
+      finishMatch(match.id, teamTotals[0] >= teamTotals[1] ? 0 : 1);
+    } else {
+      const max = Math.max(...totals);
+      finishMatch(match.id, totals.indexOf(max));
+    }
     navigate('/');
   };
 
+  const title = gameText[language].labels[variant === 'partners' ? 'complex-partners' : 'complex-solo'];
+
   return (
-    <Layout back title={`كومبلكس • مرحلة التركس (${trixCount}/20)`}>
-      <div className="game-status">
-        الجولة {done + 1} من {totalCount}
+    <Layout back title={`${title} • ${match.players.join(' / ')}`} headerAction={<ShareButton targetId="score-table-capture" />}>
+      <div id="score-table-capture" className="bg-[#f8fafc] dark:bg-[#1b1a17] -mx-1 px-1 pb-2">
+        <GameScoreHeader match={match} />
+        <div className="game-status">
+          <span>{en ? 'Round' : 'جولة'} {match.rounds.length + 1} {en ? 'of' : 'من'} {TOTAL_COMPLEX_ROUNDS}</span>
+          <span>{en ? 'Remaining' : 'المتبقي'}: {remaining}</span>
+        </div>
+        <ScoreTable match={match} />
       </div>
 
-      <ScoreTable match={match} />
-      {trixCount < COMPLEX_TRIX_HANDS && <ManualFinishMatch match={match} />}
+      {remaining > 0 && <ManualFinishMatch match={match} />}
 
-      {trixCount < COMPLEX_TRIX_HANDS && !showRoundForm && (
+      {remaining > 0 && !showRoundForm && (
         <button className="btn-primary mt-4 w-full py-4 text-lg" onClick={() => setShowRoundForm(true)}>
-          <Plus className="h-4 w-4" /> جولة جديدة
+          <Plus className="h-4 w-4" /> {en ? 'New round' : 'جولة جديدة'}
         </button>
       )}
 
-      {trixCount < COMPLEX_TRIX_HANDS && showRoundForm && (
+      {remaining > 0 && showRoundForm && (
         <div className="card mt-4 space-y-3">
           <div>
-            <label className="label">العقد</label>
-            <div className="flex flex-wrap gap-2">
-              {TRIX_CONTRACTS.map((c) => (
-                <button key={c.id}
-                  className={'rounded-full border px-3 py-1.5 text-sm font-semibold ' + (contract === c.id ? 'border-brand-600 bg-brand-600 text-white' : 'border-slate-300 dark:border-slate-700')}
-                  onClick={() => setContract(c.id)}>{c.label}</button>
+            <label className="label">{en ? 'Request' : 'الطلب'}</label>
+            <div className="grid grid-cols-2 gap-2">
+              {(['complex', 'trix'] as const).map((value) => (
+                <button
+                  key={value}
+                  className={'choice-btn ' + (contract === value ? 'border-emerald-600 bg-emerald-600 text-white' : 'border-slate-300 dark:border-slate-700')}
+                  onClick={() => setContract(value)}
+                >
+                  {value === 'complex' ? (en ? 'Complex' : 'كومبلكس') : 'Trix'}
+                </button>
               ))}
             </div>
           </div>
 
           <div>
-            <label className="label">صاحب الدور</label>
+            <label className="label">{en ? 'Kingdom owner' : 'صاحب المملكة'}</label>
             <div className="choice-grid">
-              {match.players.map((p: string, i: number) => (
-                <button key={i}
-                  className={'choice-btn ' + (declarer === i ? 'border-brand-600 bg-brand-600 text-white' : 'border-slate-300 dark:border-slate-700')}
-                  onClick={() => setDeclarer(i)}>{p}</button>
+              {match.players.map((p, i) => (
+                <button
+                  key={p}
+                  disabled={played[`${i}-${contract}`]}
+                  className={'choice-btn disabled:opacity-40 ' + (declarer === i ? 'border-brand-600 bg-brand-600 text-white' : 'border-slate-300 dark:border-slate-700')}
+                  onClick={() => setDeclarer(i)}
+                >
+                  {p}
+                </button>
               ))}
             </div>
           </div>
 
-          {def.type === 'negative-count' && (
+          {contract === 'complex' ? (
+            <ComplexCountsForm
+              en={en}
+              players={match.players}
+              kingTaker={kingTaker}
+              setKingTaker={setKingTaker}
+              queens={queens}
+              setQueens={setQueens}
+              diamonds={diamonds}
+              setDiamonds={setDiamonds}
+              tricks={tricks}
+              setTricks={setTricks}
+              doubleCards={doubleCards}
+              setDoubleCards={setDoubleCards}
+            />
+          ) : (
             <div>
-              <label className="label">العدد لكل لاعب (المجموع = {def.maxCount})</label>
+              <label className="label">{en ? 'Finish order' : 'ترتيب الإنهاء'}</label>
               <div className="choice-grid">
-                {match.players.map((p: string, i: number) => (
-                  <div key={i}>
-                    <div className="mb-1 text-xs text-slate-500">{p}</div>
-                    <input type="number" min={0} max={def.maxCount} className="input" value={counts[i]}
-                      onChange={(e) => {
-                        const n = [...counts];
-                        const value = e.target.value;
-                        n[i] = value === '' ? '' : String(Math.max(0, Number(value) || 0));
-                        setCounts(n);
-                      }} />
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-          {def.type === 'negative-taker' && (
-            <div>
-              <label className="label">من أخذ الملك؟</label>
-              <div className="choice-grid">
-                {match.players.map((p: string, i: number) => (
-                  <button key={i}
-                    className={'choice-btn ' + (taker === i ? 'border-rose-600 bg-rose-600 text-white' : 'border-slate-300 dark:border-slate-700')}
-                    onClick={() => setTaker(i)}>{p}</button>
-                ))}
-              </div>
-            </div>
-          )}
-          {def.type === 'positive-trix' && (
-            <div>
-              <label className="label">ترتيب الإنهاء</label>
-              <div className="choice-grid">
-                {match.players.map((p: string, i: number) => {
+                {match.players.map((p, i) => {
                   const pos = trixOrder.indexOf(i);
                   return (
-                    <button key={i}
+                    <button
+                      key={p}
                       className={'choice-btn ' + (pos >= 0 ? 'border-emerald-600 bg-emerald-600 text-white' : 'border-slate-300 dark:border-slate-700')}
-                      onClick={() => togglePos(i)}>
-                      {p} {pos >= 0 && <span className="opacity-80">({['1','2','3','4'][pos]})</span>}
+                      onClick={() => togglePos(i)}
+                    >
+                      {p} {pos >= 0 && <span className="opacity-80">({pos + 1})</span>}
                     </button>
                   );
                 })}
@@ -262,22 +205,107 @@ function ComplexTrixPhase({ match, done, totalCount, trixCount, addRound, remove
           {error && <div className="rounded-lg bg-red-100 p-2 text-sm text-red-700 dark:bg-red-900/40 dark:text-red-300">{error}</div>}
 
           <div className="flex gap-2">
-            <button className="btn-primary flex-1" onClick={submit}><Plus className="h-4 w-4" /> حفظ الجولة</button>
-            <button className="btn-secondary" onClick={() => { setShowRoundForm(false); setError(''); }}>
-              إلغاء
+            <button className="btn-primary flex-1" onClick={submit}>
+              <Plus className="h-4 w-4" /> {en ? 'Save round' : 'حفظ الجولة'}
             </button>
-            <button className="btn-secondary" onClick={() => removeLastRound(match.id)} disabled={match.rounds.length === 0}>
-              <Undo2 className="h-4 w-4" /> تراجع
+            <button className="btn-secondary" onClick={() => { setShowRoundForm(false); setError(''); }}>
+              {en ? 'Cancel' : 'إلغاء'}
             </button>
           </div>
         </div>
       )}
 
-      {trixCount >= COMPLEX_TRIX_HANDS && (
+      {remaining <= 0 && (
         <button className="btn-primary mt-4 w-full" onClick={finish}>
-          <Flag className="h-4 w-4" /> إنهاء المباراة
+          <Flag className="h-4 w-4" /> {en ? 'Finish match' : 'إنهاء المباراة'}
         </button>
       )}
     </Layout>
+  );
+}
+
+function ComplexCountsForm({
+  en,
+  players,
+  kingTaker,
+  setKingTaker,
+  queens,
+  setQueens,
+  diamonds,
+  setDiamonds,
+  tricks,
+  setTricks,
+  doubleCards,
+  setDoubleCards,
+}: {
+  en: boolean;
+  players: string[];
+  kingTaker: number;
+  setKingTaker: (value: number) => void;
+  queens: string[];
+  setQueens: (value: string[]) => void;
+  diamonds: string[];
+  setDiamonds: (value: string[]) => void;
+  tricks: string[];
+  setTricks: (value: string[]) => void;
+  doubleCards: boolean;
+  setDoubleCards: (value: boolean) => void;
+}) {
+  const update = (values: string[], setter: (value: string[]) => void, idx: number, value: string) => {
+    const next = [...values];
+    next[idx] = value === '' ? '' : String(Math.max(0, Number(value) || 0));
+    setter(next);
+  };
+
+  return (
+    <div className="space-y-3">
+      <div>
+        <label className="label">{en ? 'Who took King of Hearts?' : 'من أخذ ملك الكبة؟'}</label>
+        <div className="choice-grid">
+          {players.map((p, i) => (
+            <button
+              key={p}
+              className={'choice-btn ' + (kingTaker === i ? 'border-rose-600 bg-rose-600 text-white' : 'border-slate-300 dark:border-slate-700')}
+              onClick={() => setKingTaker(i)}
+            >
+              {p}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {[
+        { label: en ? 'Queens' : 'البنات', total: 4, values: queens, setter: setQueens },
+        { label: en ? 'Diamonds' : 'الديناري', total: 13, values: diamonds, setter: setDiamonds },
+        { label: en ? 'Tricks' : 'اللطوش', total: 13, values: tricks, setter: setTricks },
+      ].map((group) => (
+        <div key={group.label}>
+          <label className="label">{group.label} ({en ? 'total' : 'المجموع'} = {group.total})</label>
+          <div className="grid grid-cols-2 gap-2">
+            {players.map((p, i) => (
+              <div key={p}>
+                <div className="mb-1 truncate text-xs text-slate-500">{p}</div>
+                <input
+                  type="number"
+                  inputMode="numeric"
+                  min={0}
+                  className="input"
+                  value={group.values[i]}
+                  onChange={(e) => update(group.values, group.setter, i, e.target.value)}
+                />
+              </div>
+            ))}
+          </div>
+          <div className="mt-1 text-xs text-slate-500">
+            {en ? 'Current' : 'الحالي'}: {group.values.reduce((sum, value) => sum + (Number(value) || 0), 0)} / {group.total}
+          </div>
+        </div>
+      ))}
+
+      <label className="flex items-center gap-2 text-sm font-semibold">
+        <input type="checkbox" checked={doubleCards} onChange={(e) => setDoubleCards(e.target.checked)} />
+        <Crown className="h-4 w-4 text-amber-500" /> {en ? 'Double King/Queens' : 'تدبيل الملك/البنات'}
+      </label>
+    </div>
   );
 }

@@ -138,7 +138,7 @@ export default function Home() {
                   </div>
                   
                   {/* Scores and Players */}
-                  {totals.length === 2 ? (() => {
+                  {totals.length === 2 && (m.kind.includes('partners') || m.kind === 'tarneeb') ? (() => {
                     // Team layout (Partners)
                     let t1p1, t1p2, t2p1, t2p2;
                     if (m.config?.originalNames && m.config.originalNames.length >= 4) {

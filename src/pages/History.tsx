@@ -103,7 +103,7 @@ function MatchCard({ match, language, onDelete }: { match: Match; language: 'en'
       </div>
 
       {/* Scores and Players */}
-      {totals.length === 2 ? (() => {
+      {totals.length === 2 && (match.kind.includes('partners') || match.kind === 'tarneeb') ? (() => {
         let t1p1: string, t1p2: string, t2p1: string, t2p2: string;
         if (match.config?.originalNames && match.config.originalNames.length >= 4) {
           t1p1 = match.config.originalNames[0];

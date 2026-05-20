@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import { createPortal } from 'react-dom';
 import { X, ChevronDown, Search } from 'lucide-react';
 import { PlayerAvatar } from './PlayerAvatar';
 import { useMatches } from '../store/matches';
@@ -84,7 +85,7 @@ export function PlayerSelect({ value, onChange, allPlayers, label, exclude }: Pr
       </button>
 
       {/* Custom BottomSheet Modal Dropdown */}
-      {isOpen && (
+      {isOpen && createPortal(
         <div className="fixed inset-0 z-[115] flex items-end sm:items-center justify-center p-0 sm:p-4">
           {/* Backdrop blur overlay */}
           <div
@@ -182,7 +183,8 @@ export function PlayerSelect({ value, onChange, allPlayers, label, exclude }: Pr
               )}
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </>
   );

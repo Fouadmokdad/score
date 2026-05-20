@@ -47,7 +47,12 @@ export function Layout({ children, title, back, headerAction }: LayoutProps) {
             {showHeaderMenu && (
               <>
                 <div className="fixed inset-0 z-40" onClick={closeMenu} />
-                <div className="absolute end-0 top-full z-50 mt-2 w-56 rounded-2xl border border-slate-200 bg-white p-2 shadow-xl dark:border-white/10 dark:bg-[#201f1b]">
+                <div
+                  className={
+                    'absolute top-full z-50 mt-2 w-56 rounded-2xl border border-slate-200 bg-white p-2 shadow-xl dark:border-white/10 dark:bg-[#201f1b] ' +
+                    (language === 'ar' ? 'right-0' : 'left-0')
+                  }
+                >
                   <div className="flex items-center justify-between gap-2 border-b border-slate-200/70 px-1 pb-2 dark:border-white/10">
                     {headerAction ? <div onClick={closeMenu}>{headerAction}</div> : <span />}
                     <button onClick={() => { toggleLanguage(); closeMenu(); }} className="btn-ghost h-11 px-3 text-sm" aria-label="Toggle language">

@@ -107,9 +107,9 @@ export function ScoreTable({ match, names, lowerIsBetter, editTotalRequired }: P
       <MatchChart match={match} />
       
       {/* Table Container */}
-      <div className="overflow-hidden rounded-[1.5rem] border border-slate-200/60 bg-white shadow-lg dark:border-white/[0.06] dark:bg-[#201f1b] hide-on-share mt-3">
+      <div className="overflow-hidden rounded-[1.5rem] border border-black/[0.05] bg-white/95 shadow-[0_4px_24px_rgb(15,23,42,0.03)] dark:border-white/[0.06] dark:bg-[#201f1b] hide-on-share mt-3">
         <table className={(compact ? 'table-fixed text-xs' : 'text-sm') + ' w-full border-collapse'}>
-          <thead className="bg-gradient-to-r from-slate-50 to-slate-50/80 dark:from-[#1a1915] dark:to-[#1a1915]/80 border-b border-slate-200/60 dark:border-white/[0.06]">
+          <thead className="bg-gradient-to-r from-black/[0.015] to-transparent dark:from-[#1a1915] dark:to-[#1a1915]/80 border-b border-black/[0.04] dark:border-white/[0.06]">
             <tr>
               <th className={(compact ? 'w-16 px-1' : 'w-20') + ' py-3.5 text-slate-400 font-black text-center text-[10px] uppercase tracking-widest'}>#</th>
               {labels.map((p, i) => {
@@ -157,7 +157,7 @@ export function ScoreTable({ match, names, lowerIsBetter, editTotalRequired }: P
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-100/80 dark:divide-white/[0.03]">
+          <tbody className="divide-y divide-black/[0.03] dark:divide-white/[0.03]">
             {match.rounds.map((r, idx) => (
               <motion.tr
                 key={r.id}
@@ -173,7 +173,7 @@ export function ScoreTable({ match, names, lowerIsBetter, editTotalRequired }: P
                 className="group hover:bg-slate-50/60 dark:hover:bg-white/[0.015] transition-colors touch-pan-y"
               >
                 <td className={(compact ? 'px-1 py-3.5' : 'py-3.5') + ' table-cell text-center'}>
-                  <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-slate-100 text-[10px] font-black text-slate-500 dark:bg-white/8 dark:text-slate-400">
+                  <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-black/[0.04] text-[10px] font-black text-slate-500 dark:bg-white/8 dark:text-slate-400">
                     {idx + 1}
                   </span>
                 </td>
@@ -210,14 +210,14 @@ export function ScoreTable({ match, names, lowerIsBetter, editTotalRequired }: P
                 <td className="table-cell px-1 py-3 hide-on-share align-middle">
                   <div className="flex items-center justify-center gap-1">
                     <button
-                      className="inline-flex h-7 w-7 items-center justify-center rounded-xl border border-slate-200/60 bg-white/60 text-slate-400 shadow-sm transition-all hover:border-[rgba(var(--accent),0.3)] hover:bg-[rgba(var(--accent),0.08)] hover:text-[rgb(var(--accent))] dark:border-white/[0.04] dark:bg-white/[0.02] dark:hover:bg-[rgba(var(--accent),0.12)] dark:hover:text-[rgb(var(--accent-dark))]"
+                      className="inline-flex h-7 w-7 items-center justify-center rounded-xl border border-black/[0.05] bg-white/80 text-slate-400 shadow-sm transition-all hover:border-[rgba(var(--accent),0.3)] hover:bg-[rgba(var(--accent),0.08)] hover:text-[rgb(var(--accent))] dark:border-white/[0.04] dark:bg-white/[0.02] dark:hover:bg-[rgba(var(--accent),0.12)] dark:hover:text-[rgb(var(--accent-dark))]"
                       onClick={() => startEdit(r)}
                       aria-label={en ? 'Edit round' : 'تعديل الجولة'}
                     >
                       <Pencil className="h-3 w-3" />
                     </button>
                     <button
-                      className="inline-flex h-7 w-7 items-center justify-center rounded-xl border border-slate-200/60 bg-white/60 text-slate-400 shadow-sm transition-all hover:border-red-300 hover:bg-red-50 hover:text-red-600 dark:border-white/[0.04] dark:bg-white/[0.02] dark:hover:bg-red-500/10 dark:hover:text-red-400"
+                      className="inline-flex h-7 w-7 items-center justify-center rounded-xl border border-black/[0.05] bg-white/80 text-slate-400 shadow-sm transition-all hover:border-red-300 hover:bg-red-50 hover:text-red-600 dark:border-white/[0.04] dark:bg-white/[0.02] dark:hover:bg-red-500/10 dark:hover:text-red-400"
                       onClick={() => void deleteRound(r)}
                       aria-label={en ? 'Delete round' : 'حذف الجولة'}
                     >
@@ -250,7 +250,7 @@ export function ScoreTable({ match, names, lowerIsBetter, editTotalRequired }: P
                 });
                 const displayBest = lowerIsBetter ? Math.min(...displayTotals) : Math.max(...displayTotals);
                 return (
-                  <tr className="border-t-2 border-slate-200/80 dark:border-white/[0.07]">
+                  <tr className="border-t-2 border-black/[0.06] dark:border-white/[0.07]">
                     <td className={(compact ? 'px-1 py-4 text-[10px]' : 'py-4') + ' table-cell font-black text-slate-500 dark:text-slate-400 tracking-widest uppercase text-center'}>
                       {t.total}
                     </td>

@@ -68,7 +68,7 @@ export function PlayerSelect({ value, onChange, allPlayers, label, exclude }: Pr
       <button
         onClick={handleOpen}
         type="button"
-        className="w-full flex items-center justify-between gap-3 px-4 py-3 rounded-2xl bg-white/40 dark:bg-black/20 border border-black/5 dark:border-white/5 shadow-sm hover:bg-white/50 dark:hover:bg-black/25 active:scale-[0.98] transition-all duration-150 text-left rtl:text-right"
+        className="w-full flex items-center justify-between gap-3 px-4 py-3 rounded-2xl bg-white/80 dark:bg-black/20 border border-black/[0.04] dark:border-white/5 shadow-[0_2px_8px_rgb(15,23,42,0.015)] hover:bg-white/90 dark:hover:bg-black/25 active:scale-[0.98] transition-all duration-150 text-left rtl:text-right"
       >
         <div className="flex items-center gap-3 min-w-0">
           <PlayerAvatar name={value} size="sm" />
@@ -150,7 +150,7 @@ export function PlayerSelect({ value, onChange, allPlayers, label, exclude }: Pr
                       className={`w-full flex items-center justify-between gap-3 px-4 py-3 rounded-2xl transition-all duration-150 text-left rtl:text-right border ${
                         isSelected
                           ? 'bg-[rgba(var(--accent),0.15)] border-[rgba(var(--accent),0.2)] dark:bg-[rgba(var(--accent),0.2)] dark:border-[rgba(var(--accent),0.3)]'
-                          : 'bg-black/5 border-transparent hover:bg-black/10 dark:bg-white/5 dark:hover:bg-white/10'
+                          : 'bg-black/[0.03] border-transparent hover:bg-black/[0.06] dark:bg-white/5 dark:hover:bg-white/10'
                       }`}
                     >
                       <div className="flex items-center gap-3 min-w-0">
@@ -171,7 +171,7 @@ export function PlayerSelect({ value, onChange, allPlayers, label, exclude }: Pr
                       <div className={`h-5 w-5 rounded-full flex items-center justify-center border shrink-0 ${
                         isSelected
                           ? 'border-[rgb(var(--accent))] bg-[rgb(var(--accent))] text-white'
-                          : 'border-slate-300 dark:border-slate-700'
+                          : 'border-black/[0.12] dark:border-slate-700'
                       }`}>
                         {isSelected && (
                           <span className="w-1.5 h-1.5 rounded-full bg-white animate-ping" />

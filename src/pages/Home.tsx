@@ -132,7 +132,7 @@ export default function Home() {
                 <Link
                   key={m.id}
                   to={`/match/${m.id}/${m.kind}`}
-                  className={`group relative block overflow-hidden rounded-3xl border border-black/5 dark:border-white/5 bg-white dark:bg-[#1a1915] p-4 shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg`}
+                  className={`group relative block overflow-hidden rounded-3xl border border-black/5 dark:border-white/5 bg-white/95 dark:bg-[#1a1915] p-4 shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg`}
                 >
                   {/* Top row: Game Pill and Date */}
                   <div className="mb-4 flex items-center justify-between">
@@ -184,7 +184,7 @@ export default function Home() {
                           <div className={`mt-0.5 px-3 py-1.5 rounded-2xl text-lg font-black leading-none shadow-sm transition-all border ${
                             totals[0] < 0 
                               ? 'bg-red-500/10 text-red-500 border-red-500/20 dark:bg-red-500/20' 
-                              : 'bg-slate-50 text-slate-800 border-slate-200/50 dark:bg-white/[0.03] dark:text-white dark:border-white/[0.05]'
+                              : 'bg-white/80 text-slate-800 border-black/[0.04] dark:bg-white/[0.03] dark:text-white dark:border-white/[0.05]'
                           }`}>
                             <CountUp value={totals[0]} />
                           </div>
@@ -226,7 +226,7 @@ export default function Home() {
                           <div className={`mt-0.5 px-3 py-1.5 rounded-2xl text-lg font-black leading-none shadow-sm transition-all border ${
                             totals[1] < 0 
                               ? 'bg-red-500/10 text-red-500 border-red-500/20 dark:bg-red-500/20' 
-                              : 'bg-slate-50 text-slate-800 border-slate-200/50 dark:bg-white/[0.03] dark:text-white dark:border-white/[0.05]'
+                              : 'bg-white/80 text-slate-800 border-black/[0.04] dark:bg-white/[0.03] dark:text-white dark:border-white/[0.05]'
                           }`}>
                             <CountUp value={totals[1]} />
                           </div>
@@ -245,7 +245,7 @@ export default function Home() {
                           <div className={`mt-0.5 px-2.5 py-1.5 rounded-2xl text-sm font-black leading-none shadow-sm transition-all border ${
                             tot < 0 
                               ? 'bg-red-500/10 text-red-500 border-red-500/20 dark:bg-red-500/20' 
-                              : 'bg-slate-50 text-slate-800 border-slate-200/50 dark:bg-white/[0.03] dark:text-white dark:border-white/[0.05]'
+                              : 'bg-white/80 text-slate-800 border-black/[0.04] dark:bg-white/[0.03] dark:text-white dark:border-white/[0.05]'
                           }`}>
                             <CountUp value={tot} />
                           </div>
@@ -319,7 +319,7 @@ export default function Home() {
             <button
               key={g}
               onClick={() => navigate(`/new/${g}`)}
-              className="group relative flex w-full flex-col items-stretch overflow-hidden rounded-[1.5rem] border border-white/[0.08] bg-white shadow-md shadow-black/8 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-black/14 active:scale-[0.96] dark:bg-[#1c1b18]"
+              className="group relative flex w-full flex-col items-stretch overflow-hidden rounded-[1.5rem] border border-black/[0.04] dark:border-white/[0.08] bg-white/95 shadow-md shadow-black/[0.03] transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-black/[0.06] active:scale-[0.96] dark:bg-[#1c1b18]"
             >
               {/* Image / Icon Panel */}
               <div className={'relative flex h-24 w-full shrink-0 items-center justify-center overflow-hidden bg-gradient-to-br text-white ' + GRADIENTS[g]}>

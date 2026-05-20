@@ -88,7 +88,7 @@ export function Layout({ children, title, back, headerAction }: LayoutProps) {
 
   return (
     <div className="app-shell min-h-full flex flex-col">
-      <header className="sticky top-0 z-40 border-b border-slate-200/70 bg-white/85 pt-[env(safe-area-inset-top)] backdrop-blur-xl dark:border-white/5 dark:bg-[#171715]/95">
+      <header className="sticky top-0 z-40 border-b border-black/[0.04] bg-white/90 pt-[env(safe-area-inset-top)] backdrop-blur-xl dark:border-white/5 dark:bg-[#171715]/95">
         <div className="mx-auto grid max-w-5xl grid-cols-[3.25rem_minmax(0,1fr)_3.25rem] items-center gap-2 px-3 py-2.5 sm:px-4 sm:py-3">
           <div ref={menuRef} className="relative flex justify-start">
             <button
@@ -107,7 +107,7 @@ export function Layout({ children, title, back, headerAction }: LayoutProps) {
                 }
               >
                 {/* Top quick row */}
-                <div className="flex items-center justify-between gap-2 border-b border-slate-200/70 px-1 pb-2 dark:border-white/10">
+                <div className="flex items-center justify-between gap-2 border-b border-black/[0.06] px-1 pb-2 dark:border-white/10">
                   {headerAction ? <div onClick={closeMenu}>{headerAction}</div> : <span />}
                   <button onClick={() => { toggleSound(); }} className="btn-ghost h-11 w-11 px-0" aria-label={t.sound}>
                       {soundEnabled ? <Volume2 className="h-5 w-5" /> : <VolumeX className="h-5 w-5 text-slate-400" />}
@@ -179,7 +179,7 @@ export function Layout({ children, title, back, headerAction }: LayoutProps) {
         {children}
       </main>
 
-      <nav className="fixed bottom-0 left-0 right-0 z-40 border-t border-slate-200 bg-white/95 pb-[env(safe-area-inset-bottom)] backdrop-blur dark:border-white/5 dark:bg-[#171715]/95">
+      <nav className="fixed bottom-0 left-0 right-0 z-40 border-t border-black/[0.04] bg-white/92 pb-[env(safe-area-inset-bottom)] backdrop-blur dark:border-white/5 dark:bg-[#171715]/95">
         <div className="mx-auto flex max-w-5xl items-stretch justify-around">
           <NavItem to="/" active={isActive('/')} icon={<Home className="h-5 w-5" />} label={t.home} />
           <NavItem to="/history" active={isActive('/history')} icon={<History className="h-5 w-5" />} label={t.history} />

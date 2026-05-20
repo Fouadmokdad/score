@@ -87,7 +87,7 @@ function MatchCard({ match, language, onDelete }: { match: Match; language: 'en'
     <>
       <Link
         to={`/match/${match.id}/${match.kind}`}
-        className="group relative block overflow-hidden rounded-3xl border border-black/5 dark:border-white/5 bg-white dark:bg-[#1a1915] p-4 shadow-sm transition-transform hover:-translate-y-1 hover:shadow-md"
+        className="group relative block overflow-hidden rounded-3xl border border-black/[0.04] dark:border-white/5 bg-white/95 dark:bg-[#1a1915] p-4 shadow-sm transition-transform hover:-translate-y-1 hover:shadow-md"
       >
       <MatchCover match={match} language={language} />
 
@@ -339,7 +339,7 @@ function CalendarPicker({
           </button>
           <button
             onClick={() => { onSelect(new Date(0)); onClose(); }}
-            className="flex-1 rounded-xl bg-black/5 dark:bg-white/10 py-2.5 text-sm font-bold text-slate-700 dark:text-white transition hover:bg-black/10 dark:hover:bg-white/15 active:scale-95"
+            className="flex-1 rounded-xl bg-black/[0.04] dark:bg-white/10 py-2.5 text-sm font-bold text-slate-700 dark:text-white transition hover:bg-black/[0.07] dark:hover:bg-white/15 active:scale-95"
           >
             {language === 'ar' ? 'عرض الكل' : 'Show All'}
           </button>
@@ -401,7 +401,7 @@ export default function History() {
       <div className="mb-5 flex items-center justify-between">
         <button
           onClick={() => setShowCalendar(true)}
-          className="flex items-center gap-2.5 rounded-2xl border border-black/5 dark:border-white/10 bg-white dark:bg-white/5 px-4 py-2.5 shadow-sm transition hover:shadow-md active:scale-95"
+          className="flex items-center gap-2.5 rounded-2xl border border-black/[0.04] dark:border-white/10 bg-white/95 dark:bg-white/5 px-4 py-2.5 shadow-sm transition hover:shadow-md active:scale-95"
         >
           <CalendarDays className="h-5 w-5 text-emerald-500" />
           <span className="text-sm font-bold text-slate-800 dark:text-white">{dateLabel}</span>
@@ -445,7 +445,7 @@ export default function History() {
                 'rounded-xl px-4 py-2 text-xs font-bold transition-all active:scale-95 ' +
                 (isActive
                   ? 'bg-[rgb(var(--accent))] text-white shadow-md shadow-[rgba(var(--accent),0.25)]'
-                  : 'bg-black/5 dark:bg-white/10 text-slate-600 dark:text-slate-300 hover:bg-black/10 dark:hover:bg-white/15'
+                  : 'bg-black/[0.03] dark:bg-white/10 text-slate-600 dark:text-slate-300 hover:bg-black/[0.06] dark:hover:bg-white/15'
                 )
               }
             >

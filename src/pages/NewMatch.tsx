@@ -80,7 +80,7 @@ export default function NewMatch() {
                       'rounded-xl border px-3 py-2 text-sm font-bold ' +
                       (tarneebTarget === value
                         ? 'border-[rgb(var(--accent))] bg-[rgb(var(--accent))] text-white'
-                        : 'border-slate-300 dark:border-slate-700')
+                        : 'border-black/[0.08] dark:border-slate-700')
                     }
                     onClick={() => setTarneebTarget(value)}
                   >
@@ -101,7 +101,7 @@ export default function NewMatch() {
                       'rounded-xl border px-3 py-2 text-sm font-bold ' +
                       (handSoloPlayers === count
                         ? 'border-[rgb(var(--accent))] bg-[rgb(var(--accent))] text-white'
-                        : 'border-slate-300 dark:border-slate-700')
+                        : 'border-black/[0.08] dark:border-slate-700')
                     }
                     onClick={() => setHandSoloPlayers(count)}
                   >

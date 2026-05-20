@@ -102,7 +102,7 @@ export default function Trophies() {
               'relative flex flex-col items-center rounded-2xl border p-4 text-center transition ' +
               (a.achieved
                 ? 'border-amber-300/60 bg-gradient-to-br from-amber-50 to-yellow-100 shadow-md shadow-amber-500/10 dark:border-amber-500/40 dark:from-amber-500/15 dark:to-yellow-500/5'
-                : 'border-slate-200 bg-white/60 dark:border-white/10 dark:bg-white/5')
+                : 'border-black/[0.05] bg-white/80 dark:border-white/10 dark:bg-white/5')
             }
           >
             <div
@@ -129,7 +129,7 @@ export default function Trophies() {
 
             {/* Progress bar */}
             {!a.achieved && (
-              <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-slate-200 dark:bg-white/10">
+              <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-black/[0.06] dark:bg-white/10">
                 <div
                   className="h-full rounded-full bg-gradient-to-r from-amber-400 to-yellow-500"
                   style={{ width: `${Math.round(a.progress * 100)}%` }}

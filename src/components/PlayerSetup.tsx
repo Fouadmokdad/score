@@ -61,7 +61,7 @@ export function PlayerSetup({ count, initial, labels, onSubmit, submitLabel, ext
             'flex items-center gap-3 rounded-2xl border px-3 py-2.5 transition-all duration-300 cursor-pointer ' +
             (isActive
               ? 'border-[rgb(var(--accent))] bg-[rgba(var(--accent),0.08)] shadow-[0_0_15px_rgba(var(--accent),0.12)] ring-1 ring-[rgb(var(--accent))] dark:bg-[rgba(var(--accent),0.04)] dark:shadow-[0_0_20px_rgba(var(--accent),0.08)]'
-              : 'border-slate-200/80 bg-white/80 dark:border-white/[0.05] dark:bg-white/[0.02] hover:bg-slate-50 dark:hover:bg-white/[0.03] hover:border-slate-300 dark:hover:border-white/[0.08]')
+              : 'border-black/[0.05] bg-white/90 dark:border-white/[0.05] dark:bg-white/[0.02] hover:bg-black/[0.02] dark:hover:bg-white/[0.03] hover:border-black/[0.08] dark:hover:border-white/[0.08]')
           }
           onClick={() => setActiveSlot(index)}
         >
@@ -72,7 +72,7 @@ export function PlayerSetup({ count, initial, labels, onSubmit, submitLabel, ext
               'inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border transition-all duration-300 active:scale-95 ' +
               (isActive
                 ? 'border-[rgb(var(--accent))] bg-[rgba(var(--accent),0.12)] text-[rgb(var(--accent))] shadow-[0_2px_8px_rgba(var(--accent),0.08)]'
-                : 'border-slate-200 bg-slate-50/50 text-slate-400 hover:border-[rgb(var(--accent))] hover:text-[rgb(var(--accent))] hover:bg-[rgba(var(--accent),0.05)] dark:border-white/[0.08] dark:bg-white/[0.01] dark:text-slate-500 dark:hover:bg-white/[0.04]')
+                : 'border-black/[0.06] bg-white/80 text-slate-500 hover:border-[rgb(var(--accent))] hover:text-[rgb(var(--accent))] hover:bg-[rgba(var(--accent),0.05)] dark:border-white/[0.08] dark:bg-white/[0.01] dark:text-slate-500 dark:hover:bg-white/[0.04]')
             }
             onClick={(e) => {
               e.stopPropagation();
@@ -136,7 +136,7 @@ export function PlayerSetup({ count, initial, labels, onSubmit, submitLabel, ext
                     <button
                       key={player.name}
                       type="button"
-                      className="group inline-flex max-w-full items-center gap-2 rounded-full border border-slate-200/80 bg-slate-50/50 dark:border-white/[0.05] dark:bg-white/[0.01] px-3.5 py-1.5 text-xs font-bold text-slate-700 dark:text-slate-300 transition-all duration-200 hover:border-[rgba(var(--accent),0.4)] hover:bg-[rgba(var(--accent),0.06)] hover:text-[rgb(var(--accent))] hover:scale-[1.02] active:scale-[0.98]"
+                      className="group inline-flex max-w-full items-center gap-2 rounded-full border border-black/[0.05] bg-white/90 dark:border-white/[0.05] dark:bg-white/[0.01] px-3.5 py-1.5 text-xs font-bold text-slate-800 dark:text-slate-300 transition-all duration-200 hover:border-[rgba(var(--accent),0.4)] hover:bg-[rgba(var(--accent),0.06)] hover:text-[rgb(var(--accent))] hover:scale-[1.02] active:scale-[0.98]"
                       onClick={() => setAt(index, player.name)}
                     >
                       <PlayerAvatar name={player.name} size="sm" />
@@ -248,7 +248,7 @@ export function PlayerSetup({ count, initial, labels, onSubmit, submitLabel, ext
           </div>
         </div>
         {players.length === 0 ? (
-          <div className="rounded-2xl border border-dashed border-slate-200 dark:border-white/[0.08] p-5 text-center text-xs text-slate-400 dark:text-slate-500 font-medium bg-slate-50/20 dark:bg-transparent">
+          <div className="rounded-2xl border border-dashed border-black/[0.06] dark:border-white/[0.08] p-5 text-center text-xs text-slate-400 dark:text-slate-500 font-medium bg-transparent dark:bg-transparent">
             {t.noSavedPlayers}
           </div>
         ) : (
@@ -266,7 +266,7 @@ export function PlayerSetup({ count, initial, labels, onSubmit, submitLabel, ext
                 .map((player) => (
                   <button
                     key={player.name}
-                    className="group inline-flex max-w-full items-center gap-2 rounded-full border border-slate-200/80 bg-slate-50/50 dark:border-white/[0.05] dark:bg-white/[0.01] px-3.5 py-1.5 text-xs font-bold text-slate-700 dark:text-slate-300 transition-all duration-200 hover:border-[rgba(var(--accent),0.4)] hover:bg-[rgba(var(--accent),0.06)] hover:text-[rgb(var(--accent))] hover:scale-[1.02] active:scale-[0.98]"
+                    className="group inline-flex max-w-full items-center gap-2 rounded-full border border-black/[0.05] bg-white/90 dark:border-white/[0.05] dark:bg-white/[0.01] px-3.5 py-1.5 text-xs font-bold text-slate-800 dark:text-slate-300 transition-all duration-200 hover:border-[rgba(var(--accent),0.4)] hover:bg-[rgba(var(--accent),0.06)] hover:text-[rgb(var(--accent))] hover:scale-[1.02] active:scale-[0.98]"
                     onClick={() => setAt(activeSlot, player.name)}
                   >
                     <PlayerAvatar name={player.name} size="sm" />

@@ -256,7 +256,7 @@ export function ScoreTable({ match, names, lowerIsBetter, editTotalRequired }: P
       {editingRound &&
         createPortal(
           <div className="fixed inset-0 z-[120] flex items-end justify-center bg-black/65 px-3 pb-4 pt-16 backdrop-blur-sm sm:items-center sm:p-4">
-            <div className="max-h-[calc(100vh-5rem)] w-full max-w-md overflow-y-auto rounded-[1.5rem] border border-white/10 bg-white p-4 shadow-2xl dark:bg-[#201f1b]">
+            <div className="max-h-[calc(100vh-5rem)] w-full max-w-md overflow-y-auto rounded-[1.5rem] p-4 glass-modal">
               <div className="mb-4 flex items-start justify-between gap-3">
                 <div className="min-w-0">
                   <h2 className="text-lg font-extrabold">

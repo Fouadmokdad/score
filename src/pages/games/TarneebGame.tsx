@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { useState } from 'react';
-import { Flag, Plus } from 'lucide-react';
+import { Flag, Plus, Trophy } from 'lucide-react';
 import { Layout } from '../../components/Layout';
 import { ManualFinishMatch } from '../../components/ManualFinishMatch';
 import { ScoreTable } from '../../components/ScoreTable';
@@ -18,6 +18,7 @@ import {
 } from '../../logic/tarneeb';
 import { computeTotals, useMatches } from '../../store/matches';
 import { useSettings } from '../../store/settings';
+import { ShareMatchCardModal } from '../../components/ShareMatchCardModal';
 
 type Variant = 'regular' | '400';
 
@@ -32,6 +33,7 @@ export default function TarneebGame({ variant }: { variant: Variant }) {
 
   const [showRoundForm, setShowRoundForm] = useState(false);
   const [error, setError] = useState('');
+  const [showShareCard, setShowShareCard] = useState(false);
 
   const [bidderTeam, setBidderTeam] = useState(0);
   const [bidTricks, setBidTricks] = useState(7);
@@ -157,10 +159,23 @@ export default function TarneebGame({ variant }: { variant: Variant }) {
           <div className="card text-center font-bold text-emerald-600 dark:text-emerald-400">
             {en ? 'Winner' : 'الفائز'}: {match.players[winnerIndex]} ({totals[winnerIndex]})
           </div>
-          <button className="btn-primary w-full" onClick={finish}>
-            <Flag className="h-4 w-4" /> {en ? 'Finish match' : 'إنهاء المباراة'}
-          </button>
+          <div className="flex gap-2">
+            <button className="btn-primary flex-1" onClick={finish}>
+              <Flag className="h-4 w-4" /> {en ? 'Finish match' : 'إنهاء المباراة'}
+            </button>
+            <button
+              className="border-2 border-amber-500/30 bg-amber-500/10 text-amber-600 hover:bg-amber-500/20 dark:text-amber-400 flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-2xl text-sm font-bold transition-all"
+              onClick={() => setShowShareCard(true)}
+            >
+              <Trophy className="h-4 w-4 text-amber-500" />
+              <span>{en ? 'Share Victory' : 'بطاقة الفوز'}</span>
+            </button>
+          </div>
         </div>
+      )}
+
+      {showShareCard && (
+        <ShareMatchCardModal matchId={match.id} onClose={() => setShowShareCard(false)} />
       )}
     </Layout>
   );

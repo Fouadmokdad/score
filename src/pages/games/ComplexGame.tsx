@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Flag, Plus, Crown } from 'lucide-react';
+import { Flag, Plus, Crown, Trophy } from 'lucide-react';
 import { Layout } from '../../components/Layout';
 import { ManualFinishMatch } from '../../components/ManualFinishMatch';
 import { ScoreTable } from '../../components/ScoreTable';
@@ -10,6 +10,7 @@ import { gameText } from '../../i18n';
 import { calcTrixRound } from '../../logic/trix';
 import { computeTotals, useMatches } from '../../store/matches';
 import { useSettings } from '../../store/settings';
+import { ShareMatchCardModal } from '../../components/ShareMatchCardModal';
 
 type ComplexContract = 'complex' | 'trix';
 
@@ -33,6 +34,7 @@ export default function ComplexGame({ variant = 'solo' }: { variant?: 'solo' | '
   const [trixOrder, setTrixOrder] = useState<number[]>([]);
   const [doubleCards, setDoubleCards] = useState(false);
   const [error, setError] = useState('');
+  const [showShareCard, setShowShareCard] = useState(false);
 
   if (!match) {
     return (
@@ -241,9 +243,24 @@ export default function ComplexGame({ variant = 'solo' }: { variant?: 'solo' | '
       )}
 
       {remaining <= 0 && (
-        <button className="btn-primary mt-4 w-full" onClick={finish}>
-          <Flag className="h-4 w-4" /> {en ? 'Finish match' : 'إنهاء المباراة'}
-        </button>
+        <div className="mt-4 space-y-2">
+          <div className="flex gap-2">
+            <button className="btn-primary flex-1" onClick={finish}>
+              <Flag className="h-4 w-4" /> {en ? 'Finish match' : 'إنهاء المباراة'}
+            </button>
+            <button
+              className="border-2 border-amber-500/30 bg-amber-500/10 text-amber-600 hover:bg-amber-500/20 dark:text-amber-400 flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-2xl text-sm font-bold transition-all"
+              onClick={() => setShowShareCard(true)}
+            >
+              <Trophy className="h-4 w-4 text-amber-500" />
+              <span>{en ? 'Share Victory' : 'بطاقة الفوز'}</span>
+            </button>
+          </div>
+        </div>
+      )}
+
+      {showShareCard && (
+        <ShareMatchCardModal matchId={match.id} onClose={() => setShowShareCard(false)} />
       )}
     </Layout>
   );

@@ -2,7 +2,7 @@ import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { Layout } from '../components/Layout';
 import { useMatches, computeTotals } from '../store/matches';
-import { Trash2, ChevronLeft, ChevronRight, CalendarDays } from 'lucide-react';
+import { Trash2, ChevronLeft, ChevronRight, CalendarDays, Trophy } from 'lucide-react';
 import { copy, gameText } from '../i18n';
 import { useSettings } from '../store/settings';
 import { PlayerAvatar } from '../components/PlayerAvatar';
@@ -11,6 +11,7 @@ import { countHandWins } from '../logic/hand';
 import { useConfirm } from '../components/ConfirmDialog';
 import { EmptyState } from '../components/EmptyState';
 import { CountUp } from '../components/CountUp';
+import { ShareMatchCardModal } from '../components/ShareMatchCardModal';
 
 const GRADIENTS: Record<GameKind, string> = {
   likha: 'from-[#6366f1] to-[#a855f7]',
@@ -80,11 +81,14 @@ function MatchCard({ match, language, onDelete }: { match: Match; language: 'en'
     ? matchDate.toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' })
     : matchDate.toLocaleDateString('ar-SY-u-nu-latn', { day: 'numeric', month: 'long', year: 'numeric' });
 
+  const [showShareCard, setShowShareCard] = useState(false);
+
   return (
-    <Link
-      to={`/match/${match.id}/${match.kind}`}
-      className="group relative block overflow-hidden rounded-3xl border border-black/5 dark:border-white/5 bg-white dark:bg-[#1a1915] p-4 shadow-sm transition-transform hover:-translate-y-1 hover:shadow-md"
-    >
+    <>
+      <Link
+        to={`/match/${match.id}/${match.kind}`}
+        className="group relative block overflow-hidden rounded-3xl border border-black/5 dark:border-white/5 bg-white dark:bg-[#1a1915] p-4 shadow-sm transition-transform hover:-translate-y-1 hover:shadow-md"
+      >
       <MatchCover match={match} language={language} />
 
       {/* Top row */}
@@ -201,10 +205,29 @@ function MatchCard({ match, language, onDelete }: { match: Match; language: 'en'
           >
             <Trash2 className="h-4 w-4" />
           </button>
+
+          {match.finished && (
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setShowShareCard(true);
+              }}
+              className="flex h-8 px-3 items-center justify-center gap-1 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400 transition-all hover:bg-amber-500 hover:text-white text-xs font-bold"
+              aria-label="Share Match Card"
+            >
+              <Trophy className="h-3.5 w-3.5" />
+              <span>{en ? 'Share' : 'مشاركة'}</span>
+            </button>
+          )}
         </div>
         <span className="text-xs font-medium text-slate-500">{language === 'en' ? 'Rounds: ' : 'جولة: '}{match.rounds.length}</span>
       </div>
     </Link>
+    {showShareCard && (
+      <ShareMatchCardModal matchId={match.id} onClose={() => setShowShareCard(false)} />
+    )}
+    </>
   );
 }
 
@@ -250,7 +273,7 @@ function CalendarPicker({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative w-full max-w-sm rounded-[2rem] bg-[#F9F6EE] dark:bg-[#1a1915] p-5 shadow-2xl border border-black/5 dark:border-white/5 animate-in zoom-in-95">
+      <div className="relative w-full max-w-sm rounded-[2rem] p-5 animate-in zoom-in-95 glass-modal">
         {/* Header */}
         <div className="flex items-center justify-between mb-4">
           <button onClick={prevMonth} className="flex h-9 w-9 items-center justify-center rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition">

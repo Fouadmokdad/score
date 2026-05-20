@@ -34,7 +34,7 @@ export function ConfirmProvider({ children }: { children: React.ReactNode }) {
       {children}
       {state && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 px-4 backdrop-blur-sm">
-          <div className="w-full max-w-sm rounded-[1.5rem] border border-white/10 bg-white p-4 shadow-2xl dark:bg-[#201f1b]">
+          <div className="w-full max-w-sm rounded-[1.5rem] p-4 glass-modal">
             <div className="flex items-start gap-3">
               <div
                 className={

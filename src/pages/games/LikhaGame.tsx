@@ -10,6 +10,7 @@ import { Plus, Undo2, Flag, CalendarDays, Trophy, Target } from 'lucide-react';
 import { copy, gameText } from '../../i18n';
 import { useSettings } from '../../store/settings';
 import { ShareButton } from '../../components/ShareButton';
+import { ShareMatchCardModal } from '../../components/ShareMatchCardModal';
 
 export default function LikhaGame() {
   const { id } = useParams();
@@ -23,6 +24,7 @@ export default function LikhaGame() {
   const [scores, setScores] = useState<string[]>(['', '', '', '']);
   const [showRoundForm, setShowRoundForm] = useState(false);
   const [error, setError] = useState('');
+  const [showShareCard, setShowShareCard] = useState(false);
 
   if (!match) {
     return (
@@ -217,10 +219,23 @@ export default function LikhaGame() {
               {en ? `${match.players[reachedIdx]} reached ${totals[reachedIdx]} points, so the game ended` : `${match.players[reachedIdx]} وصل ${totals[reachedIdx]} نقطة فانتهت اللعبة`}
             </div>
           </div>
-          <button className="btn-primary w-full" onClick={finish}>
-            <Flag className="h-4 w-4" /> {en ? 'Finish match' : 'إنهاء المباراة'}
-          </button>
+          <div className="flex gap-2">
+            <button className="btn-primary flex-1" onClick={finish}>
+              <Flag className="h-4 w-4" /> {en ? 'Finish match' : 'إنهاء المباراة'}
+            </button>
+            <button
+              className="border-2 border-amber-500/30 bg-amber-500/10 text-amber-600 hover:bg-amber-500/20 dark:text-amber-400 flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-2xl text-sm font-bold transition-all"
+              onClick={() => setShowShareCard(true)}
+            >
+              <Trophy className="h-4 w-4 text-amber-500" />
+              <span>{en ? 'Share Victory' : 'بطاقة الفوز'}</span>
+            </button>
+          </div>
         </div>
+      )}
+
+      {showShareCard && (
+        <ShareMatchCardModal matchId={match.id} onClose={() => setShowShareCard(false)} />
       )}
     </Layout>
   );

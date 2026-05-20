@@ -4,6 +4,7 @@ import { copy } from '../i18n';
 import { useSavedPlayers, AVATARS } from '../store/players';
 import { useSettings } from '../store/settings';
 import { PlayerAvatar } from './PlayerAvatar';
+import { AvatarPickerModal } from './AvatarPickerModal';
 
 interface Props {
   count: number;
@@ -126,7 +127,7 @@ export function PlayerSetup({ count, initial, labels, onSubmit, submitLabel, ext
           );
           const available = players.filter((p) => !takenNames.has(p.name.trim().toLowerCase()));
           return (
-            <div className="animate-in slide-in-from-top-2 rounded-2xl border border-slate-200/80 bg-white/95 p-2.5 shadow-lg dark:border-white/10 dark:bg-[#252420]">
+            <div className="animate-in slide-in-from-top-2 rounded-2xl p-2.5 glass-modal">
               {available.length === 0 ? (
                 <div className="px-2 py-2 text-center text-xs text-slate-500">{t.noSavedPlayers}</div>
               ) : (
@@ -272,92 +273,10 @@ export function PlayerSetup({ count, initial, labels, onSubmit, submitLabel, ext
 
       {/* Avatar Picker Modal */}
       {avatarPickerFor && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setAvatarPickerFor(null)} />
-          <div className="relative w-full max-w-md animate-in zoom-in-95 rounded-[2rem] bg-white p-5 shadow-2xl dark:bg-[#1a1915] sm:p-6">
-            <div className="mb-4 flex items-center justify-between">
-              <div>
-                <h3 className="text-lg font-bold">{en ? 'Choose Avatar' : 'اختر صورة العرض'}</h3>
-                <p className="text-sm text-slate-500">{avatarPickerFor}</p>
-              </div>
-              <button
-                className="rounded-full bg-slate-100 p-2 text-slate-500 hover:bg-slate-200 dark:bg-white/5 dark:hover:bg-white/10"
-                onClick={() => setAvatarPickerFor(null)}
-              >
-                <X className="h-5 w-5" />
-              </button>
-            </div>
-            <div className="grid max-h-[60vh] grid-cols-4 gap-3 overflow-y-auto p-1 sm:grid-cols-5">
-              <label className="group relative flex aspect-square cursor-pointer flex-col items-center justify-center overflow-hidden rounded-2xl border-2 border-dashed border-emerald-400 bg-emerald-50 text-emerald-600 transition-transform hover:scale-105 active:scale-95 dark:border-emerald-500/50 dark:bg-emerald-500/10 dark:text-emerald-400">
-                <input
-                  type="file"
-                  accept="image/*"
-                  className="hidden"
-                  onChange={(e) => {
-                    const file = e.target.files?.[0];
-                    if (!file) return;
-                    const reader = new FileReader();
-                    reader.onload = (event) => {
-                      const img = new Image();
-                      img.onload = () => {
-                        const canvas = document.createElement('canvas');
-                        const MAX_SIZE = 150;
-                        let width = img.width;
-                        let height = img.height;
-                        if (width > height) {
-                          if (width > MAX_SIZE) {
-                            height *= MAX_SIZE / width;
-                            width = MAX_SIZE;
-                          }
-                        } else {
-                          if (height > MAX_SIZE) {
-                            width *= MAX_SIZE / height;
-                            height = MAX_SIZE;
-                          }
-                        }
-                        canvas.width = width;
-                        canvas.height = height;
-                        const ctx = canvas.getContext('2d');
-                        if (ctx) {
-                          ctx.drawImage(img, 0, 0, width, height);
-                          const dataUrl = canvas.toDataURL('image/jpeg', 0.8);
-                          updatePlayer(avatarPickerFor, { avatar: dataUrl });
-                          setAvatarPickerFor(null);
-                        }
-                      };
-                      img.src = event.target?.result as string;
-                    };
-                    reader.readAsDataURL(file);
-                  }}
-                />
-                <Plus className="mb-1 h-5 w-5" />
-                <span className="text-[10px] font-bold">{en ? 'Upload' : 'رفع صورة'}</span>
-              </label>
-
-              {AVATARS.map((avatar) => {
-                const path = `/jawaker-assets/avatars/${avatar}`;
-                const player = players.find(p => p.name === avatarPickerFor);
-                const isSelected = player?.avatar === path;
-                return (
-                  <button
-                    key={avatar}
-                    type="button"
-                    className={'group relative aspect-square overflow-hidden rounded-2xl transition-transform hover:scale-105 active:scale-95 ' + (isSelected ? 'ring-4 ring-emerald-500 ring-offset-2 dark:ring-offset-[#1a1915]' : '')}
-                    onClick={() => {
-                      updatePlayer(avatarPickerFor, { avatar: path });
-                      setAvatarPickerFor(null);
-                    }}
-                  >
-                    <img src={path} alt="" className="h-full w-full object-cover" />
-                    {isSelected && (
-                      <div className="absolute inset-0 bg-emerald-500/20" />
-                    )}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        </div>
+        <AvatarPickerModal
+          playerName={avatarPickerFor}
+          onClose={() => setAvatarPickerFor(null)}
+        />
       )}
     </div>
   );

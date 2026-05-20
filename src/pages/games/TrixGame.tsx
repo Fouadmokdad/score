@@ -5,11 +5,12 @@ import { ScoreTable } from '../../components/ScoreTable';
 import { ManualFinishMatch } from '../../components/ManualFinishMatch';
 import { useMatches, computeTotals } from '../../store/matches';
 import { TRIX_CONTRACTS, calcTrixRound, type TrixContract, totalTrixRounds } from '../../logic/trix';
-import { Plus, Undo2, Flag, Crown } from 'lucide-react';
+import { Plus, Undo2, Flag, Crown, Trophy } from 'lucide-react';
 import { copy, gameText } from '../../i18n';
 import { useSettings } from '../../store/settings';
 import { ShareButton } from '../../components/ShareButton';
 import { GameScoreHeader } from '../../components/GameScoreHeader';
+import { ShareMatchCardModal } from '../../components/ShareMatchCardModal';
 
 export default function TrixGame({ variant = 'solo' }: { variant?: 'solo' | 'partners' }) {
   const { id } = useParams();
@@ -28,6 +29,7 @@ export default function TrixGame({ variant = 'solo' }: { variant?: 'solo' | 'par
   const [crown, setCrown] = useState(false);
   const [showRoundForm, setShowRoundForm] = useState(false);
   const [error, setError] = useState('');
+  const [showShareCard, setShowShareCard] = useState(false);
 
   const def = useMemo(() => TRIX_CONTRACTS.find((c) => c.id === contract)!, [contract]);
   const parsedCounts = counts.map((count) => Number(count) || 0);
@@ -333,9 +335,24 @@ export default function TrixGame({ variant = 'solo' }: { variant?: 'solo' | 'par
       )}
 
       {remaining <= 0 && (
-        <button className="btn-primary mt-4 w-full" onClick={finish}>
-          <Flag className="h-4 w-4" /> {en ? 'Finish match' : 'إنهاء المباراة'}
-      </button>
+        <div className="mt-4 space-y-2">
+          <div className="flex gap-2">
+            <button className="btn-primary flex-1" onClick={finish}>
+              <Flag className="h-4 w-4" /> {en ? 'Finish match' : 'إنهاء المباراة'}
+            </button>
+            <button
+              className="border-2 border-amber-500/30 bg-amber-500/10 text-amber-600 hover:bg-amber-500/20 dark:text-amber-400 flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-2xl text-sm font-bold transition-all"
+              onClick={() => setShowShareCard(true)}
+            >
+              <Trophy className="h-4 w-4 text-amber-500" />
+              <span>{en ? 'Share Victory' : 'بطاقة الفوز'}</span>
+            </button>
+          </div>
+        </div>
+      )}
+
+      {showShareCard && (
+        <ShareMatchCardModal matchId={match.id} onClose={() => setShowShareCard(false)} />
       )}
     </Layout>
   );

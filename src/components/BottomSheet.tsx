@@ -50,7 +50,7 @@ export function BottomSheet({ open, onClose, title, children, maxHeight = 'max-h
           {/* Sheet */}
           <motion.div
             className={
-              'relative w-full max-w-md rounded-t-[2rem] border border-black/5 bg-[#F9F6EE] p-4 pb-8 shadow-2xl dark:border-white/5 dark:bg-[#1a1915] sm:rounded-[2rem] sm:pb-6 ' +
+              'relative w-full max-w-md rounded-t-[2rem] p-4 pb-8 glass-modal sm:rounded-[2rem] sm:pb-6 ' +
               maxHeight
             }
             initial={{ y: '100%' }}

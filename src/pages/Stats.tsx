@@ -6,6 +6,7 @@ import { copy, gameText } from '../i18n';
 import { useSettings } from '../store/settings';
 import { PlayerAvatar } from '../components/PlayerAvatar';
 import { AvatarPickerModal } from '../components/AvatarPickerModal';
+import { PlayerSelect } from '../components/PlayerSelect';
 import { calculateEloData, calculateH2HStats } from '../utils/elo';
 import {
   Trophy,
@@ -878,20 +879,12 @@ export default function Stats() {
 
                 <div className="grid grid-cols-[1fr_2.5rem_1fr] items-center gap-3">
                   {/* Selector Player 1 */}
-                  <div className="relative">
-                    <select
-                      value={activeP1}
-                      onChange={(e) => setP1State(e.target.value)}
-                      className="input py-3 pl-3 pr-8 font-black text-sm text-slate-800 dark:text-white appearance-none text-center bg-black/5 border border-transparent dark:bg-white/5"
-                    >
-                      {allPlayerNames.map((name) => (
-                        <option key={name} value={name} className="dark:bg-slate-900">
-                          {name}
-                        </option>
-                      ))}
-                    </select>
-                    <ChevronDown className="absolute right-3.5 top-1/2 -translate-y-1/2 h-4 w-4 pointer-events-none text-slate-400" />
-                  </div>
+                  <PlayerSelect
+                    value={activeP1}
+                    onChange={setP1State}
+                    allPlayers={allPlayerNames}
+                    exclude={activeP2}
+                  />
 
                   {/* ⚔️ Icon */}
                   <div className="flex items-center justify-center">
@@ -899,20 +892,12 @@ export default function Stats() {
                   </div>
 
                   {/* Selector Player 2 */}
-                  <div className="relative">
-                    <select
-                      value={activeP2}
-                      onChange={(e) => setP2State(e.target.value)}
-                      className="input py-3 pl-3 pr-8 font-black text-sm text-slate-800 dark:text-white appearance-none text-center bg-black/5 border border-transparent dark:bg-white/5"
-                    >
-                      {allPlayerNames.map((name) => (
-                        <option key={name} value={name} className="dark:bg-slate-900">
-                          {name}
-                        </option>
-                      ))}
-                    </select>
-                    <ChevronDown className="absolute right-3.5 top-1/2 -translate-y-1/2 h-4 w-4 pointer-events-none text-slate-400" />
-                  </div>
+                  <PlayerSelect
+                    value={activeP2}
+                    onChange={setP2State}
+                    allPlayers={allPlayerNames}
+                    exclude={activeP1}
+                  />
                 </div>
               </div>
 
@@ -1080,20 +1065,11 @@ export default function Stats() {
                 <h3 className="text-sm font-black text-slate-400 uppercase tracking-wider text-center">
                   {en ? 'Select Player to Analyze' : 'اختر اللاعب لتحليل مساره'}
                 </h3>
-                <div className="relative">
-                  <select
-                    value={activeEloPlayer}
-                    onChange={(e) => setEloPlayerState(e.target.value)}
-                    className="input py-3 pl-3 pr-8 font-black text-sm text-slate-800 dark:text-white appearance-none text-center bg-black/5 border border-transparent dark:bg-white/5"
-                  >
-                    {allPlayerNames.map((name) => (
-                      <option key={name} value={name} className="dark:bg-slate-900">
-                        {name}
-                      </option>
-                    ))}
-                  </select>
-                  <ChevronDown className="absolute right-3.5 top-1/2 -translate-y-1/2 h-4 w-4 pointer-events-none text-slate-400" />
-                </div>
+                <PlayerSelect
+                  value={activeEloPlayer}
+                  onChange={setEloPlayerState}
+                  allPlayers={allPlayerNames}
+                />
               </div>
 
               {/* Player tier representation card */}

@@ -5,6 +5,7 @@ import { useMatches } from '../store/matches';
 import { useSavedPlayers } from '../store/players';
 import { useSettings } from '../store/settings';
 import { PlayerAvatar } from '../components/PlayerAvatar';
+import { PlayerSelect } from '../components/PlayerSelect';
 import { EmptyState } from '../components/EmptyState';
 import { Trophy, ChevronDown } from 'lucide-react';
 import { getAchievements } from '../utils/achievements';
@@ -59,22 +60,13 @@ export default function Trophies() {
   return (
     <Layout title={en ? 'Trophy Room' : 'غرفة الجوائز'}>
       {/* Player picker */}
-      <div className="mb-5">
+      <div className="mb-5 space-y-1.5">
         <label className="label">{en ? 'Player' : 'اللاعب'}</label>
-        <div className="relative">
-          <select
-            value={selectedPlayer}
-            onChange={(e) => setSelectedPlayer(e.target.value)}
-            className="input appearance-none pr-10 font-bold"
-          >
-            {allKnownPlayers.map((name) => (
-              <option key={name} value={name}>
-                {name}
-              </option>
-            ))}
-          </select>
-          <ChevronDown className="pointer-events-none absolute end-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
-        </div>
+        <PlayerSelect
+          value={selectedPlayer}
+          onChange={setSelectedPlayer}
+          allPlayers={allKnownPlayers}
+        />
       </div>
 
       {/* Header */}

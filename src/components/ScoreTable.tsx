@@ -193,7 +193,7 @@ export function ScoreTable({ match, names, lowerIsBetter, editTotalRequired }: P
                                 ? 'bg-red-500/10 text-red-600 dark:text-red-400'
                                 : 'text-slate-500 dark:text-slate-400'
                         }`}>
-                          {d > 0 ? `+${d}` : d}
+                          <span dir="ltr">{d > 0 ? `+${d}` : d}</span>
                           {isHandWinner && (
                             <Star className="h-2.5 w-2.5 fill-amber-400 text-amber-400" />
                           )}

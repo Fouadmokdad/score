@@ -143,28 +143,36 @@ export default function TrixGame({ variant = 'solo' }: { variant?: 'solo' | 'par
 
       {/* Played grid */}
       <div className="card mt-4 p-0">
-        <div className="border-b border-slate-200 p-3 text-sm font-bold dark:border-slate-800">
+        <div className="border-b border-slate-100 dark:border-white/[0.06] px-4 py-3.5 text-xs font-black uppercase tracking-wider text-slate-500 dark:text-slate-400">
           {en ? 'Played contracts' : 'العقود الملعوبة'}
         </div>
-        <div className="overflow-x-auto p-3">
+        <div className="overflow-x-auto">
           <table className="w-full text-xs">
             <thead>
-              <tr>
-                <th className="table-cell">{t.player}</th>
+              <tr className="bg-slate-50/40 dark:bg-white/[0.01]">
+                <th className="table-cell py-3 text-slate-400 dark:text-slate-500 font-extrabold text-[10px] uppercase tracking-wider text-center">{t.player}</th>
                 {TRIX_CONTRACTS.map((c) => (
-                  <th key={c.id} className="table-cell">{trixLabel(c.id, en)}</th>
+                  <th key={c.id} className="table-cell py-3 text-slate-400 dark:text-slate-500 font-extrabold text-[10px] uppercase tracking-wider text-center">{trixLabel(c.id, en)}</th>
                 ))}
               </tr>
             </thead>
-            <tbody>
+            <tbody className="divide-y divide-slate-100 dark:divide-white/[0.04]">
               {match.players.map((p, i) => (
-                <tr key={i} className="border-t border-slate-200 dark:border-slate-800">
-                  <td className="table-cell font-bold">{p}</td>
+                <tr key={i} className="odd:bg-slate-50/20 even:bg-transparent dark:odd:bg-white/[0.005] hover:bg-slate-50/40 dark:hover:bg-white/[0.015] transition-colors duration-150">
+                  <td className="table-cell font-bold text-slate-700 dark:text-slate-300 px-3.5 py-4 align-middle">{p}</td>
                   {TRIX_CONTRACTS.map((c) => {
                     const ok = played[`${i}-${c.id}`];
                     return (
-                      <td key={c.id} className="table-cell">
-                        {ok ? <span className="text-[rgb(var(--accent))]">✓</span> : '–'}
+                      <td key={c.id} className="table-cell px-2 py-4 align-middle text-center">
+                        {ok ? (
+                          <div className="flex items-center justify-center">
+                            <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-[rgba(var(--accent),0.18)] text-[rgb(var(--accent))] text-xs font-black ring-1 ring-[rgba(var(--accent),0.25)] shadow-sm transition-all duration-300">
+                              ✓
+                            </span>
+                          </div>
+                        ) : (
+                          <span className="text-slate-300 dark:text-slate-700 font-bold text-sm">–</span>
+                        )}
                       </td>
                     );
                   })}

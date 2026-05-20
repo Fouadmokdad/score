@@ -44,7 +44,10 @@ export function ManualFinishMatch({ match, lowerIsBetter, winnerIndex }: Props) 
   };
 
   return (
-    <button className="btn-secondary mt-3 w-full border-amber-500/50 text-amber-600 dark:text-amber-300" onClick={finish}>
+    <button
+      className="w-full mt-3 py-3 px-4 rounded-2xl border border-amber-500/25 bg-amber-500/5 hover:bg-amber-500/10 text-amber-600 dark:text-amber-400 hover:border-amber-500/40 text-sm font-black transition-all duration-200 active:scale-[0.98] flex items-center justify-center gap-2 shadow-sm"
+      onClick={finish}
+    >
       <Flag className="h-4 w-4" /> {en ? 'End match manually' : 'إنهاء المباراة يدوياً'}
     </button>
   );

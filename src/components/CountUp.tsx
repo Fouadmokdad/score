@@ -48,5 +48,5 @@ export function CountUp({ value, duration = 600, className, format }: Props) {
     };
   }, [value, duration]);
 
-  return <span className={className}>{format ? format(display) : display}</span>;
+  return <span className={className} dir="ltr">{format ? format(display) : display}</span>;
 }

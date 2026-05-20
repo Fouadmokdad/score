@@ -18,12 +18,12 @@ import TarneebGame from './pages/games/TarneebGame';
 import { Onboarding } from './components/Onboarding';
 
 export default function App() {
-  const { theme, language, accentColor, skin, soundEnabled } = useSettings();
+  const { theme, language, accentColor, soundEnabled } = useSettings();
   const location = useLocation();
 
   useEffect(() => {
-    applyPreferences(theme, language, accentColor, skin);
-  }, [theme, language, accentColor, skin]);
+    applyPreferences(theme, language, accentColor);
+  }, [theme, language, accentColor]);
 
   useEffect(() => {
     setSoundEnabled(soundEnabled);

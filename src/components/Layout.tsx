@@ -14,16 +14,13 @@ import {
   Award,
   Volume2,
   VolumeX,
-  Sparkles,
 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import {
   applyPreferences,
   useSettings,
   ACCENT_PRESETS,
-  SKIN_PRESETS,
   type AccentColor,
-  type Skin,
 } from '../store/settings';
 import { copy } from '../i18n';
 
@@ -35,10 +32,9 @@ interface LayoutProps {
 }
 
 const ACCENT_KEYS: AccentColor[] = ['emerald', 'blue', 'rose', 'violet', 'amber'];
-const SKIN_KEYS: Skin[] = ['classic', 'felt', 'paper', 'neon', 'oled'];
 
 export function Layout({ children, title, back, headerAction }: LayoutProps) {
-  const { theme, language, accentColor, skin, soundEnabled, toggleTheme, toggleLanguage, setAccentColor, setSkin, toggleSound } = useSettings();
+  const { theme, language, accentColor, soundEnabled, toggleTheme, toggleLanguage, setAccentColor, toggleSound } = useSettings();
   const navigate = useNavigate();
   const location = useLocation();
   const t = copy[language];
@@ -47,8 +43,8 @@ export function Layout({ children, title, back, headerAction }: LayoutProps) {
   const touchStart = useRef<{ x: number; y: number } | null>(null);
 
   useEffect(() => {
-    applyPreferences(theme, language, accentColor, skin);
-  }, [theme, language, accentColor, skin]);
+    applyPreferences(theme, language, accentColor);
+  }, [theme, language, accentColor]);
 
   useEffect(() => {
     setShowHeaderMenu(false);
@@ -132,33 +128,7 @@ export function Layout({ children, title, back, headerAction }: LayoutProps) {
                     </div>
                   </div>
 
-                  {/* Skin selector */}
-                  <div className="mt-3 px-1">
-                    <div className="mb-2 flex items-center gap-2 text-xs font-bold text-slate-500 dark:text-slate-400">
-                      <Sparkles className="h-4 w-4 text-amber-500" />
-                      <span>{t.skin}</span>
-                    </div>
-                    <div className="grid grid-cols-5 gap-2">
-                      {SKIN_KEYS.map((key) => (
-                        <button
-                          key={key}
-                          onClick={() => { setSkin(key); }}
-                          className={
-                            'flex flex-col items-center gap-1 rounded-xl border px-1 py-2 text-[10px] font-bold transition ' +
-                            (skin === key
-                              ? 'border-[rgb(var(--accent))] bg-[rgba(var(--accent),0.08)] text-[rgb(var(--accent))] dark:bg-[rgba(var(--accent),0.12)] dark:text-[rgb(var(--accent-dark))]'
-                              : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50 dark:border-white/10 dark:bg-white/5 dark:text-slate-300 dark:hover:bg-white/10')
-                          }
-                          title={language === 'ar' ? SKIN_PRESETS[key].descriptionAr : SKIN_PRESETS[key].description}
-                        >
-                          <span className="text-base">{SKIN_PRESETS[key].emoji}</span>
-                          <span className="truncate">
-                            {language === 'ar' ? SKIN_PRESETS[key].labelAr : SKIN_PRESETS[key].label}
-                          </span>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
+
                 </div>
               </>
             )}

@@ -89,7 +89,7 @@ export function Layout({ children, title, back, headerAction }: LayoutProps) {
                 <div className="fixed inset-0 z-40" onClick={closeMenu} />
                 <div
                   className={
-                    'absolute top-full z-50 mt-2 w-72 rounded-2xl border border-slate-200 bg-white p-3 shadow-xl dark:border-white/10 dark:bg-[#201f1b] ' +
+                    'absolute top-full z-50 mt-2 w-72 rounded-3xl p-3.5 shadow-2xl glass-modal ' +
                     (language === 'ar' ? 'right-0' : 'left-0')
                   }
                 >
@@ -165,7 +165,7 @@ export function Layout({ children, title, back, headerAction }: LayoutProps) {
           </div>
           <div className="min-w-0 text-center">
             <img
-              src="/app-icon.png"
+              src="app-icon.png"
               alt=""
               className="mx-auto mb-1 h-8 w-8 rounded-lg object-cover shadow-sm ring-1 ring-amber-400/40"
             />

@@ -30,13 +30,16 @@ export function PlayerAvatar({ name, size = 'md', showName, className = '' }: Pr
 
   const badges = useMemo(() => getPlayerBadges(normalizedName, matches), [normalizedName, matches]);
 
+  const isImage = player.avatar.includes('/') || player.avatar.startsWith('data:image/');
+  const avatarUrl = player.avatar.startsWith('/') ? player.avatar.substring(1) : player.avatar;
+
   return (
     <span className={'relative inline-flex min-w-0 items-center gap-2 ' + className} title={displayName}>
       <span
         className={`inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br ${player.color} ${sizes[size]} font-black text-white shadow-lg shadow-black/25 ring-2 ring-white/80 dark:ring-white/70`}
       >
-        {player.avatar.startsWith('/') || player.avatar.startsWith('data:image/') ? (
-          <img src={player.avatar} alt="" className="h-full w-full object-cover" aria-hidden="true" />
+        {isImage ? (
+          <img src={avatarUrl} alt="" className="h-full w-full object-cover" aria-hidden="true" />
         ) : (
           <span aria-hidden="true">{player.avatar}</span>
         )}

@@ -23,7 +23,7 @@ export function AvatarPickerModal({ playerName, onClose }: Props) {
   // Find player details or create temp player
   const player = players.find((p) => p.name.toLowerCase() === playerName.trim().toLowerCase()) ?? {
     name: playerName,
-    avatar: `/jawaker-assets/avatars/adam.png`,
+    avatar: `jawaker-assets/avatars/adam.png`,
     color: COLORS[0],
   };
 
@@ -112,8 +112,8 @@ export function AvatarPickerModal({ playerName, onClose }: Props) {
           <div
             className={`flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br ${currentColor} text-4xl font-black text-white shadow-xl ring-4 ring-white dark:ring-slate-800`}
           >
-            {currentAvatar.startsWith('/') || currentAvatar.startsWith('data:image/') ? (
-              <img src={currentAvatar} alt="" className="h-full w-full object-cover" />
+            {currentAvatar.includes('/') || currentAvatar.startsWith('data:image/') ? (
+              <img src={currentAvatar.startsWith('/') ? currentAvatar.substring(1) : currentAvatar} alt="" className="h-full w-full object-cover" />
             ) : (
               <span>{currentAvatar}</span>
             )}
@@ -171,8 +171,8 @@ export function AvatarPickerModal({ playerName, onClose }: Props) {
           {activeTab === 'jawaker' && (
             <div className="grid grid-cols-4 gap-2">
               {AVATARS.map((avatar) => {
-                const path = `/jawaker-assets/avatars/${avatar}`;
-                const isSelected = currentAvatar === path;
+                const path = `jawaker-assets/avatars/${avatar}`;
+                const isSelected = currentAvatar === path || currentAvatar === `/${path}`;
                 return (
                   <button
                     key={avatar}

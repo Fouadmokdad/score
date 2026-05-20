@@ -45,15 +45,15 @@ const GRADIENTS: Record<GameKind, string> = {
 const GAMES: GameKind[] = ['likha', 'hand-solo', 'hand-partners', 'trix-solo', 'trix-partners', 'complex-solo', 'complex-partners', 'tarneeb', 'tarneeb-400'];
 
 const GAME_IMAGES: Partial<Record<GameKind, string>> = {
-  likha: '/games/likha.png',
-  'hand-solo': '/games/hand.png',
-  'hand-partners': '/games/hand-partners.png',
-  'trix-solo': '/games/trix.png',
-  'trix-partners': '/games/trix.png',
-  'complex-solo': '/games/trix-complex.png',
-  'complex-partners': '/games/trix-complex.png',
-  tarneeb: '/games/tarneeb-400.png',
-  'tarneeb-400': '/games/tarneeb-400.png',
+  likha: 'games/likha.png',
+  'hand-solo': 'games/hand.png',
+  'hand-partners': 'games/hand-partners.png',
+  'trix-solo': 'games/trix.png',
+  'trix-partners': 'games/trix.png',
+  'complex-solo': 'games/trix-complex.png',
+  'complex-partners': 'games/trix-complex.png',
+  tarneeb: 'games/tarneeb-400.png',
+  'tarneeb-400': 'games/tarneeb-400.png',
 };
 
 function GameArt({ game, label }: { game: GameKind; label: string }) {

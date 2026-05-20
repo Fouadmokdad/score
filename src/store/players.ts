@@ -47,7 +47,7 @@ export function makePlayer(name: string): SavedPlayer {
   const h = hash(clean);
   return {
     name: clean,
-    avatar: `/jawaker-assets/avatars/${AVATARS[h % AVATARS.length]}`,
+    avatar: `jawaker-assets/avatars/${AVATARS[h % AVATARS.length]}`,
     color: COLORS[h % COLORS.length],
   };
 }
@@ -98,7 +98,10 @@ export const useSavedPlayers = create<PlayersState>()(
           ...persisted,
           players: players.map((p: string | SavedPlayer) => {
             if (typeof p === 'string') return makePlayer(p);
-            if (!p.avatar?.startsWith('/')) return { ...makePlayer(p.name), color: p.color };
+            if (p.avatar && p.avatar.startsWith('/jawaker-assets/')) {
+              return { ...p, avatar: p.avatar.substring(1) };
+            }
+            if (!p.avatar) return { ...makePlayer(p.name), color: p.color };
             return p;
           }),
         };

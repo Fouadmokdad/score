@@ -600,6 +600,91 @@ function H2HDualChart({
   );
 }
 
+/* ─── Game Filter Selector – Premium Expandable Grid ─── */
+const GAME_ICONS: Record<string, string> = {
+  all: '🎴',
+  likha: '♠️',
+  'hand-solo': '🤚',
+  'hand-partners': '🤝',
+  'trix-solo': '🃏',
+  'trix-partners': '🃏',
+  'complex-solo': '♟️',
+  'complex-partners': '♟️',
+  tarneeb: '🏆',
+  'tarneeb-400': '🏅',
+};
+
+function GameFilterSelector({
+  gameFilter,
+  setGameFilter,
+  gameFilterLabel,
+  en,
+}: {
+  gameFilter: 'all' | GameKind;
+  setGameFilter: (g: 'all' | GameKind) => void;
+  gameFilterLabel: (g: 'all' | GameKind) => string;
+  en: boolean;
+}) {
+  const [expanded, setExpanded] = useState(false);
+
+  const handleSelect = (g: 'all' | GameKind) => {
+    setGameFilter(g);
+    setExpanded(false);
+  };
+
+  return (
+    <div className="mb-5 relative">
+      {/* Active filter preview chip – tappable */}
+      <button
+        onClick={() => setExpanded(!expanded)}
+        className={`w-full flex items-center justify-between gap-3 px-4 py-3 rounded-2xl border transition-all duration-200 active:scale-[0.98] ${
+          expanded
+            ? 'bg-white/60 dark:bg-black/30 border-emerald-500/30 dark:border-emerald-500/20 shadow-lg shadow-emerald-500/5'
+            : 'bg-black/5 dark:bg-white/5 border-black/5 dark:border-white/5 hover:bg-black/10 dark:hover:bg-white/10'
+        }`}
+      >
+        <div className="flex items-center gap-2.5 min-w-0">
+          <span className="text-lg">{GAME_ICONS[gameFilter] || '🎴'}</span>
+          <div className="min-w-0 text-left rtl:text-right">
+            <div className="text-[10px] font-extrabold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
+              {en ? 'Filter' : 'التصفية'}
+            </div>
+            <div className="font-black text-sm text-slate-800 dark:text-white truncate">
+              {gameFilterLabel(gameFilter)}
+            </div>
+          </div>
+        </div>
+        <ChevronDown className={`h-4 w-4 text-slate-400 shrink-0 transition-transform duration-200 ${expanded ? 'rotate-180' : ''}`} />
+      </button>
+
+      {/* Expandable grid overlay */}
+      {expanded && (
+        <div className="mt-2 rounded-2xl bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border border-black/5 dark:border-white/10 shadow-2xl p-3 animate-in fade-in-0 slide-in-from-top-2 duration-200 z-20 relative">
+          <div className="grid grid-cols-3 gap-2">
+            {GAME_FILTERS.map((g) => {
+              const isActive = gameFilter === g;
+              return (
+                <button
+                  key={g}
+                  onClick={() => handleSelect(g)}
+                  className={`flex flex-col items-center justify-center gap-1 py-3 px-2 rounded-xl text-center transition-all duration-150 active:scale-95 border ${
+                    isActive
+                      ? `bg-gradient-to-br ${GRADIENTS[g]} text-white shadow-lg border-transparent`
+                      : 'bg-black/5 dark:bg-white/5 text-slate-600 dark:text-slate-300 hover:bg-black/10 dark:hover:bg-white/10 border-transparent'
+                  }`}
+                >
+                  <span className="text-lg leading-none">{GAME_ICONS[g] || '🎴'}</span>
+                  <span className="text-[10px] font-black leading-tight">{gameFilterLabel(g)}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 /* ─── Stats Page Overhaul ─── */
 export default function Stats() {
   const { matches } = useMatches();
@@ -723,26 +808,13 @@ export default function Stats() {
         </button>
       </div>
 
-      {/* Game Filter Pills */}
-      <div className="mb-5 flex gap-2 overflow-x-auto pb-1 scrollbar-none">
-        {GAME_FILTERS.map((g) => {
-          const isActive = gameFilter === g;
-          return (
-            <button
-              key={g}
-              onClick={() => setGameFilter(g)}
-              className={
-                'shrink-0 rounded-xl px-4 py-2.5 text-xs font-bold transition-all active:scale-95 ' +
-                (isActive
-                  ? `bg-gradient-to-br ${GRADIENTS[g]} text-white shadow-lg`
-                  : 'bg-black/5 dark:bg-white/10 text-slate-600 dark:text-slate-300 hover:bg-black/10 dark:hover:bg-white/15')
-              }
-            >
-              {gameFilterLabel(g)}
-            </button>
-          );
-        })}
-      </div>
+      {/* Game Filter – Premium Collapsible Grid */}
+      <GameFilterSelector
+        gameFilter={gameFilter}
+        setGameFilter={setGameFilter}
+        gameFilterLabel={gameFilterLabel}
+        en={en}
+      />
 
       {stats.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-16 text-center opacity-60">

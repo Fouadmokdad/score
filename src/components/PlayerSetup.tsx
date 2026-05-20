@@ -60,7 +60,7 @@ export function PlayerSetup({ count, initial, labels, onSubmit, submitLabel, ext
           className={
             'flex items-center gap-3 rounded-2xl border px-3 py-2.5 transition-all duration-200 ' +
             (isActive
-              ? 'border-emerald-500/60 bg-emerald-500/5 ring-2 ring-emerald-500/20 dark:bg-emerald-500/5'
+              ? 'border-[rgba(var(--accent),0.6)] bg-[rgba(var(--accent),0.05)] ring-2 ring-[rgba(var(--accent),0.2)] dark:bg-[rgba(var(--accent),0.05)]'
               : 'border-slate-300/60 bg-white/60 dark:border-white/10 dark:bg-white/[0.03]')
           }
           onClick={() => setActiveSlot(index)}
@@ -71,8 +71,8 @@ export function PlayerSetup({ count, initial, labels, onSubmit, submitLabel, ext
             className={
               'inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border transition-all duration-200 ' +
               (isActive
-                ? 'border-emerald-500/40 text-emerald-500 hover:bg-emerald-500/10'
-                : 'border-slate-300 text-slate-400 hover:border-emerald-500 hover:text-emerald-500 dark:border-slate-700')
+                ? 'border-[rgba(var(--accent),0.4)] text-[rgb(var(--accent))] hover:bg-[rgba(var(--accent),0.1)]'
+                : 'border-slate-300 text-slate-400 hover:border-[rgb(var(--accent))] hover:text-[rgb(var(--accent))] dark:border-slate-700')
             }
             onClick={(e) => {
               e.stopPropagation();
@@ -136,7 +136,7 @@ export function PlayerSetup({ count, initial, labels, onSubmit, submitLabel, ext
                     <button
                       key={player.name}
                       type="button"
-                      className="inline-flex max-w-full items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-xs font-semibold transition hover:border-emerald-400 hover:bg-emerald-50 dark:border-white/10 dark:bg-white/5 dark:hover:bg-white/10"
+                      className="inline-flex max-w-full items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-xs font-semibold transition hover:border-[rgba(var(--accent),0.5)] hover:bg-[rgba(var(--accent),0.08)] dark:border-white/10 dark:bg-white/5 dark:hover:bg-white/10"
                       onClick={() => setAt(index, player.name)}
                     >
                       <PlayerAvatar name={player.name} size="sm" />
@@ -250,7 +250,7 @@ export function PlayerSetup({ count, initial, labels, onSubmit, submitLabel, ext
                 .map((player) => (
                   <button
                     key={player.name}
-                    className="group inline-flex max-w-full items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-semibold transition hover:border-emerald-400 hover:bg-emerald-50 dark:border-white/10 dark:bg-white/5 dark:hover:bg-white/10"
+                    className="group inline-flex max-w-full items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-semibold transition hover:border-[rgba(var(--accent),0.5)] hover:bg-[rgba(var(--accent),0.08)] dark:border-white/10 dark:bg-white/5 dark:hover:bg-white/10"
                     onClick={() => setAt(activeSlot, player.name)}
                   >
                     <PlayerAvatar name={player.name} size="sm" />

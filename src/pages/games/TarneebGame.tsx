@@ -162,7 +162,7 @@ export default function TarneebGame({ variant }: { variant: Variant }) {
             <div className="flex flex-col gap-2 pt-1">
               <button
                 type="button"
-                className="w-full py-4 rounded-2xl bg-gradient-to-r from-amber-500 to-orange-400 hover:from-amber-400 hover:to-orange-300 text-white text-[15px] font-black shadow-xl shadow-amber-500/25 hover:shadow-amber-400/35 active:scale-[0.97] transition-all duration-200 flex items-center justify-center gap-2"
+                className="btn-primary w-full py-4 rounded-2xl text-[15px] font-black flex items-center justify-center gap-2"
                 onClick={variant === 'regular' ? submitRegular : submit400}
               >
                 <Plus className="h-5 w-5 stroke-[3]" />
@@ -185,7 +185,7 @@ export default function TarneebGame({ variant }: { variant: Variant }) {
 
       {matchOver && (
         <div className="mt-4 space-y-2">
-          <div className="card text-center font-bold text-emerald-600 dark:text-emerald-400">
+          <div className="card text-center font-bold text-[rgb(var(--accent))]">
             {en ? 'Winner' : 'الفائز'}: {match.players[winnerIndex]} ({totals[winnerIndex]})
           </div>
           <div className="flex gap-2">
@@ -270,7 +270,7 @@ function RegularRoundForm({
       <div className="grid grid-cols-2 gap-3">
         <div className="space-y-2">
           <label className="flex items-center gap-1.5 text-[11px] font-black tracking-widest text-slate-400 dark:text-slate-500 uppercase">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3 h-3 text-emerald-500">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3 h-3 text-[rgb(var(--accent))]">
               <path d="M15.98 1.804a1 1 0 0 0-1.96 0l-.24 1.192a1 1 0 0 1-.784.785l-1.192.24a1 1 0 0 0 0 1.962l1.192.24a1 1 0 0 1 .784.785l.24 1.192a1 1 0 0 0 1.962 0l.24-1.192a1 1 0 0 1 .784-.785l1.192-.24a1 1 0 0 0 0-1.962l-1.192-.24a1 1 0 0 1-.784-.785l-.24-1.192Z" />
             </svg>
             {en ? 'Bid' : 'الطلب'}
@@ -286,7 +286,7 @@ function RegularRoundForm({
               }`}
               disabled={bidTricks <= 7}
             >−</button>
-            <div className="flex h-12 flex-1 items-center justify-center bg-emerald-500/10 text-2xl font-black text-emerald-700 dark:text-emerald-400">
+            <div className="flex h-12 flex-1 items-center justify-center bg-[rgba(var(--accent),0.1)] text-2xl font-black text-[rgb(var(--accent))] dark:text-[rgb(var(--accent-dark))]">
               {bidTricks}
             </div>
             <button
@@ -353,12 +353,12 @@ function Tarneeb400RoundForm({
   return (
     <div className="space-y-3">
       <div className="grid grid-cols-2 gap-2">
-        <div className={'rounded-2xl border p-3 text-center ' + (bidReady ? 'border-emerald-500/40 bg-emerald-500/10' : 'border-amber-500/40 bg-amber-500/10')}>
+        <div className={'rounded-2xl border p-3 text-center ' + (bidReady ? 'border-[rgba(var(--accent),0.4)] bg-[rgba(var(--accent),0.1)]' : 'border-amber-500/40 bg-amber-500/10')}>
           <div className="text-[11px] font-bold text-slate-500 dark:text-slate-400">{en ? 'Bids' : 'الطلبات'}</div>
           <div className="mt-1 text-xl font-extrabold text-slate-900 dark:text-white">{bidTotal}</div>
           <div className="text-[11px] text-slate-500 dark:text-slate-400">{en ? 'minimum' : 'الأقل'} {minTotal}</div>
         </div>
-        <div className={'rounded-2xl border p-3 text-center ' + (tricksReady ? 'border-emerald-500/40 bg-emerald-500/10' : 'border-slate-300/70 dark:border-white/10')}>
+        <div className={'rounded-2xl border p-3 text-center ' + (tricksReady ? 'border-[rgba(var(--accent),0.4)] bg-[rgba(var(--accent),0.1)]' : 'border-slate-300/70 dark:border-white/10')}>
           <div className="text-[11px] font-bold text-slate-500 dark:text-slate-400">{en ? 'Tricks' : 'اللمات'}</div>
           <div className="mt-1 text-xl font-extrabold text-slate-900 dark:text-white">{tricksTotal}</div>
           <div className="text-[11px] text-slate-500 dark:text-slate-400">/ 13</div>
@@ -403,7 +403,7 @@ function Tarneeb400RoundForm({
                 >
                   −
                 </button>
-                <div className="flex h-9 w-9 items-center justify-center bg-emerald-500/15 dark:bg-emerald-500/20 text-base font-black text-emerald-700 dark:text-emerald-400 border-y border-emerald-500/20">
+                <div className="flex h-9 w-9 items-center justify-center bg-[rgba(var(--accent),0.15)] dark:bg-[rgba(var(--accent),0.2)] text-base font-black text-[rgb(var(--accent))] dark:text-[rgb(var(--accent-dark))] border-y border-[rgba(var(--accent),0.2)]">
                   {currentBid}
                 </div>
                 <button

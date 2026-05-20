@@ -100,7 +100,7 @@ export default function LikhaGame() {
                   className={
                     'mt-1 w-full max-w-[4.5rem] rounded-xl border-2 py-1.5 text-center text-sm font-extrabold transition ' +
                     (isBest
-                      ? 'border-emerald-500 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'
+                      ? 'border-[rgb(var(--accent))] bg-[rgba(var(--accent),0.1)] text-[rgb(var(--accent))] dark:text-[rgb(var(--accent-dark))]'
                       : 'border-slate-300/60 text-slate-700 dark:border-white/10 dark:text-slate-200')
                   }
                 >
@@ -247,12 +247,12 @@ export default function LikhaGame() {
             <div className="overflow-hidden rounded-[1.25rem] border border-slate-200/60 dark:border-white/[0.06] bg-slate-50/80 dark:bg-white/[0.02]">
               <div className="flex items-center justify-between px-4 py-2.5 border-b border-slate-200/60 dark:border-white/[0.04]">
                 <div className="flex items-center gap-2">
-                  <div className={`h-1.5 w-1.5 rounded-full ${roundTotal === LIKHA_PER_HAND ? 'bg-emerald-400' : 'bg-violet-400'} animate-pulse`} />
+                  <div className={`h-1.5 w-1.5 rounded-full ${roundTotal === LIKHA_PER_HAND ? 'bg-[rgb(var(--accent))]' : 'bg-violet-400'} animate-pulse`} />
                   <span className="text-[10px] font-black tracking-widest uppercase text-slate-400 dark:text-slate-500">
                     {en ? 'Round Total' : 'مجموع الجولة'}
                   </span>
                 </div>
-                <span className={`text-sm font-black ${roundTotal === LIKHA_PER_HAND ? 'text-emerald-600 dark:text-emerald-400' : roundTotal > LIKHA_PER_HAND ? 'text-red-500' : 'text-slate-600 dark:text-slate-300'}`}>
+                <span className={`text-sm font-black ${roundTotal === LIKHA_PER_HAND ? 'text-[rgb(var(--accent))] dark:text-[rgb(var(--accent-dark))]' : roundTotal > LIKHA_PER_HAND ? 'text-red-500' : 'text-slate-600 dark:text-slate-300'}`}>
                   {roundTotal} <span className="font-normal text-slate-400">/ {LIKHA_PER_HAND}</span>
                 </span>
               </div>
@@ -260,12 +260,12 @@ export default function LikhaGame() {
               <div className="px-4 py-3">
                 <div className="h-2 w-full rounded-full bg-slate-200/60 dark:bg-white/[0.05] overflow-hidden">
                   <div
-                    className={`h-full rounded-full transition-all duration-300 ${roundTotal === LIKHA_PER_HAND ? 'bg-gradient-to-r from-emerald-500 to-teal-400' : roundTotal > LIKHA_PER_HAND ? 'bg-red-500' : 'bg-gradient-to-r from-violet-500 to-purple-400'}`}
+                    className={`h-full rounded-full transition-all duration-300 ${roundTotal === LIKHA_PER_HAND ? 'bg-gradient-to-r from-[rgb(var(--accent))] to-[rgb(var(--accent-dark))]' : roundTotal > LIKHA_PER_HAND ? 'bg-red-500' : 'bg-gradient-to-r from-violet-500 to-purple-400'}`}
                     style={{ width: `${Math.min(100, (roundTotal / LIKHA_PER_HAND) * 100)}%` }}
                   />
                 </div>
                 {roundTotal === LIKHA_PER_HAND && (
-                  <p className="mt-1.5 text-center text-[10px] font-black text-emerald-600 dark:text-emerald-400 animate-in fade-in duration-200">
+                  <p className="mt-1.5 text-center text-[10px] font-black text-[rgb(var(--accent))] dark:text-[rgb(var(--accent-dark))] animate-in fade-in duration-200">
                     {en ? '✓ Ready to save!' : '✓ جاهز للحفظ!'}
                   </p>
                 )}
@@ -282,7 +282,7 @@ export default function LikhaGame() {
             <div className="flex flex-col gap-2 pt-1">
               <button
                 type="button"
-                className="w-full py-4 rounded-2xl bg-gradient-to-r from-violet-600 to-purple-500 hover:from-violet-500 hover:to-purple-400 text-white text-[15px] font-black shadow-xl shadow-violet-600/25 hover:shadow-violet-500/35 active:scale-[0.97] transition-all duration-200 flex items-center justify-center gap-2"
+                className="btn-primary w-full py-4 rounded-2xl text-[15px] font-black flex items-center justify-center gap-2"
                 onClick={submit}
               >
                 <Plus className="h-5 w-5 stroke-[3]" />
@@ -306,7 +306,7 @@ export default function LikhaGame() {
 
       {matchOver && (
         <div className="mt-4 space-y-2">
-          <div className="card text-center font-bold text-emerald-600 dark:text-emerald-400">
+          <div className="card text-center font-bold text-[rgb(var(--accent))]">
             {en ? 'Winner' : 'الفائز'}: {match.players[totals.indexOf(Math.min(...totals))]} (
             {Math.min(...totals)} {en ? 'pts' : 'نقطة'})
             <div className="mt-1 text-xs font-normal text-slate-500">

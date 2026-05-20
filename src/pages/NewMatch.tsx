@@ -79,7 +79,7 @@ export default function NewMatch() {
                     className={
                       'rounded-xl border px-3 py-2 text-sm font-bold ' +
                       (tarneebTarget === value
-                        ? 'border-emerald-600 bg-emerald-600 text-white'
+                        ? 'border-[rgb(var(--accent))] bg-[rgb(var(--accent))] text-white'
                         : 'border-slate-300 dark:border-slate-700')
                     }
                     onClick={() => setTarneebTarget(value)}
@@ -100,7 +100,7 @@ export default function NewMatch() {
                     className={
                       'rounded-xl border px-3 py-2 text-sm font-bold ' +
                       (handSoloPlayers === count
-                        ? 'border-emerald-600 bg-emerald-600 text-white'
+                        ? 'border-[rgb(var(--accent))] bg-[rgb(var(--accent))] text-white'
                         : 'border-slate-300 dark:border-slate-700')
                     }
                     onClick={() => setHandSoloPlayers(count)}

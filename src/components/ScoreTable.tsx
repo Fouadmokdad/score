@@ -210,7 +210,7 @@ export function ScoreTable({ match, names, lowerIsBetter, editTotalRequired }: P
                 <td className="table-cell px-1 py-3 hide-on-share align-middle">
                   <div className="flex items-center justify-center gap-1">
                     <button
-                      className="inline-flex h-7 w-7 items-center justify-center rounded-xl border border-slate-200/60 bg-white/60 text-slate-400 shadow-sm transition-all hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-600 dark:border-white/[0.04] dark:bg-white/[0.02] dark:hover:bg-emerald-500/10 dark:hover:text-emerald-400"
+                      className="inline-flex h-7 w-7 items-center justify-center rounded-xl border border-slate-200/60 bg-white/60 text-slate-400 shadow-sm transition-all hover:border-[rgba(var(--accent),0.3)] hover:bg-[rgba(var(--accent),0.08)] hover:text-[rgb(var(--accent))] dark:border-white/[0.04] dark:bg-white/[0.02] dark:hover:bg-[rgba(var(--accent),0.12)] dark:hover:text-[rgb(var(--accent-dark))]"
                       onClick={() => startEdit(r)}
                       aria-label={en ? 'Edit round' : 'تعديل الجولة'}
                     >
@@ -262,12 +262,12 @@ export function ScoreTable({ match, names, lowerIsBetter, editTotalRequired }: P
                           className={
                             (compact ? 'px-1 py-4' : 'py-4') +
                             ' table-cell align-middle text-center ' +
-                            (isBest ? 'bg-gradient-to-b from-emerald-500/[0.06] to-emerald-500/[0.02]' : '')
+                            (isBest ? 'bg-gradient-to-b from-[rgba(var(--accent),0.06)] to-[rgba(var(--accent),0.02)]' : '')
                           }
                         >
                           <div className="flex flex-col items-center gap-0.5">
                             <span className={`text-sm font-black ${
-                              isBest ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-700 dark:text-slate-200'
+                              isBest ? 'text-[rgb(var(--accent))] dark:text-[rgb(var(--accent-dark))]' : 'text-slate-700 dark:text-slate-200'
                             }`}>
                               <CountUp value={dt} />
                             </span>
@@ -292,7 +292,7 @@ export function ScoreTable({ match, names, lowerIsBetter, editTotalRequired }: P
           <div className="fixed inset-0 z-[120] flex items-end justify-center bg-black/70 px-3 pb-4 pt-16 backdrop-blur-sm sm:items-center sm:p-4">
             <div className="relative max-h-[calc(100vh-5rem)] w-full max-w-md overflow-hidden rounded-[2rem] border border-white/[0.08] bg-white shadow-2xl dark:bg-[#1c1b18]">
               {/* Accent bar */}
-              <div className="absolute top-0 inset-x-0 h-[3px] bg-gradient-to-r from-emerald-500 via-teal-400 to-blue-500" />
+              <div className="absolute top-0 inset-x-0 h-[3px] bg-gradient-to-r from-[rgb(var(--accent))] to-[rgb(var(--accent-dark))]" />
               <div className="overflow-y-auto p-5 pt-6">
                 <div className="mb-5 flex items-start justify-between gap-3">
                   <div className="min-w-0">
@@ -325,7 +325,7 @@ export function ScoreTable({ match, names, lowerIsBetter, editTotalRequired }: P
                       <input
                         type="number"
                         inputMode="numeric"
-                        className="w-full h-11 text-center text-base font-black placeholder:text-slate-300 dark:placeholder:text-slate-700 bg-white/80 dark:bg-[#1a1915]/70 border-2 border-slate-200/80 dark:border-white/5 rounded-xl outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all duration-200"
+                        className="w-full h-11 text-center text-base font-black placeholder:text-slate-300 dark:placeholder:text-slate-700 bg-white/80 dark:bg-[#1a1915]/70 border-2 border-slate-200/80 dark:border-white/5 rounded-xl outline-none focus:border-[rgb(var(--accent))] focus:ring-4 focus:ring-[rgba(var(--accent),0.1)] transition-all duration-200"
                         value={editValues[i] ?? ''}
                         onChange={(e) => {
                           const next = [...editValues];
@@ -341,7 +341,7 @@ export function ScoreTable({ match, names, lowerIsBetter, editTotalRequired }: P
                 {editTotalRequired !== undefined && (
                   <div className={`mt-3 text-center text-xs font-black ${
                     editValues.reduce((sum, value) => sum + (Number(value) || 0), 0) === editTotalRequired
-                      ? 'text-emerald-600 dark:text-emerald-400'
+                      ? 'text-[rgb(var(--accent))] dark:text-[rgb(var(--accent-dark))]'
                       : 'text-slate-500'
                   }`}>
                     {en ? 'Current total' : 'المجموع الحالي'}:{' '}
@@ -363,7 +363,7 @@ export function ScoreTable({ match, names, lowerIsBetter, editTotalRequired }: P
                     {en ? 'Cancel' : 'إلغاء'}
                   </button>
                   <button
-                    className="py-3 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-500 text-white text-sm font-black shadow-lg shadow-emerald-500/20 hover:from-emerald-500 hover:to-teal-400 active:scale-[0.97] transition-all flex items-center justify-center gap-1.5"
+                    className="btn-primary py-3 rounded-2xl text-sm font-black flex items-center justify-center gap-1.5"
                     onClick={saveEdit}
                   >
                     <Check className="h-4 w-4 stroke-[3]" /> {en ? 'Save' : 'حفظ'}

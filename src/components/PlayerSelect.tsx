@@ -120,7 +120,7 @@ export function PlayerSelect({ value, onChange, allPlayers, label, exclude }: Pr
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder={en ? 'Search player...' : 'ابحث عن لاعب...'}
-                className="w-full bg-black/5 dark:bg-black/25 text-sm font-bold text-slate-800 dark:text-white pl-10 pr-4 py-2.5 rounded-2xl border border-transparent focus:border-emerald-500/30 focus:bg-white/40 dark:focus:bg-black/40 focus:outline-none transition-all duration-150"
+                className="w-full bg-black/5 dark:bg-black/25 text-sm font-bold text-slate-800 dark:text-white pl-10 pr-4 py-2.5 rounded-2xl border border-transparent focus:border-[rgba(var(--accent),0.3)] focus:bg-white/40 dark:focus:bg-black/40 focus:outline-none transition-all duration-150"
               />
               {search && (
                 <button
@@ -149,7 +149,7 @@ export function PlayerSelect({ value, onChange, allPlayers, label, exclude }: Pr
                       onClick={() => handleSelect(name)}
                       className={`w-full flex items-center justify-between gap-3 px-4 py-3 rounded-2xl transition-all duration-150 text-left rtl:text-right border ${
                         isSelected
-                          ? 'bg-emerald-500/15 border-emerald-500/20 dark:bg-emerald-500/20 dark:border-emerald-500/30'
+                          ? 'bg-[rgba(var(--accent),0.15)] border-[rgba(var(--accent),0.2)] dark:bg-[rgba(var(--accent),0.2)] dark:border-[rgba(var(--accent),0.3)]'
                           : 'bg-black/5 border-transparent hover:bg-black/10 dark:bg-white/5 dark:hover:bg-white/10'
                       }`}
                     >
@@ -157,7 +157,7 @@ export function PlayerSelect({ value, onChange, allPlayers, label, exclude }: Pr
                         <PlayerAvatar name={name} size="sm" />
                         <div className="min-w-0">
                           <div className={`font-black text-sm truncate ${
-                            isSelected ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-800 dark:text-white'
+                            isSelected ? 'text-[rgb(var(--accent))] dark:text-[rgb(var(--accent-dark))]' : 'text-slate-800 dark:text-white'
                           }`}>
                             {name}
                           </div>
@@ -170,7 +170,7 @@ export function PlayerSelect({ value, onChange, allPlayers, label, exclude }: Pr
                       {/* Selected Custom Bullet */}
                       <div className={`h-5 w-5 rounded-full flex items-center justify-center border shrink-0 ${
                         isSelected
-                          ? 'border-emerald-500 bg-emerald-500 text-white'
+                          ? 'border-[rgb(var(--accent))] bg-[rgb(var(--accent))] text-white'
                           : 'border-slate-300 dark:border-slate-700'
                       }`}>
                         {isSelected && (

@@ -639,7 +639,7 @@ function GameFilterSelector({
         onClick={() => setExpanded(!expanded)}
         className={`w-full flex items-center justify-between gap-3 px-4 py-3 rounded-2xl border transition-all duration-200 active:scale-[0.98] ${
           expanded
-            ? 'bg-white/60 dark:bg-black/30 border-emerald-500/30 dark:border-emerald-500/20 shadow-lg shadow-emerald-500/5'
+            ? 'bg-white/60 dark:bg-black/30 border-[rgba(var(--accent),0.3)] dark:border-[rgba(var(--accent),0.2)] shadow-lg shadow-[rgba(var(--accent),0.05)]'
             : 'bg-black/5 dark:bg-white/5 border-black/5 dark:border-white/5 hover:bg-black/10 dark:hover:bg-white/10'
         }`}
       >

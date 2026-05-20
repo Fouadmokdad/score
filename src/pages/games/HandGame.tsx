@@ -185,7 +185,7 @@ export default function HandGame({ variant }: Props) {
                     className={
                       'mt-1 w-full max-w-[4.5rem] rounded-xl border-2 py-1.5 text-center text-sm font-extrabold transition ' +
                       (isBest
-                        ? 'border-emerald-500 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'
+                        ? 'border-[rgb(var(--accent))] bg-[rgba(var(--accent),0.1)] text-[rgb(var(--accent))] dark:text-[rgb(var(--accent-dark))]'
                         : 'border-slate-300/60 text-slate-700 dark:border-white/10 dark:text-slate-200')
                     }
                   >
@@ -194,7 +194,7 @@ export default function HandGame({ variant }: Props) {
                   {/* Wins counter */}
                   <div className="mt-0.5 flex items-center justify-center gap-1 rounded-full bg-slate-100/80 px-2 py-0.5 text-[10px] font-bold text-slate-500 dark:bg-white/5 dark:text-slate-400">
                     <Trophy className="h-3 w-3 text-amber-500" />
-                    <span className={status.winner === i ? 'text-emerald-600 dark:text-emerald-400' : ''}>{wins[i]}</span>
+                    <span className={status.winner === i ? 'text-[rgb(var(--accent))] dark:text-[rgb(var(--accent-dark))]' : ''}>{wins[i]}</span>
                   </div>
                 </div>
               );
@@ -223,7 +223,7 @@ export default function HandGame({ variant }: Props) {
                     className={
                       'flex w-full items-center justify-center rounded-2xl border-2 px-3 py-2.5 text-center text-xl font-extrabold transition ' +
                       (isBest
-                        ? 'border-emerald-500 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'
+                        ? 'border-[rgb(var(--accent))] bg-[rgba(var(--accent),0.1)] text-[rgb(var(--accent))] dark:text-[rgb(var(--accent-dark))]'
                         : 'border-slate-300/60 text-slate-700 dark:border-white/10 dark:text-slate-200')
                     }
                   >
@@ -232,7 +232,7 @@ export default function HandGame({ variant }: Props) {
                   {/* Wins counter */}
                   <div className="flex items-center justify-center gap-1.5 rounded-full bg-slate-100/80 px-2.5 py-1 text-xs font-bold text-slate-500 dark:bg-white/5 dark:text-slate-400">
                     <Trophy className="h-3.5 w-3.5 text-amber-500" />
-                    <span className={status.winner === i ? 'text-emerald-600 dark:text-emerald-400' : ''}>
+                    <span className={status.winner === i ? 'text-[rgb(var(--accent))] dark:text-[rgb(var(--accent-dark))]' : ''}>
                       {wins[i]} {en ? 'wins' : 'جولات'}
                     </span>
                   </div>
@@ -290,15 +290,15 @@ export default function HandGame({ variant }: Props) {
       {!status.over && showRoundForm && (
         <div className="relative overflow-hidden rounded-[2.25rem] border border-slate-200/60 bg-white shadow-2xl shadow-black/10 backdrop-blur-xl dark:border-white/[0.07] dark:bg-[#18171380] dark:shadow-black/40 mt-5 space-y-0 animate-in fade-in slide-in-from-bottom-4 duration-300">
           {/* Top accent gradient bar */}
-          <div className="absolute top-0 inset-x-0 h-[3px] bg-gradient-to-r from-emerald-500 via-teal-400 to-blue-500 rounded-t-[2.25rem]" />
+          <div className="absolute top-0 inset-x-0 h-[3px] bg-gradient-to-r from-[rgb(var(--accent))] to-[rgb(var(--accent-dark))] rounded-t-[2.25rem]" />
           <div className="p-6 pt-7 space-y-5">
           
           {/* Header Bar */}
           <div className="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-white/[0.06]">
             <h3 className="text-base font-extrabold text-slate-800 dark:text-slate-100 flex items-center gap-2.5">
               <span className="relative flex h-2.5 w-2.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[rgb(var(--accent))] opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[rgb(var(--accent))]"></span>
               </span>
               <span>{en ? 'New Round' : 'جولة جديدة'}</span>
             </h3>
@@ -310,7 +310,7 @@ export default function HandGame({ variant }: Props) {
           {/* Winner Selection */}
           <div className="space-y-2.5">
             <label className="flex items-center gap-1.5 text-[11px] font-black tracking-widest text-slate-400 dark:text-slate-500 uppercase">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3 h-3 text-emerald-500">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3 h-3 text-[rgb(var(--accent))]">
                 <path fillRule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm3.857-9.809a.75.75 0 0 0-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 1 0-1.06 1.061l2.5 2.5a.75.75 0 0 0 1.137-.089l4-5.5Z" clipRule="evenodd" />
               </svg>
               {en ? 'Round Winner' : variant === 'partners' ? 'الفريق الفائز' : 'الفائز'}
@@ -326,16 +326,16 @@ export default function HandGame({ variant }: Props) {
                     className={
                       'group relative overflow-hidden flex flex-col items-center justify-center gap-2.5 rounded-[1.5rem] border-2 px-3 py-4 transition-all duration-300 active:scale-[0.96] ' +
                       (isSelected
-                        ? 'border-emerald-500/80 bg-gradient-to-b from-emerald-500/12 to-teal-500/6 shadow-[0_4px_20px_rgba(16,185,129,0.18)] dark:from-emerald-500/15 dark:to-teal-500/8'
+                        ? 'border-[rgba(var(--accent),0.8)] bg-gradient-to-b from-[rgba(var(--accent),0.12)] to-[rgba(var(--accent),0.04)] shadow-[0_4px_20px_rgba(var(--accent),0.18)] dark:from-[rgba(var(--accent),0.15)] dark:to-[rgba(var(--accent),0.08)]'
                         : 'border-slate-200/70 bg-slate-50/60 hover:border-slate-300/80 hover:bg-slate-100/70 dark:border-white/[0.04] dark:bg-white/[0.02] dark:hover:border-white/[0.07] dark:hover:bg-white/[0.04]')
                     }
                     onClick={() => setWinner(i)}
                   >
                     {/* Selected Glow Behind */}
-                    {isSelected && <div className="absolute inset-0 bg-gradient-to-b from-emerald-500/5 to-transparent pointer-events-none" />}
+                    {isSelected && <div className="absolute inset-0 bg-gradient-to-b from-[rgba(var(--accent),0.05)] to-transparent pointer-events-none" />}
 
                     {/* Checkmark badge */}
-                    <div className={`absolute top-2 right-2 h-5 w-5 rounded-full flex items-center justify-center transition-all duration-200 ${isSelected ? 'bg-emerald-500 text-white scale-100 opacity-100 shadow-md shadow-emerald-500/30' : 'bg-slate-200/60 dark:bg-white/5 scale-75 opacity-40'}`}>
+                    <div className={`absolute top-2 right-2 h-5 w-5 rounded-full flex items-center justify-center transition-all duration-200 ${isSelected ? 'bg-[rgb(var(--accent))] text-white scale-100 opacity-100 shadow-md shadow-[rgba(var(--accent),0.3)]' : 'bg-slate-200/60 dark:bg-white/5 scale-75 opacity-40'}`}>
                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3 h-3">
                         <path fillRule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" />
                       </svg>
@@ -344,21 +344,21 @@ export default function HandGame({ variant }: Props) {
                     {isTeam ? (
                       <>
                         <div className="flex items-center -space-x-3 space-x-reverse">
-                          <div className={`z-10 rounded-full ring-[2.5px] transition-all duration-300 ${isSelected ? 'ring-emerald-400/60 shadow-lg shadow-emerald-500/20' : 'ring-white dark:ring-[#201f1b] opacity-75'}`}>
+                          <div className={`z-10 rounded-full ring-[2.5px] transition-all duration-300 ${isSelected ? 'ring-[rgba(var(--accent),0.6)] shadow-lg shadow-[rgba(var(--accent),0.2)]' : 'ring-white dark:ring-[#201f1b] opacity-75'}`}>
                             <PlayerAvatar name={originalNames[i]} size="md" />
                           </div>
-                          <div className={`z-0 rounded-full ring-[2.5px] transition-all duration-300 ${isSelected ? 'ring-emerald-400/60 shadow-lg shadow-emerald-500/20' : 'ring-white dark:ring-[#201f1b] opacity-75'}`}>
+                          <div className={`z-0 rounded-full ring-[2.5px] transition-all duration-300 ${isSelected ? 'ring-[rgba(var(--accent),0.6)] shadow-lg shadow-[rgba(var(--accent),0.2)]' : 'ring-white dark:ring-[#201f1b] opacity-75'}`}>
                             <PlayerAvatar name={originalNames[i + 2]} size="md" />
                           </div>
                         </div>
-                        <span className={`text-[11px] font-black tracking-wide leading-tight text-center transition-all duration-200 ${isSelected ? 'text-emerald-700 dark:text-emerald-300' : 'text-slate-500 dark:text-slate-400'}`}>{p}</span>
+                        <span className={`text-[11px] font-black tracking-wide leading-tight text-center transition-all duration-200 ${isSelected ? 'text-[rgb(var(--accent))] dark:text-[rgb(var(--accent-dark))]' : 'text-slate-500 dark:text-slate-400'}`}>{p}</span>
                       </>
                     ) : (
                       <>
-                        <div className={`rounded-full ring-[2.5px] transition-all duration-300 ${isSelected ? 'ring-emerald-400/60 shadow-lg shadow-emerald-500/20' : 'ring-slate-200 dark:ring-white/10 opacity-75'}`}>
+                        <div className={`rounded-full ring-[2.5px] transition-all duration-300 ${isSelected ? 'ring-[rgba(var(--accent),0.6)] shadow-lg shadow-[rgba(var(--accent),0.2)]' : 'ring-slate-200 dark:ring-white/10 opacity-75'}`}>
                           <PlayerAvatar name={p} size="md" />
                         </div>
-                        <span className={`text-[11px] font-black tracking-wide text-center transition-all duration-200 ${isSelected ? 'text-emerald-700 dark:text-emerald-300' : 'text-slate-500 dark:text-slate-400'}`}>{p}</span>
+                        <span className={`text-[11px] font-black tracking-wide text-center transition-all duration-200 ${isSelected ? 'text-[rgb(var(--accent))] dark:text-[rgb(var(--accent-dark))]' : 'text-slate-500 dark:text-slate-400'}`}>{p}</span>
                       </>
                     )}
                   </button>
@@ -721,7 +721,7 @@ export default function HandGame({ variant }: Props) {
           {/* Live Preview Summary */}
           <div className="overflow-hidden rounded-[1.25rem] border border-slate-200/60 dark:border-white/[0.06] bg-slate-50/80 dark:bg-white/[0.02]">
             <div className="flex items-center gap-2 px-4 py-2.5 border-b border-slate-200/60 dark:border-white/[0.04]">
-              <div className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              <div className="h-1.5 w-1.5 rounded-full bg-[rgb(var(--accent))] animate-pulse" />
               <span className="text-[10px] font-black tracking-widest uppercase text-slate-400 dark:text-slate-500">
                 {en ? 'Score Preview' : 'معاينة النقاط'}
               </span>
@@ -751,7 +751,7 @@ export default function HandGame({ variant }: Props) {
                   const isWinnerPl = i === winner;
                   const val = deltas[i];
                   return (
-                    <div key={i} className={`flex items-center gap-2 rounded-xl border px-3 py-1.5 text-xs font-black shadow-sm ${isWinnerPl ? 'border-emerald-500/20 bg-emerald-500/8 text-emerald-700 dark:text-emerald-300 dark:bg-emerald-500/10' : 'border-red-500/20 bg-red-500/8 text-red-700 dark:text-red-400 dark:bg-red-500/10'}`}>
+                    <div key={i} className={`flex items-center gap-2 rounded-xl border px-3 py-1.5 text-xs font-black shadow-sm ${isWinnerPl ? 'border-[rgba(var(--accent),0.2)] bg-[rgba(var(--accent),0.08)] text-[rgb(var(--accent))] dark:text-[rgb(var(--accent-dark))] dark:bg-[rgba(var(--accent),0.1)]' : 'border-red-500/20 bg-red-500/8 text-red-700 dark:text-red-400 dark:bg-red-500/10'}`}>
                       <span className="opacity-70 font-semibold">{player}</span>
                       <span className="text-sm">{val > 0 ? `+${val}` : val}</span>
                     </div>
@@ -771,7 +771,7 @@ export default function HandGame({ variant }: Props) {
           <div className="flex flex-col gap-2 pt-1">
             <button
               type="button"
-              className="w-full py-4 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white text-[15px] font-black shadow-xl shadow-emerald-600/25 hover:shadow-emerald-500/35 active:scale-[0.97] transition-all duration-200 flex items-center justify-center gap-2"
+              className="btn-primary w-full py-4 rounded-2xl text-[15px] font-black flex items-center justify-center gap-2"
               onClick={submit}
             >
               <Plus className="h-5 w-5 stroke-[3]" />
@@ -797,7 +797,7 @@ export default function HandGame({ variant }: Props) {
 
       {status.over && (
         <div className="mt-4 space-y-2">
-          <div className="card text-center font-bold text-emerald-600 dark:text-emerald-400">
+          <div className="card text-center font-bold text-[rgb(var(--accent))]">
             {en ? 'Winner' : 'الفائز'}: {match.players[status.winner!]} ({wins[status.winner!]} {en ? 'wins' : 'جولات'})
             <div className="mt-1 text-xs font-normal text-slate-500">
               {en ? 'Final score' : 'النقاط النهائية'}: {match.players.map((p, i) => `${p} ${totals[i]}`).join(' • ')}

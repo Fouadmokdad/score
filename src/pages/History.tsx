@@ -310,19 +310,19 @@ function CalendarPicker({
                 className={
                   'relative flex h-10 w-full items-center justify-center rounded-xl text-sm font-semibold transition-all ' +
                   (isSelected
-                    ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/30'
+                    ? 'bg-[rgb(var(--accent))] text-white shadow-lg shadow-[rgba(var(--accent),0.3)]'
                     : hasMatch
-                      ? 'text-slate-800 dark:text-white hover:bg-emerald-100 dark:hover:bg-emerald-900/30 cursor-pointer'
+                      ? 'text-slate-800 dark:text-white hover:bg-[rgba(var(--accent),0.15)] dark:hover:bg-[rgba(var(--accent),0.2)] cursor-pointer'
                       : 'text-slate-300 dark:text-slate-600 cursor-default'
                   )
                 }
               >
                 {day}
                 {hasMatch && !isSelected && (
-                  <span className="absolute bottom-1 left-1/2 -translate-x-1/2 h-1 w-1 rounded-full bg-emerald-500" />
+                  <span className="absolute bottom-1 left-1/2 -translate-x-1/2 h-1 w-1 rounded-full bg-[rgb(var(--accent))]" />
                 )}
                 {isToday && !isSelected && (
-                  <span className="absolute inset-0 rounded-xl ring-2 ring-emerald-400/50 pointer-events-none" />
+                  <span className="absolute inset-0 rounded-xl ring-2 ring-[rgba(var(--accent),0.5)] pointer-events-none" />
                 )}
               </button>
             );
@@ -333,7 +333,7 @@ function CalendarPicker({
         <div className="mt-4 flex gap-2">
           <button
             onClick={() => { onSelect(today); onClose(); }}
-            className="flex-1 rounded-xl bg-emerald-500 py-2.5 text-sm font-bold text-white shadow transition hover:bg-emerald-600 active:scale-95"
+            className="btn-primary flex-1 py-2.5 rounded-xl text-sm font-bold"
           >
             {language === 'ar' ? 'اليوم' : 'Today'}
           </button>
@@ -444,7 +444,7 @@ export default function History() {
               className={
                 'rounded-xl px-4 py-2 text-xs font-bold transition-all active:scale-95 ' +
                 (isActive
-                  ? 'bg-emerald-500 text-white shadow-md shadow-emerald-500/25'
+                  ? 'bg-[rgb(var(--accent))] text-white shadow-md shadow-[rgba(var(--accent),0.25)]'
                   : 'bg-black/5 dark:bg-white/10 text-slate-600 dark:text-slate-300 hover:bg-black/10 dark:hover:bg-white/15'
                 )
               }

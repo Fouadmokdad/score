@@ -38,7 +38,7 @@ export function GameScoreHeader({
                 className={
                   'mt-1 w-full max-w-[4.5rem] rounded-xl border-2 py-1.5 text-center text-sm font-extrabold transition ' +
                   (isBest
-                    ? 'border-emerald-500 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'
+                    ? 'border-[rgb(var(--accent))] bg-[rgba(var(--accent),0.1)] text-[rgb(var(--accent))] dark:text-[rgb(var(--accent-dark))]'
                     : 'border-slate-300/60 text-slate-700 dark:border-white/10 dark:text-slate-200')
                 }
               >

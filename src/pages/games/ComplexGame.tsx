@@ -276,7 +276,7 @@ export default function ComplexGame({ variant = 'solo' }: { variant?: 'solo' | '
             ) : (
               <div className="space-y-2.5">
                 <label className="flex items-center gap-1.5 text-[11px] font-black tracking-widest text-slate-400 dark:text-slate-500 uppercase">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3 h-3 text-emerald-500">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3 h-3 text-[rgb(var(--accent))]">
                     <path fillRule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm3.857-9.809a.75.75 0 0 0-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 1 0-1.06 1.061l2.5 2.5a.75.75 0 0 0 1.137-.089l4-5.5Z" clipRule="evenodd" />
                   </svg>
                   {en ? 'Finish Order (1st → 4th)' : 'ترتيب الإنهاء (الأول → الرابع)'}
@@ -292,14 +292,14 @@ export default function ComplexGame({ variant = 'solo' }: { variant?: 'solo' | '
                         className={
                           'relative flex items-center justify-between gap-2 rounded-[1.25rem] border-2 px-3.5 py-3 text-sm font-black transition-all duration-300 active:scale-[0.96] ' +
                           (isSelected
-                            ? 'border-emerald-500/70 bg-gradient-to-br from-emerald-500/12 to-teal-500/6 text-emerald-700 dark:text-emerald-300 shadow-[0_3px_16px_rgba(16,185,129,0.14)]'
+                            ? 'border-[rgba(var(--accent),0.7)] bg-[rgba(var(--accent),0.12)] text-[rgb(var(--accent))] shadow-[0_3px_16px_rgba(var(--accent),0.14)]'
                             : 'border-slate-200/60 bg-slate-50/50 text-slate-500 hover:border-slate-300 hover:bg-slate-100/70 dark:border-white/[0.04] dark:bg-white/[0.02] dark:text-slate-400')
                         }
                         onClick={() => togglePos(i)}
                       >
                         <span>{p}</span>
                         {isSelected && (
-                          <span className="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-500 text-white text-xs font-black shadow-sm">
+                          <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[rgb(var(--accent))] text-white text-xs font-black shadow-sm">
                             {pos + 1}
                           </span>
                         )}
@@ -323,7 +323,7 @@ export default function ComplexGame({ variant = 'solo' }: { variant?: 'solo' | '
             <div className="flex flex-col gap-2 pt-1">
               <button
                 type="button"
-                className="w-full py-4 rounded-2xl bg-gradient-to-r from-rose-600 to-pink-500 hover:from-rose-500 hover:to-pink-400 text-white text-[15px] font-black shadow-xl shadow-rose-600/25 hover:shadow-rose-500/35 active:scale-[0.97] transition-all duration-200 flex items-center justify-center gap-2"
+                className="btn-primary w-full py-4 rounded-2xl text-[15px] font-black flex items-center justify-center gap-2"
                 onClick={submit}
               >
                 <Plus className="h-5 w-5 stroke-[3]" />
@@ -455,7 +455,7 @@ function ComplexCountsForm({
                 {group.label}
               </label>
               <span className={`text-[11px] font-black px-2 py-0.5 rounded-full ${
-                isReady ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400' : 'bg-slate-100 dark:bg-white/5 text-slate-400'
+                isReady ? 'bg-[rgba(var(--accent),0.1)] text-[rgb(var(--accent))] dark:text-[rgb(var(--accent-dark))]' : 'bg-slate-100 dark:bg-white/5 text-slate-400'
               }`}>
                 {groupTotal} / {group.total}
               </span>

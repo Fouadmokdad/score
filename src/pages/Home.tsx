@@ -299,7 +299,7 @@ export default function Home() {
       <div className="fixed bottom-24 left-1/2 z-40 -translate-x-1/2">
         <motion.button
           onClick={() => setShowPicker(true)}
-          className="btn-primary flex items-center gap-2 rounded-full px-8 py-4 text-lg font-bold shadow-xl shadow-emerald-500/30 transition-transform hover:scale-105 active:scale-95"
+          className="btn-primary flex items-center gap-2 rounded-full px-8 py-4 text-lg font-bold shadow-xl shadow-[rgba(var(--accent),0.3)] transition-transform hover:scale-105 active:scale-95"
           whileHover={{ scale: 1.06 }}
           whileTap={{ scale: 0.94 }}
           animate={{ scale: showPicker ? 0.92 : 1 }}

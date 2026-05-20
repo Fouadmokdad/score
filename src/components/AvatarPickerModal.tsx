@@ -156,7 +156,7 @@ export function AvatarPickerModal({ playerName, onClose }: Props) {
                     onClick={() => setCurrentAvatar(emoji)}
                     className={`aspect-square flex items-center justify-center text-2xl rounded-2xl transition hover:scale-105 active:scale-95 ${
                       isSelected
-                        ? 'bg-white/20 ring-4 ring-[#10b981] dark:ring-[#34d399]'
+                        ? 'bg-white/20 ring-4 ring-[rgb(var(--accent))] dark:ring-[rgb(var(--accent-dark))]'
                         : 'bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10'
                     }`}
                   >
@@ -179,7 +179,7 @@ export function AvatarPickerModal({ playerName, onClose }: Props) {
                     onClick={() => setCurrentAvatar(path)}
                     className={`aspect-square overflow-hidden rounded-2xl relative transition hover:scale-105 active:scale-95 border-2 ${
                       isSelected
-                        ? 'border-[#10b981] ring-4 ring-[#10b981]/30'
+                        ? 'border-[rgb(var(--accent))] ring-4 ring-[rgba(var(--accent),0.3)]'
                         : 'border-transparent bg-black/5 dark:bg-white/5'
                     }`}
                   >
@@ -200,7 +200,7 @@ export function AvatarPickerModal({ playerName, onClose }: Props) {
                   className="hidden"
                   onChange={handleFileUpload}
                 />
-                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-500 group-hover:scale-110 transition">
+                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[rgba(var(--accent),0.1)] text-[rgb(var(--accent))] group-hover:scale-110 transition">
                   <ImageIcon className="h-6 w-6" />
                 </div>
                 <div className="text-xs font-bold text-slate-700 dark:text-slate-300">
@@ -227,7 +227,7 @@ export function AvatarPickerModal({ playerName, onClose }: Props) {
                     key={gradient}
                     onClick={() => setCurrentColor(gradient)}
                     className={`h-9 w-full rounded-xl bg-gradient-to-br ${gradient} relative transition hover:scale-105 active:scale-95 border-2 ${
-                      isSelected ? 'border-white dark:border-slate-800 ring-2 ring-emerald-500' : 'border-transparent'
+                      isSelected ? 'border-white dark:border-slate-800 ring-2 ring-[rgb(var(--accent))]' : 'border-transparent'
                     }`}
                     aria-label="Gradient swatch"
                   />

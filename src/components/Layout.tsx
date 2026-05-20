@@ -146,7 +146,7 @@ export function Layout({ children, title, back, headerAction }: LayoutProps) {
                           className={
                             'flex flex-col items-center gap-1 rounded-xl border px-1 py-2 text-[10px] font-bold transition ' +
                             (skin === key
-                              ? 'border-emerald-500 bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-300'
+                              ? 'border-[rgb(var(--accent))] bg-[rgba(var(--accent),0.08)] text-[rgb(var(--accent))] dark:bg-[rgba(var(--accent),0.12)] dark:text-[rgb(var(--accent-dark))]'
                               : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50 dark:border-white/10 dark:bg-white/5 dark:text-slate-300 dark:hover:bg-white/10')
                           }
                           title={language === 'ar' ? SKIN_PRESETS[key].descriptionAr : SKIN_PRESETS[key].description}

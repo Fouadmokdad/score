@@ -288,68 +288,170 @@ export default function HandGame({ variant }: Props) {
       )}
 
       {!status.over && showRoundForm && (
-        <div className="card mt-4 space-y-3">
-          <h3 className="font-bold">{en ? 'New round' : 'جولة جديدة'}</h3>
+        <div className="relative overflow-hidden rounded-[2.25rem] border border-slate-200/60 bg-white shadow-2xl shadow-black/10 backdrop-blur-xl dark:border-white/[0.07] dark:bg-[#18171380] dark:shadow-black/40 mt-5 space-y-0 animate-in fade-in slide-in-from-bottom-4 duration-300">
+          {/* Top accent gradient bar */}
+          <div className="absolute top-0 inset-x-0 h-[3px] bg-gradient-to-r from-emerald-500 via-teal-400 to-blue-500 rounded-t-[2.25rem]" />
+          <div className="p-6 pt-7 space-y-5">
+          
+          {/* Header Bar */}
+          <div className="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-white/[0.06]">
+            <h3 className="text-base font-extrabold text-slate-800 dark:text-slate-100 flex items-center gap-2.5">
+              <span className="relative flex h-2.5 w-2.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+              </span>
+              <span>{en ? 'New Round' : 'جولة جديدة'}</span>
+            </h3>
+            <span className="text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full bg-gradient-to-br from-slate-100 to-slate-50 dark:from-white/[0.06] dark:to-white/[0.02] text-slate-400 dark:text-slate-500 border border-slate-200/40 dark:border-white/[0.04] shadow-sm">
+              {isPartners ? (en ? 'Partners' : 'شراكة') : (en ? 'Solo' : 'فردي')}
+            </span>
+          </div>
 
-          <div>
-            <label className="label mb-2">{en ? 'Round winner' : variant === 'partners' ? 'الفريق الفائز بهذه الجولة' : 'الفائز بهذه الجولة'}</label>
+          {/* Winner Selection */}
+          <div className="space-y-2.5">
+            <label className="flex items-center gap-1.5 text-[11px] font-black tracking-widest text-slate-400 dark:text-slate-500 uppercase">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3 h-3 text-emerald-500">
+                <path fillRule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm3.857-9.809a.75.75 0 0 0-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 1 0-1.06 1.061l2.5 2.5a.75.75 0 0 0 1.137-.089l4-5.5Z" clipRule="evenodd" />
+              </svg>
+              {en ? 'Round Winner' : variant === 'partners' ? 'الفريق الفائز' : 'الفائز'}
+            </label>
             <div className="grid grid-cols-2 gap-3">
-              {match.players.map((p, i) => (
-                <button
-                  key={i}
-                  className={
-                    'flex min-h-[3rem] items-center justify-center truncate rounded-2xl border px-3 py-2 text-sm font-bold transition ' +
-                    (winner === i
-                      ? 'border-emerald-600 bg-emerald-600/90 text-white shadow-md shadow-emerald-900/20'
-                      : 'border-slate-300 bg-slate-50 text-slate-700 hover:bg-slate-100 dark:border-white/10 dark:bg-white/5 dark:text-slate-200 dark:hover:bg-white/10')
-                  }
-                  onClick={() => setWinner(i)}
-                >
-                  {p}
-                </button>
-              ))}
+              {match.players.map((p, i) => {
+                const isTeam = isPartners && originalNames.length >= 4;
+                const isSelected = winner === i;
+                return (
+                  <button
+                    key={i}
+                    type="button"
+                    className={
+                      'group relative overflow-hidden flex flex-col items-center justify-center gap-2.5 rounded-[1.5rem] border-2 px-3 py-4 transition-all duration-300 active:scale-[0.96] ' +
+                      (isSelected
+                        ? 'border-emerald-500/80 bg-gradient-to-b from-emerald-500/12 to-teal-500/6 shadow-[0_4px_20px_rgba(16,185,129,0.18)] dark:from-emerald-500/15 dark:to-teal-500/8'
+                        : 'border-slate-200/70 bg-slate-50/60 hover:border-slate-300/80 hover:bg-slate-100/70 dark:border-white/[0.04] dark:bg-white/[0.02] dark:hover:border-white/[0.07] dark:hover:bg-white/[0.04]')
+                    }
+                    onClick={() => setWinner(i)}
+                  >
+                    {/* Selected Glow Behind */}
+                    {isSelected && <div className="absolute inset-0 bg-gradient-to-b from-emerald-500/5 to-transparent pointer-events-none" />}
+
+                    {/* Checkmark badge */}
+                    <div className={`absolute top-2 right-2 h-5 w-5 rounded-full flex items-center justify-center transition-all duration-200 ${isSelected ? 'bg-emerald-500 text-white scale-100 opacity-100 shadow-md shadow-emerald-500/30' : 'bg-slate-200/60 dark:bg-white/5 scale-75 opacity-40'}`}>
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3 h-3">
+                        <path fillRule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" />
+                      </svg>
+                    </div>
+
+                    {isTeam ? (
+                      <>
+                        <div className="flex items-center -space-x-3 space-x-reverse">
+                          <div className={`z-10 rounded-full ring-[2.5px] transition-all duration-300 ${isSelected ? 'ring-emerald-400/60 shadow-lg shadow-emerald-500/20' : 'ring-white dark:ring-[#201f1b] opacity-75'}`}>
+                            <PlayerAvatar name={originalNames[i]} size="md" />
+                          </div>
+                          <div className={`z-0 rounded-full ring-[2.5px] transition-all duration-300 ${isSelected ? 'ring-emerald-400/60 shadow-lg shadow-emerald-500/20' : 'ring-white dark:ring-[#201f1b] opacity-75'}`}>
+                            <PlayerAvatar name={originalNames[i + 2]} size="md" />
+                          </div>
+                        </div>
+                        <span className={`text-[11px] font-black tracking-wide leading-tight text-center transition-all duration-200 ${isSelected ? 'text-emerald-700 dark:text-emerald-300' : 'text-slate-500 dark:text-slate-400'}`}>{p}</span>
+                      </>
+                    ) : (
+                      <>
+                        <div className={`rounded-full ring-[2.5px] transition-all duration-300 ${isSelected ? 'ring-emerald-400/60 shadow-lg shadow-emerald-500/20' : 'ring-slate-200 dark:ring-white/10 opacity-75'}`}>
+                          <PlayerAvatar name={p} size="md" />
+                        </div>
+                        <span className={`text-[11px] font-black tracking-wide text-center transition-all duration-200 ${isSelected ? 'text-emerald-700 dark:text-emerald-300' : 'text-slate-500 dark:text-slate-400'}`}>{p}</span>
+                      </>
+                    )}
+                  </button>
+                );
+              })}
             </div>
           </div>
 
-          <div>
-            <label className="label mb-2 mt-4">{en ? 'Round type' : 'نوع الجولة'}</label>
-            <div className="grid grid-cols-2 gap-3">
-              {HAND_KINDS.map((k) => (
-                <button
-                  key={k.id}
-                  className={
-                    'flex min-h-[3rem] items-center justify-center rounded-2xl border px-3 py-2 text-sm font-bold transition ' +
-                    (kind === k.id
-                      ? 'border-blue-600 bg-blue-600/90 text-white shadow-md shadow-blue-900/20'
-                      : 'border-slate-300 bg-slate-50 text-slate-700 hover:bg-slate-100 dark:border-white/10 dark:bg-white/5 dark:text-slate-200 dark:hover:bg-white/10')
-                  }
-                  onClick={() => setKind(k.id)}
-                >
-                  {handKindLabel(k.id, en)}
-                </button>
-              ))}
+          {/* Round Type (Kind) Selection */}
+          <div className="space-y-3">
+            <label className="flex items-center gap-1.5 text-[11px] font-black tracking-widest text-slate-400 dark:text-slate-500 uppercase">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3 h-3 text-blue-500">
+                <path d="M15.98 1.804a1 1 0 0 0-1.96 0l-.24 1.192a1 1 0 0 1-.784.785l-1.192.24a1 1 0 0 0 0 1.962l1.192.24a1 1 0 0 1 .784.785l.24 1.192a1 1 0 0 0 1.962 0l.24-1.192a1 1 0 0 1 .784-.785l1.192-.24a1 1 0 0 0 0-1.962l-1.192-.24a1 1 0 0 1-.784-.785l-.24-1.192ZM6.949 5.684a1 1 0 0 0-1.898 0l-.683 2.051a1 1 0 0 1-.633.633l-2.051.683a1 1 0 0 0 0 1.898l2.051.684a1 1 0 0 1 .633.632l.683 2.051a1 1 0 0 0 1.898 0l.683-2.051a1 1 0 0 1 .633-.633l2.051-.683a1 1 0 0 0 0-1.898l-2.051-.683a1 1 0 0 1-.633-.633L6.95 5.684Z" />
+              </svg>
+              {en ? 'Round Type' : 'نوع الجولة'}
+            </label>
+            {/* 2x2 Segmented Button Grid */}
+            <div className="grid grid-cols-2 gap-2">
+              {HAND_KINDS.map((k) => {
+                const isSelected = kind === k.id;
+                const winnerPoints = k.id === 'normal' ? '−20' : '−40';
+                const multiplier = k.id === 'h150' ? '×1.5' : k.id === 'h200' ? '×2' : '×1';
+                return (
+                  <button
+                    key={k.id}
+                    type="button"
+                    className={
+                      'group relative overflow-hidden flex items-center justify-between gap-2 rounded-[1.25rem] border-2 px-3.5 py-3 transition-all duration-300 active:scale-[0.97] ' +
+                      (isSelected
+                        ? 'border-blue-500/70 bg-gradient-to-br from-blue-500/12 to-indigo-500/6 shadow-[0_3px_16px_rgba(59,130,246,0.16)] dark:from-blue-500/15 dark:to-indigo-500/8'
+                        : 'border-slate-200/60 bg-slate-50/50 hover:border-slate-300/80 hover:bg-slate-100/70 dark:border-white/[0.04] dark:bg-white/[0.02] dark:hover:border-white/[0.07] dark:hover:bg-white/[0.04]')
+                    }
+                    onClick={() => setKind(k.id)}
+                  >
+                    <div className="flex flex-col items-start gap-0.5">
+                      <span className={`text-[12px] font-black leading-tight transition-colors ${isSelected ? 'text-blue-700 dark:text-blue-300' : 'text-slate-600 dark:text-slate-300'}`}>
+                        {handKindLabel(k.id, en)}
+                      </span>
+                      <span className={`text-[10px] font-bold transition-colors ${isSelected ? 'text-blue-500/80 dark:text-blue-400/80' : 'text-slate-400 dark:text-slate-500'}`}>
+                        {en ? `Loser ${multiplier}` : `خاسر ${multiplier}`}
+                      </span>
+                    </div>
+                    <div className={`shrink-0 flex flex-col items-center justify-center h-8 w-8 rounded-xl text-[10px] font-black transition-all duration-200 ${isSelected ? 'bg-blue-500 text-white shadow-md shadow-blue-500/30' : 'bg-slate-200/70 text-slate-500 dark:bg-white/5 dark:text-slate-400'}`}>
+                      {winnerPoints}
+                    </div>
+                  </button>
+                );
+              })}
             </div>
-            <p className="mt-1.5 text-xs text-slate-500">
-              {kindHelp(kind, en)}
-            </p>
+            
+            {/* Elegant Callout Help Message */}
+            <div key={kind} className="flex items-start gap-2.5 rounded-[1.25rem] border border-blue-500/10 bg-gradient-to-br from-blue-500/6 to-indigo-500/4 p-3 text-xs text-blue-700/80 dark:text-blue-300/80 animate-in fade-in duration-200">
+              <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-lg bg-blue-500/12 text-blue-500 mt-px">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3.5 h-3.5">
+                  <path fillRule="evenodd" d="M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0Zm-7-4a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM9 9a.75.75 0 0 0 0 1.5h.253a.25.25 0 0 1 .244.304l-.459 2.066A1.75 1.75 0 0 0 10.747 15H11a.75.75 0 0 0 0-1.5h-.253a.25.25 0 0 1-.244-.304l.459-2.066A1.75 1.75 0 0 0 9.253 9H9Z" clipRule="evenodd" />
+                </svg>
+              </span>
+              <span className="font-semibold leading-relaxed">{kindHelp(kind, en)}</span>
+            </div>
           </div>
 
-          <div>
-            <label className="label mb-2 mt-4">{en ? 'Card points this round' : 'نقاط الورق هذه الجولة'}</label>
-            <div className={isPartners ? "grid grid-cols-1 gap-3" : "grid grid-cols-2 gap-3"}>
+          {/* Card Points Inputs */}
+          <div className="space-y-3">
+            <label className="flex items-center gap-1.5 text-[11px] font-black tracking-widest text-slate-400 dark:text-slate-500 uppercase">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3 h-3 text-red-400">
+                <path d="M1 4.25a3.733 3.733 0 0 1 2.25-.75h13.5c.844 0 1.623.279 2.25.75A2.25 2.25 0 0 0 16.75 2H3.25A2.25 2.25 0 0 0 1 4.25ZM1 7.25a3.733 3.733 0 0 1 2.25-.75h13.5c.844 0 1.623.279 2.25.75A2.25 2.25 0 0 0 16.75 5H3.25A2.25 2.25 0 0 0 1 7.25ZM7 8a1 1 0 0 1 1 1 2 2 0 1 0 4 0 1 1 0 1 1 2 0v6.75A2.25 2.25 0 0 1 11.75 18H3.25A2.25 2.25 0 0 1 1 15.75V9a1 1 0 0 1 1-1h5Z" />
+              </svg>
+              {en ? 'Loser Card Points' : 'نقاط ورق الخاسر'}
+            </label>
+            <div className={isPartners ? "grid grid-cols-1 gap-4" : "grid grid-cols-2 gap-3"}>
               {isPartners ? (
                 // Only show inputs for the losing team
                 [0, 1].map(teamIdx => teamIdx !== winner && (
-                  <div key={teamIdx} className="flex flex-col gap-3 rounded-xl border border-blue-200 bg-blue-50/50 p-3 dark:border-blue-900/30 dark:bg-blue-900/10">
-                    <div className="truncate px-1 text-center text-xs font-bold text-slate-500">{match.players[teamIdx]}</div>
-                    <div className="grid grid-cols-2 gap-3">
-                      <div className="flex flex-col gap-1">
-                        <div className="truncate px-1 text-center text-xs font-semibold text-slate-600 dark:text-slate-300">{originalNames[teamIdx]}</div>
+                  <div key={teamIdx} className="flex flex-col gap-4 rounded-[2rem] border border-slate-200/60 bg-slate-50/40 p-4 dark:border-white/[0.03] dark:bg-white/[0.01] animate-in fade-in duration-200">
+                    <div className="flex items-center justify-between px-1">
+                      <span className="text-[10px] font-black tracking-wider text-slate-400 dark:text-slate-500 uppercase">{en ? 'Losing Team' : 'الفريق الخاسر'}</span>
+                      <span className="rounded-full bg-red-500/10 px-3 py-0.5 text-[11px] font-extrabold text-red-500 dark:text-red-400 border border-red-500/10">
+                        {match.players[teamIdx]}
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4">
+                      {/* Player 1 of Losing Team */}
+                      <div className="flex flex-col gap-2">
+                        <div className="truncate px-1 text-center text-xs font-bold text-slate-600 dark:text-slate-300 flex items-center justify-center gap-1.5">
+                          <PlayerAvatar name={originalNames[teamIdx]} size="sm" className="h-5 w-5 ring-1 ring-slate-200 dark:ring-white/10" />
+                          <span className="truncate max-w-[5rem]">{originalNames[teamIdx]}</span>
+                        </div>
                         <input
                           type="number"
                           inputMode="numeric"
                           min={0}
-                          className="input h-12 text-center text-lg font-bold placeholder:text-slate-300 dark:bg-[#1a1915] dark:placeholder:text-slate-700"
+                          className="w-full h-12 text-center text-lg font-black placeholder:text-slate-300 dark:placeholder:text-slate-700 bg-white/70 dark:bg-[#1a1915]/60 border-2 border-slate-200/80 dark:border-white/5 rounded-2xl outline-none focus:border-red-500 focus:ring-4 focus:ring-red-500/10 dark:focus:ring-red-500/20 transition-all duration-200"
                           placeholder="0"
                           value={loserCards[teamIdx] ?? ''}
                           onChange={(e) => {
@@ -358,15 +460,48 @@ export default function HandGame({ variant }: Props) {
                             setLoserCards(next);
                           }}
                         />
+                        {/* Increment Shortcuts */}
+                        <div className="flex justify-center gap-1">
+                          {[10, 20, 50].map((inc) => (
+                            <button
+                              key={inc}
+                              type="button"
+                              className="flex-1 inline-flex h-6 items-center justify-center rounded-lg border border-slate-200/80 bg-white text-[10px] font-black text-slate-500 shadow-sm transition hover:bg-slate-50 active:scale-95 dark:border-white/[0.04] dark:bg-white/[0.02] dark:text-slate-400 dark:hover:bg-white/10"
+                              onClick={() => {
+                                const next = [...loserCards];
+                                const currentVal = Number(next[teamIdx]) || 0;
+                                next[teamIdx] = String(currentVal + inc);
+                                setLoserCards(next);
+                              }}
+                            >
+                              +{inc}
+                            </button>
+                          ))}
+                          <button
+                            type="button"
+                            className="inline-flex h-6 w-6 items-center justify-center rounded-lg border border-red-200/50 bg-red-50/50 text-[10px] font-black text-red-500 shadow-sm transition hover:bg-red-50 active:scale-95 dark:border-red-500/10 dark:bg-red-500/5 dark:text-red-400"
+                            onClick={() => {
+                              const next = [...loserCards];
+                              next[teamIdx] = '';
+                              setLoserCards(next);
+                            }}
+                          >
+                            ×
+                          </button>
+                        </div>
                       </div>
                       
-                      <div className="flex flex-col gap-1">
-                        <div className="truncate px-1 text-center text-xs font-semibold text-slate-600 dark:text-slate-300">{originalNames[teamIdx + 2]}</div>
+                      {/* Player 2 of Losing Team */}
+                      <div className="flex flex-col gap-2">
+                        <div className="truncate px-1 text-center text-xs font-bold text-slate-600 dark:text-slate-300 flex items-center justify-center gap-1.5">
+                          <PlayerAvatar name={originalNames[teamIdx + 2]} size="sm" className="h-5 w-5 ring-1 ring-slate-200 dark:ring-white/10" />
+                          <span className="truncate max-w-[5rem]">{originalNames[teamIdx + 2]}</span>
+                        </div>
                         <input
                           type="number"
                           inputMode="numeric"
                           min={0}
-                          className="input h-12 text-center text-lg font-bold placeholder:text-slate-300 dark:bg-[#1a1915] dark:placeholder:text-slate-700"
+                          className="w-full h-12 text-center text-lg font-black placeholder:text-slate-300 dark:placeholder:text-slate-700 bg-white/70 dark:bg-[#1a1915]/60 border-2 border-slate-200/80 dark:border-white/5 rounded-2xl outline-none focus:border-red-500 focus:ring-4 focus:ring-red-500/10 dark:focus:ring-red-500/20 transition-all duration-200"
                           placeholder="0"
                           value={loserCards[teamIdx + 2] ?? ''}
                           onChange={(e) => {
@@ -375,19 +510,51 @@ export default function HandGame({ variant }: Props) {
                             setLoserCards(next);
                           }}
                         />
+                        {/* Increment Shortcuts */}
+                        <div className="flex justify-center gap-1">
+                          {[10, 20, 50].map((inc) => (
+                            <button
+                              key={inc}
+                              type="button"
+                              className="flex-1 inline-flex h-6 items-center justify-center rounded-lg border border-slate-200/80 bg-white text-[10px] font-black text-slate-500 shadow-sm transition hover:bg-slate-50 active:scale-95 dark:border-white/[0.04] dark:bg-white/[0.02] dark:text-slate-400 dark:hover:bg-white/10"
+                              onClick={() => {
+                                const next = [...loserCards];
+                                const currentVal = Number(next[teamIdx + 2]) || 0;
+                                next[teamIdx + 2] = String(currentVal + inc);
+                                setLoserCards(next);
+                              }}
+                            >
+                              +{inc}
+                            </button>
+                          ))}
+                          <button
+                            type="button"
+                            className="inline-flex h-6 w-6 items-center justify-center rounded-lg border border-red-200/50 bg-red-50/50 text-[10px] font-black text-red-500 shadow-sm transition hover:bg-red-50 active:scale-95 dark:border-red-500/10 dark:bg-red-500/5 dark:text-red-400"
+                            onClick={() => {
+                              const next = [...loserCards];
+                              next[teamIdx + 2] = '';
+                              setLoserCards(next);
+                            }}
+                          >
+                            ×
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
                 ))
               ) : (
                 match.players.map((p, i) => i !== winner && (
-                  <div key={i} className="flex flex-col">
-                    <div className="mb-1 truncate px-1 text-xs font-semibold text-slate-500">{p}</div>
+                  <div key={i} className="flex flex-col gap-3 rounded-[2rem] border border-slate-200/60 bg-slate-50/40 p-4 dark:border-white/[0.03] dark:bg-white/[0.01] animate-in fade-in duration-200">
+                    <div className="truncate px-1 text-center text-xs font-bold text-slate-600 dark:text-slate-300 flex items-center justify-center gap-1.5">
+                      <PlayerAvatar name={p} size="sm" className="h-5 w-5 ring-1 ring-slate-200 dark:ring-white/10" />
+                      <span className="truncate max-w-[5rem]">{p}</span>
+                    </div>
                     <input
                       type="number"
                       inputMode="numeric"
                       min={0}
-                      className="input h-12 text-center text-lg font-bold placeholder:text-slate-300 dark:bg-[#1a1915] dark:placeholder:text-slate-700"
+                      className="w-full h-12 text-center text-lg font-black placeholder:text-slate-300 dark:placeholder:text-slate-700 bg-white/70 dark:bg-[#1a1915]/60 border-2 border-slate-200/80 dark:border-white/5 rounded-2xl outline-none focus:border-red-500 focus:ring-4 focus:ring-red-500/10 dark:focus:ring-red-500/20 transition-all duration-200"
                       placeholder="0"
                       value={loserCards[i] ?? ''}
                       onChange={(e) => {
@@ -396,53 +563,103 @@ export default function HandGame({ variant }: Props) {
                         setLoserCards(next);
                       }}
                     />
+                    {/* Increment Shortcuts */}
+                    <div className="flex justify-center gap-1">
+                      {[10, 20, 50].map((inc) => (
+                        <button
+                          key={inc}
+                          type="button"
+                          className="flex-1 inline-flex h-6 items-center justify-center rounded-lg border border-slate-200/80 bg-white text-[10px] font-black text-slate-500 shadow-sm transition hover:bg-slate-50 active:scale-95 dark:border-white/[0.04] dark:bg-white/[0.02] dark:text-slate-400 dark:hover:bg-white/10"
+                          onClick={() => {
+                            const next = [...loserCards];
+                            const currentVal = Number(next[i]) || 0;
+                            next[i] = String(currentVal + inc);
+                            setLoserCards(next);
+                          }}
+                        >
+                          +{inc}
+                        </button>
+                      ))}
+                      <button
+                        type="button"
+                        className="inline-flex h-6 w-6 items-center justify-center rounded-lg border border-red-200/50 bg-red-50/50 text-[10px] font-black text-red-500 shadow-sm transition hover:bg-red-50 active:scale-95 dark:border-red-500/10 dark:bg-red-500/5 dark:text-red-400"
+                        onClick={() => {
+                          const next = [...loserCards];
+                          next[i] = '';
+                          setLoserCards(next);
+                        }}
+                      >
+                        ×
+                      </button>
+                    </div>
                   </div>
                 ))
               )}
             </div>
           </div>
 
-          {/* Live preview */}
-          <div className="rounded-xl border border-dashed border-slate-300 p-2 text-xs dark:border-slate-700">
-            {en ? 'Preview:' : 'معاينة:'}{' '}
-            {(() => {
-              const def = HAND_KINDS.find((k) => k.id === kind)!;
-              const defaultVal = handKindDefaults[kind];
-              const deltas = new Array(sides).fill(0);
-              deltas[winner] = def.winnerDelta;
+          {/* Live Preview Summary */}
+          <div className="overflow-hidden rounded-[1.25rem] border border-slate-200/60 dark:border-white/[0.06] bg-slate-50/80 dark:bg-white/[0.02]">
+            <div className="flex items-center gap-2 px-4 py-2.5 border-b border-slate-200/60 dark:border-white/[0.04]">
+              <div className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="text-[10px] font-black tracking-widest uppercase text-slate-400 dark:text-slate-500">
+                {en ? 'Score Preview' : 'معاينة النقاط'}
+              </span>
+            </div>
+            <div className="flex flex-wrap items-center justify-center gap-2 p-3.5">
+              {(() => {
+                const def = HAND_KINDS.find((k) => k.id === kind)!;
+                const defaultVal = handKindDefaults[kind];
+                const deltas = new Array(sides).fill(0);
+                deltas[winner] = def.winnerDelta;
 
-              for (let teamIdx = 0; teamIdx < sides; teamIdx++) {
-                if (teamIdx === winner) continue;
-                if (isPartners) {
-                  const p1 = loserCards[teamIdx];
-                  const p2 = loserCards[teamIdx + 2];
-                  let p1Penalty = p1 === '' && defaultVal !== undefined ? defaultVal : Math.round((Number(p1) || 0) * def.multiplier);
-                  let p2Penalty = p2 === '' && defaultVal !== undefined ? defaultVal : Math.round((Number(p2) || 0) * def.multiplier);
-                  deltas[teamIdx] = p1Penalty + p2Penalty;
-                } else {
-                  const p1 = loserCards[teamIdx];
-                  deltas[teamIdx] = p1 === '' && defaultVal !== undefined ? defaultVal : Math.round((Number(p1) || 0) * def.multiplier);
+                for (let teamIdx = 0; teamIdx < sides; teamIdx++) {
+                  if (teamIdx === winner) continue;
+                  if (isPartners) {
+                    const p1 = loserCards[teamIdx];
+                    const p2 = loserCards[teamIdx + 2];
+                    let p1Penalty = p1 === '' && defaultVal !== undefined ? defaultVal : Math.round((Number(p1) || 0) * def.multiplier);
+                    let p2Penalty = p2 === '' && defaultVal !== undefined ? defaultVal : Math.round((Number(p2) || 0) * def.multiplier);
+                    deltas[teamIdx] = p1Penalty + p2Penalty;
+                  } else {
+                    const p1 = loserCards[teamIdx];
+                    deltas[teamIdx] = p1 === '' && defaultVal !== undefined ? defaultVal : Math.round((Number(p1) || 0) * def.multiplier);
+                  }
                 }
-              }
 
-              return match.players
-                .map((player, i) => `${player}: ${deltas[i] > 0 ? '+' : ''}${deltas[i]}`)
-                .join(' • ');
-            })()}
+                return match.players.map((player, i) => {
+                  const isWinnerPl = i === winner;
+                  const val = deltas[i];
+                  return (
+                    <div key={i} className={`flex items-center gap-2 rounded-xl border px-3 py-1.5 text-xs font-black shadow-sm ${isWinnerPl ? 'border-emerald-500/20 bg-emerald-500/8 text-emerald-700 dark:text-emerald-300 dark:bg-emerald-500/10' : 'border-red-500/20 bg-red-500/8 text-red-700 dark:text-red-400 dark:bg-red-500/10'}`}>
+                      <span className="opacity-70 font-semibold">{player}</span>
+                      <span className="text-sm">{val > 0 ? `+${val}` : val}</span>
+                    </div>
+                  );
+                });
+              })()}
+            </div>
           </div>
 
           {error && (
-            <div className="rounded-lg bg-red-100 p-2 text-sm text-red-700 dark:bg-red-900/40 dark:text-red-300">
+            <div className="rounded-2xl bg-red-500/10 border border-red-500/20 p-3.5 text-xs font-black text-red-600 dark:text-red-400 text-center animate-shake">
               {error}
             </div>
           )}
 
-          <div className="flex gap-2">
-            <button className="btn-primary flex-1" onClick={submit}>
-              <Plus className="h-4 w-4" /> {en ? 'Save round' : 'حفظ الجولة'}
+          {/* Action Buttons */}
+          <div className="flex flex-col gap-2 pt-1">
+            <button
+              type="button"
+              className="w-full py-4 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white text-[15px] font-black shadow-xl shadow-emerald-600/25 hover:shadow-emerald-500/35 active:scale-[0.97] transition-all duration-200 flex items-center justify-center gap-2"
+              onClick={submit}
+            >
+              <Plus className="h-5 w-5 stroke-[3]" />
+              {en ? 'Save Round' : 'حفظ الجولة'}
             </button>
             <button
-              className="btn-secondary"
+              type="button"
+              className="w-full py-3 rounded-2xl border border-slate-200/60 dark:border-white/[0.05] bg-transparent text-slate-400 dark:text-slate-500 text-sm font-bold hover:bg-slate-100/60 dark:hover:bg-white/[0.03] active:scale-[0.98] transition-all duration-200"
               onClick={() => {
                 setShowRoundForm(false);
                 setError('');
@@ -453,6 +670,7 @@ export default function HandGame({ variant }: Props) {
             >
               {en ? 'Cancel' : 'إلغاء'}
             </button>
+          </div>
           </div>
         </div>
       )}

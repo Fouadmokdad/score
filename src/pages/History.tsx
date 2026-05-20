@@ -9,6 +9,8 @@ import { PlayerAvatar } from '../components/PlayerAvatar';
 import type { GameKind, Match } from '../types';
 import { countHandWins } from '../logic/hand';
 import { useConfirm } from '../components/ConfirmDialog';
+import { EmptyState } from '../components/EmptyState';
+import { CountUp } from '../components/CountUp';
 
 const GRADIENTS: Record<GameKind, string> = {
   likha: 'from-[#6366f1] to-[#a855f7]',
@@ -44,6 +46,30 @@ const AR_DAYS = ['أح', 'إث', 'ثل', 'أر', 'خم', 'جم', 'سب'];
 const EN_DAYS = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
 
 /* ─── Match Card (inline) ─── */
+function MatchCover({ match, language }: { match: Match; language: 'en' | 'ar' }) {
+  const names = match.config?.originalNames?.length ? match.config.originalNames.slice(0, 4) : match.players.flatMap((p) => p.split(/ و | & /)).slice(0, 4);
+
+  return (
+    <div className={'mb-4 overflow-hidden rounded-2xl bg-gradient-to-br p-3 text-white shadow-inner ' + GRADIENTS[match.kind]}>
+      <div className="flex items-center justify-between gap-3">
+        <div className="min-w-0">
+          <div className="truncate text-lg font-black leading-tight">{gameText[language].labels[match.kind]}</div>
+          <div className="mt-1 text-[10px] font-bold uppercase tracking-wider text-white/75">
+            {match.rounds.length} {language === 'en' ? 'rounds' : 'جولات'}
+          </div>
+        </div>
+        <div className="flex shrink-0 -space-x-3 rtl:space-x-reverse">
+          {names.map((name: string, idx: number) => (
+            <div key={`${name}-${idx}`} className="rounded-full ring-2 ring-white/80">
+              <PlayerAvatar name={name} size="sm" />
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function MatchCard({ match, language, onDelete }: { match: Match; language: 'en' | 'ar'; onDelete: (id: string) => void }) {
   const t = copy[language];
   const confirm = useConfirm();
@@ -59,6 +85,8 @@ function MatchCard({ match, language, onDelete }: { match: Match; language: 'en'
       to={`/match/${match.id}/${match.kind}`}
       className="group relative block overflow-hidden rounded-3xl border border-black/5 dark:border-white/5 bg-white dark:bg-[#1a1915] p-4 shadow-sm transition-transform hover:-translate-y-1 hover:shadow-md"
     >
+      <MatchCover match={match} language={language} />
+
       {/* Top row */}
       <div className="mb-4 flex items-center justify-between">
         <span className="text-[10px] font-semibold text-slate-500">{dateStr}</span>
@@ -93,7 +121,7 @@ function MatchCard({ match, language, onDelete }: { match: Match; language: 'en'
         return (
           <div className="flex items-center justify-between px-1">
             <div className="flex flex-1 flex-col items-center">
-              <div className={"text-3xl font-black mb-2 " + (totals[0] < 0 ? 'text-red-500' : 'text-slate-800 dark:text-white')}>{totals[0]}</div>
+              <div className={"text-3xl font-black mb-2 " + (totals[0] < 0 ? 'text-red-500' : 'text-slate-800 dark:text-white')}><CountUp value={totals[0]} /></div>
               <div className="flex items-center justify-center -space-x-2 space-x-reverse">
                 <div className="z-10 rounded-full ring-2 ring-white dark:ring-[#1a1915]"><PlayerAvatar name={t1p1} size="sm" /></div>
                 <div className="z-0 rounded-full ring-2 ring-white dark:ring-[#1a1915]"><PlayerAvatar name={t1p2} size="sm" /></div>
@@ -128,7 +156,7 @@ function MatchCard({ match, language, onDelete }: { match: Match; language: 'en'
               })()}
             </div>
             <div className="flex flex-1 flex-col items-center">
-              <div className={"text-3xl font-black mb-2 " + (totals[1] < 0 ? 'text-red-500' : 'text-slate-800 dark:text-white')}>{totals[1]}</div>
+              <div className={"text-3xl font-black mb-2 " + (totals[1] < 0 ? 'text-red-500' : 'text-slate-800 dark:text-white')}><CountUp value={totals[1]} /></div>
               <div className="flex items-center justify-center -space-x-2 space-x-reverse">
                 <div className="z-10 rounded-full ring-2 ring-white dark:ring-[#1a1915]"><PlayerAvatar name={t2p1} size="sm" /></div>
                 <div className="z-0 rounded-full ring-2 ring-white dark:ring-[#1a1915]"><PlayerAvatar name={t2p2} size="sm" /></div>
@@ -141,7 +169,7 @@ function MatchCard({ match, language, onDelete }: { match: Match; language: 'en'
         <div className="flex items-center justify-between gap-1">
           {totals.map((tot, idx) => (
             <div key={idx} className="flex flex-1 flex-col items-center">
-              <div className={"text-xl font-black mb-2 " + (tot < 0 ? 'text-red-500' : 'text-slate-800 dark:text-white')}>{tot}</div>
+              <div className={"text-xl font-black mb-2 " + (tot < 0 ? 'text-red-500' : 'text-slate-800 dark:text-white')}><CountUp value={tot} /></div>
               <PlayerAvatar name={match.players[idx]} size="sm" />
               <div className="mt-1.5 text-[10px] font-bold text-slate-500 dark:text-slate-400 truncate w-full text-center">{match.players[idx]}</div>
             </div>
@@ -406,12 +434,12 @@ export default function History() {
 
       {/* Match Cards */}
       {filtered.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-16 text-center opacity-60">
-          <CalendarDays className="mb-4 h-12 w-12 text-slate-400" />
-          <p className="text-sm text-slate-500">
-            {language === 'ar' ? 'لا توجد مباريات في هذا اليوم' : 'No matches on this day'}
-          </p>
-        </div>
+        <EmptyState
+          icon={CalendarDays}
+          title={language === 'ar' ? 'لا توجد مباريات في هذا اليوم' : 'No matches on this day'}
+          description={language === 'ar' ? 'غيّر الفلتر أو اعرض كل الأيام لمراجعة سجل المباريات.' : 'Change the filter or show all days to browse your match history.'}
+          action={{ label: language === 'ar' ? 'عرض الكل' : 'Show All', onClick: () => setSelectedDate(new Date(0)) }}
+        />
       ) : (
         <div className="space-y-4 pb-4">
           {filtered.map((m) => (

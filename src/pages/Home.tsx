@@ -1,14 +1,18 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { Layout } from '../components/Layout';
 import { type GameKind } from '../types';
 import { useMatches, computeTotals } from '../store/matches';
 import { Spade, Users, Layers, Crown, Heart, Trash2, Sparkles, Plus, ChevronLeft, Gem } from 'lucide-react';
 import { copy, gameText } from '../i18n';
 import { useSettings } from '../store/settings';
-import { PlayerAvatarGroup, PlayerAvatar } from '../components/PlayerAvatar';
+import { PlayerAvatar } from '../components/PlayerAvatar';
 import { countHandWins } from '../logic/hand';
 import { useConfirm } from '../components/ConfirmDialog';
+import { BottomSheet } from '../components/BottomSheet';
+import { EmptyState } from '../components/EmptyState';
+import { CountUp } from '../components/CountUp';
 
 const ICONS: Record<GameKind, React.ReactNode> = {
   likha: <Spade className="h-7 w-7 drop-shadow-sm" />,
@@ -102,7 +106,7 @@ export default function Home() {
             <p className="mt-1 max-w-md text-xs leading-relaxed text-white/80">{t.professionalSubtitle}</p>
           </div>
           <div className="flex shrink-0 flex-col items-center justify-center rounded-2xl bg-white/10 px-3 py-2 text-center backdrop-blur border border-white/10">
-            <div className="text-xl font-black leading-none">{matches.length}</div>
+            <div className="text-xl font-black leading-none"><CountUp value={matches.length} /></div>
             <div className="mt-1 text-[9px] font-bold uppercase tracking-wider text-white/70">{t.matches}</div>
           </div>
         </div>
@@ -161,7 +165,7 @@ export default function Home() {
                       <div className="relative flex items-center justify-between px-1">
                         {/* Team 1 */}
                         <div className="flex flex-1 flex-col items-center">
-                          <div className={"text-3xl font-black mb-2 " + (totals[0] < 0 ? 'text-red-500' : 'text-slate-800 dark:text-white')}>{totals[0]}</div>
+                          <div className={"text-3xl font-black mb-2 " + (totals[0] < 0 ? 'text-red-500' : 'text-slate-800 dark:text-white')}><CountUp value={totals[0]} /></div>
                           <div className="flex items-center justify-center -space-x-2 space-x-reverse">
                             <div className="z-10 rounded-full ring-2 ring-white dark:ring-[#1a1915]">
                               <PlayerAvatar name={t1p1} size="sm" />
@@ -197,7 +201,7 @@ export default function Home() {
                         
                         {/* Team 2 */}
                         <div className="flex flex-1 flex-col items-center">
-                          <div className={"text-3xl font-black mb-2 " + (totals[1] < 0 ? 'text-red-500' : 'text-slate-800 dark:text-white')}>{totals[1]}</div>
+                          <div className={"text-3xl font-black mb-2 " + (totals[1] < 0 ? 'text-red-500' : 'text-slate-800 dark:text-white')}><CountUp value={totals[1]} /></div>
                           <div className="flex items-center justify-center -space-x-2 space-x-reverse">
                             <div className="z-10 rounded-full ring-2 ring-white dark:ring-[#1a1915]">
                               <PlayerAvatar name={t2p1} size="sm" />
@@ -217,7 +221,7 @@ export default function Home() {
                     <div className="flex items-center justify-between gap-1">
                       {totals.map((tot, idx) => (
                         <div key={idx} className="flex flex-1 flex-col items-center">
-                          <div className={"text-xl font-black mb-2 " + (tot < 0 ? 'text-red-500' : 'text-slate-800 dark:text-white')}>{tot}</div>
+                          <div className={"text-xl font-black mb-2 " + (tot < 0 ? 'text-red-500' : 'text-slate-800 dark:text-white')}><CountUp value={tot} /></div>
                           <PlayerAvatar name={m.players[idx]} size="sm" />
                           <div className="mt-1.5 text-[10px] font-bold text-slate-500 dark:text-slate-400 truncate w-full text-center">
                             {m.players[idx]}
@@ -260,54 +264,49 @@ export default function Home() {
           </div>
         </section>
       ) : (
-        <div className="flex flex-col items-center justify-center py-12 text-center opacity-60">
-          <Layers className="mb-4 h-12 w-12 text-slate-400" />
-          <p>{language === 'en' ? 'No ongoing games' : 'لا توجد مباريات جارية'}</p>
-        </div>
+        <EmptyState
+          icon={Layers}
+          title={language === 'en' ? 'No ongoing games' : 'لا توجد مباريات جارية'}
+          description={language === 'en' ? 'Start a new match and it will stay here until it is finished.' : 'ابدأ مباراة جديدة وستبقى هنا حتى تنتهي.'}
+          action={{ label: language === 'en' ? 'New Game' : 'لعبة جديدة', onClick: () => setShowPicker(true) }}
+        />
       )}
 
       {/* Floating Action Button */}
       <div className="fixed bottom-24 left-1/2 z-40 -translate-x-1/2">
-        <button
+        <motion.button
           onClick={() => setShowPicker(true)}
           className="btn-primary flex items-center gap-2 rounded-full px-8 py-4 text-lg font-bold shadow-xl shadow-emerald-500/30 transition-transform hover:scale-105 active:scale-95"
+          whileHover={{ scale: 1.06 }}
+          whileTap={{ scale: 0.94 }}
+          animate={{ scale: showPicker ? 0.92 : 1 }}
+          transition={{ type: 'spring', stiffness: 420, damping: 24 }}
         >
           <Plus className="h-5 w-5" /> {language === 'en' ? 'New Game' : 'لعبة جديدة'}
-        </button>
+        </motion.button>
       </div>
 
-      {/* Game Picker Modal */}
-      {showPicker && (
-        <div className="fixed inset-0 z-50 flex flex-col justify-end p-0 sm:items-center sm:justify-center sm:p-4">
-          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setShowPicker(false)} />
-          <div className="relative w-full max-w-md animate-in slide-in-from-bottom-full rounded-t-[2rem] bg-[#F9F6EE] dark:bg-[#1a1915] p-4 pb-8 shadow-2xl sm:rounded-[2rem] sm:pb-6 sm:zoom-in-95 border border-black/5 dark:border-white/5">
-            {/* Drag Handle */}
-            <div className="mx-auto mb-4 h-1.5 w-12 rounded-full bg-black/10 dark:bg-white/10" />
-            
-            <div className="mb-4 text-center">
-              <h3 className="text-xl font-bold text-slate-900 dark:text-white">{language === 'en' ? 'Choose your game' : 'اختر لعبتك'}</h3>
-            </div>
-            
-            <div className="grid max-h-[68vh] grid-cols-2 gap-2 overflow-y-auto pe-1 sm:grid-cols-3">
-              {GAMES.map((g) => {
-                return (
-                  <button
-                    key={g}
-                    onClick={() => navigate(`/new/${g}`)}
-                    className="group flex min-h-28 w-full flex-col items-stretch justify-between overflow-hidden rounded-2xl border border-black/5 bg-white text-slate-800 shadow-sm transition-colors hover:bg-slate-50 active:scale-[0.98] dark:border-white/10 dark:bg-white/5 dark:text-white dark:hover:bg-white/10"
-                  >
-                    <div className={'flex h-20 w-full shrink-0 items-center justify-center overflow-hidden rounded-t-2xl bg-gradient-to-br text-white shadow-inner ' + GRADIENTS[g]}>
-                      <GameArt game={g} label={gameText[language].labels[g]} />
-                    </div>
-                    
-                    <span className="flex min-h-10 items-center justify-center px-2 py-2 text-center text-sm font-extrabold leading-tight">{gameText[language].labels[g]}</span>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
+      <BottomSheet
+        open={showPicker}
+        onClose={() => setShowPicker(false)}
+        title={language === 'en' ? 'Choose your game' : 'اختر لعبتك'}
+      >
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+          {GAMES.map((g) => (
+            <button
+              key={g}
+              onClick={() => navigate(`/new/${g}`)}
+              className="group flex min-h-28 w-full flex-col items-stretch justify-between overflow-hidden rounded-2xl border border-black/5 bg-white text-slate-800 shadow-sm transition-colors hover:bg-slate-50 active:scale-[0.98] dark:border-white/10 dark:bg-white/5 dark:text-white dark:hover:bg-white/10"
+            >
+              <div className={'flex h-20 w-full shrink-0 items-center justify-center overflow-hidden rounded-t-2xl bg-gradient-to-br text-white shadow-inner ' + GRADIENTS[g]}>
+                <GameArt game={g} label={gameText[language].labels[g]} />
+              </div>
+
+              <span className="flex min-h-10 items-center justify-center px-2 py-2 text-center text-sm font-extrabold leading-tight">{gameText[language].labels[g]}</span>
+            </button>
+          ))}
         </div>
-      )}
+      </BottomSheet>
     </Layout>
   );
 }

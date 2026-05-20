@@ -10,6 +10,10 @@
   --accent-hero-to: #06461f;
   --accent-ring: 16 185 129;
   --accent-swatch: #10b981;
+  --bg-base: #f8fafc;
+  --bg-base-dark: #1b1a17;
+  --card-bg: rgba(255, 255, 255, 0.95);
+  --card-bg-dark: #201f1b;
 }
 
 html,
@@ -33,14 +37,14 @@ body {
   background:
     radial-gradient(circle at 18% 20%, var(--accent-glow), transparent 24rem),
     radial-gradient(circle at 85% 8%, var(--accent-glow), transparent 18rem),
-    #f8fafc;
+    var(--bg-base);
 }
 
 .dark .app-shell {
   background:
     radial-gradient(circle at 50% -10%, rgba(255, 255, 255, 0.055), transparent 18rem),
     radial-gradient(circle at 18% 18%, var(--accent-glow), transparent 24rem),
-    #1c1b18;
+    var(--bg-base-dark);
 }
 
 .hero-card {
@@ -76,6 +80,182 @@ input[type='number']::-webkit-inner-spin-button {
 }
 input[type='number'] {
   -moz-appearance: textfield;
+}
+
+/* ──────────────────────────────────────
+   SKIN VARIATIONS
+   ────────────────────────────────────── */
+
+/* Felt — green casino table */
+.skin-felt {
+  --bg-base: #0d4d2e;
+  --bg-base-dark: #08321e;
+  --card-bg: rgba(20, 80, 50, 0.95);
+  --card-bg-dark: #0a4128;
+}
+.skin-felt body { background: var(--bg-base); color: #f0fdf4; }
+.skin-felt.dark body { background: var(--bg-base-dark); }
+.skin-felt .app-shell {
+  background:
+    radial-gradient(ellipse at 50% 10%, rgba(255,255,255,0.05), transparent 30rem),
+    repeating-linear-gradient(45deg, rgba(0,0,0,0.04) 0px, rgba(0,0,0,0.04) 2px, transparent 2px, transparent 6px),
+    var(--bg-base);
+}
+.skin-felt.dark .app-shell {
+  background:
+    radial-gradient(ellipse at 50% 10%, rgba(255,255,255,0.04), transparent 30rem),
+    repeating-linear-gradient(45deg, rgba(0,0,0,0.06) 0px, rgba(0,0,0,0.06) 2px, transparent 2px, transparent 6px),
+    var(--bg-base-dark);
+}
+.skin-felt .card,
+.skin-felt .score-card {
+  background: rgba(255,255,255,0.06) !important;
+  border-color: rgba(255,255,255,0.12) !important;
+  backdrop-filter: blur(8px);
+  color: #f0fdf4;
+}
+
+/* Paper — sepia old paper */
+.skin-paper {
+  --bg-base: #f4ecd6;
+  --bg-base-dark: #2a2218;
+  --card-bg: #fdf6e3;
+  --card-bg-dark: #1f180e;
+}
+.skin-paper body {
+  background: var(--bg-base);
+  color: #4a3a20;
+  font-family: 'Cairo', 'Courier New', monospace;
+}
+.skin-paper.dark body { background: var(--bg-base-dark); color: #d4b896; }
+.skin-paper .app-shell {
+  background:
+    radial-gradient(ellipse at 30% 20%, rgba(120,80,40,0.08), transparent 25rem),
+    radial-gradient(ellipse at 80% 70%, rgba(150,100,50,0.06), transparent 20rem),
+    var(--bg-base);
+}
+.skin-paper .card,
+.skin-paper .score-card {
+  background: var(--card-bg) !important;
+  border-color: rgba(120,80,40,0.2) !important;
+  box-shadow: 0 1px 3px rgba(80,60,30,0.15), inset 0 0 30px rgba(180,140,80,0.08) !important;
+  color: #4a3a20;
+}
+.skin-paper.dark .card,
+.skin-paper.dark .score-card {
+  background: var(--card-bg-dark) !important;
+  color: #d4b896;
+}
+
+/* Neon — synthwave glow */
+.skin-neon {
+  --bg-base: #0a0a1a;
+  --bg-base-dark: #05050f;
+  --card-bg: rgba(20, 20, 50, 0.85);
+  --card-bg-dark: rgba(15, 15, 40, 0.85);
+}
+.skin-neon body {
+  background: var(--bg-base);
+  color: #e0e0ff;
+}
+.skin-neon.dark body { background: var(--bg-base-dark); }
+.skin-neon .app-shell {
+  background:
+    linear-gradient(180deg, transparent 0%, rgba(255,0,200,0.08) 100%),
+    radial-gradient(ellipse at 20% 80%, rgba(0,255,255,0.15), transparent 25rem),
+    radial-gradient(ellipse at 80% 20%, rgba(255,0,200,0.15), transparent 25rem),
+    var(--bg-base);
+}
+.skin-neon .card,
+.skin-neon .score-card {
+  background: var(--card-bg) !important;
+  border: 1px solid rgba(0,255,255,0.3) !important;
+  box-shadow: 0 0 20px rgba(0,255,255,0.15), inset 0 0 20px rgba(255,0,200,0.05) !important;
+  color: #e0e0ff;
+}
+.skin-neon .btn-primary {
+  box-shadow: 0 0 18px rgba(0,255,255,0.4) !important;
+  text-shadow: 0 0 8px rgba(255,255,255,0.6);
+}
+
+/* OLED — pure black */
+.skin-oled.dark {
+  --bg-base-dark: #000000;
+  --card-bg-dark: #0a0a0a;
+}
+.skin-oled.dark body { background: #000000; }
+.skin-oled.dark .app-shell {
+  background:
+    radial-gradient(circle at 18% 20%, var(--accent-glow), transparent 24rem),
+    #000000;
+}
+.skin-oled.dark .card,
+.skin-oled.dark .score-card {
+  background: #0a0a0a !important;
+  border-color: rgba(255,255,255,0.06) !important;
+}
+
+/* ──────────────────────────────────────
+   ANIMATIONS & MICRO-INTERACTIONS
+   ────────────────────────────────────── */
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(var(--accent), 0.5); }
+  50% { box-shadow: 0 0 0 10px rgba(var(--accent), 0); }
+}
+
+@keyframes lead-change {
+  0% { transform: scale(1) rotate(0); }
+  20% { transform: scale(1.4) rotate(-15deg); }
+  40% { transform: scale(1.2) rotate(15deg); }
+  60% { transform: scale(1.3) rotate(-10deg); }
+  100% { transform: scale(1) rotate(0); }
+}
+
+@keyframes slide-in-bottom {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes count-pop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.18); }
+  100% { transform: scale(1); }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s infinite;
+}
+
+.animate-lead-change {
+  animation: lead-change 0.8s ease;
+}
+
+.animate-count-pop {
+  animation: count-pop 0.4s ease;
+}
+
+.animate-slide-in {
+  animation: slide-in-bottom 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.scrollbar-none {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+/* Touch swipe affordance */
+.swipe-row {
+  touch-action: pan-y;
+  user-select: none;
 }
 
 @layer components {

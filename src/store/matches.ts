@@ -1,6 +1,8 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { Match, Round } from '../types';
+import { celebrateWin } from '../utils/confetti';
+import { playRoundAdded, playWin } from '../utils/sound';
 
 const uid = () => Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
 
@@ -49,6 +51,7 @@ export const useMatches = create<MatchesState>()(
               : m
           ),
         });
+        playRoundAdded();
       },
       updateRound: (matchId, roundId, patch) => {
         set({
@@ -86,11 +89,16 @@ export const useMatches = create<MatchesState>()(
         });
       },
       finishMatch: (matchId, winnerIndex) => {
+        const shouldCelebrate = get().matches.some((m) => m.id === matchId && !m.finished);
         set({
           matches: get().matches.map((m) =>
             m.id === matchId ? { ...m, finished: true, winnerIndex, updatedAt: Date.now() } : m
           ),
         });
+        if (shouldCelebrate) {
+          playWin();
+          celebrateWin();
+        }
       },
       deleteMatch: (matchId) => {
         set({ matches: get().matches.filter((m) => m.id !== matchId) });

@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 export type AccentColor = 'emerald' | 'blue' | 'rose' | 'violet' | 'amber';
+export type Skin = 'classic' | 'felt' | 'paper' | 'neon' | 'oled';
 
 export const ACCENT_PRESETS: Record<AccentColor, { label: string; labelAr: string; swatch: string; hue: string; primary: string; primaryDark: string; glow: string; heroFrom: string; heroTo: string; ring: string }> = {
   emerald: { label: 'Emerald', labelAr: '\u0632\u0645\u0631\u062f\u064a', swatch: '#10b981', hue: '160', primary: '16 185 129', primaryDark: '52 211 153', glow: 'rgba(16,185,129,0.14)', heroFrom: '#16933a', heroTo: '#06461f', ring: '16 185 129' },
@@ -11,15 +12,31 @@ export const ACCENT_PRESETS: Record<AccentColor, { label: string; labelAr: strin
   amber:   { label: 'Gold',    labelAr: '\u0630\u0647\u0628\u064a', swatch: '#f59e0b', hue: '38',  primary: '245 158 11', primaryDark: '251 191 36',  glow: 'rgba(245,158,11,0.14)', heroFrom: '#b45309', heroTo: '#451a03', ring: '245 158 11' },
 };
 
+export const SKIN_PRESETS: Record<Skin, { label: string; labelAr: string; emoji: string; description: string; descriptionAr: string }> = {
+  classic: { label: 'Classic',  labelAr: 'كلاسيك',  emoji: '🎨', description: 'Default polished look',     descriptionAr: 'الشكل الكلاسيكي المصقول' },
+  felt:    { label: 'Felt',     labelAr: 'الطاولة', emoji: '♣️', description: 'Green casino felt',         descriptionAr: 'طاولة كازينو خضراء' },
+  paper:   { label: 'Paper',    labelAr: 'ورقة قديمة', emoji: '📜', description: 'Old paper, sepia tones', descriptionAr: 'ورقة قديمة بألوان السيبيا' },
+  neon:    { label: 'Neon',     labelAr: 'نيون',    emoji: '🌃', description: 'Synthwave neon glow',       descriptionAr: 'توهج نيون سينث ويف' },
+  oled:    { label: 'OLED',     labelAr: 'أوليد',   emoji: '⚫', description: 'Pure black for OLED',        descriptionAr: 'أسود نقي لشاشات OLED' },
+};
+
 interface SettingsState {
   theme: 'light' | 'dark';
   language: 'ar' | 'en';
   accentColor: AccentColor;
+  skin: Skin;
+  soundEnabled: boolean;
+  hasCompletedOnboarding: boolean;
   toggleTheme: () => void;
   toggleLanguage: () => void;
   setTheme: (t: 'light' | 'dark') => void;
   setLanguage: (l: 'ar' | 'en') => void;
   setAccentColor: (c: AccentColor) => void;
+  setSkin: (s: Skin) => void;
+  setSoundEnabled: (v: boolean) => void;
+  toggleSound: () => void;
+  completeOnboarding: () => void;
+  resetOnboarding: () => void;
 }
 
 export const useSettings = create<SettingsState>()(
@@ -28,13 +45,21 @@ export const useSettings = create<SettingsState>()(
       theme: 'dark',
       language: 'ar',
       accentColor: 'emerald',
+      skin: 'classic',
+      soundEnabled: true,
+      hasCompletedOnboarding: false,
       toggleTheme: () => set({ theme: get().theme === 'dark' ? 'light' : 'dark' }),
       toggleLanguage: () => set({ language: get().language === 'ar' ? 'en' : 'ar' }),
       setTheme: (t) => set({ theme: t }),
       setLanguage: (l) => set({ language: l }),
       setAccentColor: (c) => set({ accentColor: c }),
+      setSkin: (s) => set({ skin: s }),
+      setSoundEnabled: (v) => set({ soundEnabled: v }),
+      toggleSound: () => set({ soundEnabled: !get().soundEnabled }),
+      completeOnboarding: () => set({ hasCompletedOnboarding: true }),
+      resetOnboarding: () => set({ hasCompletedOnboarding: false }),
     }),
-    { name: 'score-settings' }
+    { name: 'score-settings', version: 2 }
   )
 );
 
@@ -44,8 +69,16 @@ export function applyTheme(theme: 'light' | 'dark') {
   else root.classList.remove('dark');
 }
 
-export function applyPreferences(theme: 'light' | 'dark', language: 'ar' | 'en', accentColor: AccentColor = 'emerald') {
+export function applySkin(skin: Skin) {
+  const root = document.documentElement;
+  // Remove all skin classes
+  Object.keys(SKIN_PRESETS).forEach((s) => root.classList.remove(`skin-${s}`));
+  root.classList.add(`skin-${skin}`);
+}
+
+export function applyPreferences(theme: 'light' | 'dark', language: 'ar' | 'en', accentColor: AccentColor = 'emerald', skin: Skin = 'classic') {
   applyTheme(theme);
+  applySkin(skin);
   document.documentElement.lang = language;
   document.documentElement.dir = language === 'ar' ? 'rtl' : 'ltr';
   const preset = ACCENT_PRESETS[accentColor];

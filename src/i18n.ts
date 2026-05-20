@@ -43,6 +43,11 @@ export const copy = {
     back: 'رجوع',
     professionalTitle: 'لوحة نتائج منظمة لكل ألعاب الورق',
     professionalSubtitle: 'ابدأ مباراة، اختر لاعبين محفوظين، وتابع النقاط والسجل بدون إدخال الأسماء كل مرة.',
+    leaderboard: 'المتصدرون',
+    trophies: 'الجوائز',
+    appColor: 'لون التطبيق',
+    skin: 'الستايل',
+    sound: 'الصوت',
   },
   en: {
     appName: 'Card Scoreboard',
@@ -84,6 +89,11 @@ export const copy = {
     back: 'Back',
     professionalTitle: 'A clean scoreboard for every card game',
     professionalSubtitle: 'Start matches, reuse saved players, and track score history without typing names every time.',
+    leaderboard: 'Leaderboard',
+    trophies: 'Trophies',
+    appColor: 'App color',
+    skin: 'Skin',
+    sound: 'Sound',
   },
 } as const;
 

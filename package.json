@@ -19,6 +19,9 @@
     "@capacitor/filesystem": "^8.1.2",
     "@capacitor/haptics": "^8.0.2",
     "@capacitor/share": "^8.0.1",
+    "@use-gesture/react": "^10.3.1",
+    "canvas-confetti": "^1.9.4",
+    "framer-motion": "^12.39.0",
     "html-to-image": "^1.11.13",
     "lucide-react": "^0.460.0",
     "react": "^18.3.1",
@@ -27,6 +30,7 @@
     "zustand": "^5.0.1"
   },
   "devDependencies": {
+    "@types/canvas-confetti": "^1.9.0",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^4.3.3",

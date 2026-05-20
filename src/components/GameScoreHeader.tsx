@@ -1,6 +1,7 @@
 import type { Match } from '../types';
 import { computeTotals } from '../store/matches';
 import { PlayerAvatar } from './PlayerAvatar';
+import { CountUp } from './CountUp';
 
 export function GameScoreHeader({
   match,
@@ -41,7 +42,7 @@ export function GameScoreHeader({
                     : 'border-slate-300/60 text-slate-700 dark:border-white/10 dark:text-slate-200')
                 }
               >
-                {score}
+                <CountUp value={score} />
               </div>
             </div>
           );

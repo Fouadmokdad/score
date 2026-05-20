@@ -1,7 +1,30 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Moon, Sun, Home, History, BarChart3, ArrowRight, ArrowLeft, Palette, MoreVertical } from 'lucide-react';
-import { useEffect, useState } from 'react';
-import { applyPreferences, useSettings, ACCENT_PRESETS, type AccentColor } from '../store/settings';
+import type { TouchEvent } from 'react';
+import {
+  Moon,
+  Sun,
+  Home,
+  History,
+  BarChart3,
+  ArrowRight,
+  ArrowLeft,
+  Palette,
+  MoreVertical,
+  Trophy,
+  Award,
+  Volume2,
+  VolumeX,
+  Sparkles,
+} from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import {
+  applyPreferences,
+  useSettings,
+  ACCENT_PRESETS,
+  SKIN_PRESETS,
+  type AccentColor,
+  type Skin,
+} from '../store/settings';
 import { copy } from '../i18n';
 
 interface LayoutProps {
@@ -12,17 +35,20 @@ interface LayoutProps {
 }
 
 const ACCENT_KEYS: AccentColor[] = ['emerald', 'blue', 'rose', 'violet', 'amber'];
+const SKIN_KEYS: Skin[] = ['classic', 'felt', 'paper', 'neon', 'oled'];
 
 export function Layout({ children, title, back, headerAction }: LayoutProps) {
-  const { theme, language, accentColor, toggleTheme, toggleLanguage, setAccentColor } = useSettings();
+  const { theme, language, accentColor, skin, soundEnabled, toggleTheme, toggleLanguage, setAccentColor, setSkin, toggleSound } = useSettings();
   const navigate = useNavigate();
   const location = useLocation();
   const t = copy[language];
+  const en = language === 'en';
   const [showHeaderMenu, setShowHeaderMenu] = useState(false);
+  const touchStart = useRef<{ x: number; y: number } | null>(null);
 
   useEffect(() => {
-    applyPreferences(theme, language, accentColor);
-  }, [theme, language, accentColor]);
+    applyPreferences(theme, language, accentColor, skin);
+  }, [theme, language, accentColor, skin]);
 
   useEffect(() => {
     setShowHeaderMenu(false);
@@ -30,6 +56,20 @@ export function Layout({ children, title, back, headerAction }: LayoutProps) {
 
   const isActive = (p: string) => location.pathname === p;
   const closeMenu = () => setShowHeaderMenu(false);
+  const tabs = ['/', '/history', '/leaderboard', '/trophies', '/stats'];
+  const currentTabIndex = tabs.indexOf(location.pathname);
+
+  const handleTouchEnd = (event: TouchEvent<HTMLElement>) => {
+    if (!touchStart.current || currentTabIndex < 0) return;
+    const touch = event.changedTouches[0];
+    const dx = touch.clientX - touchStart.current.x;
+    const dy = touch.clientY - touchStart.current.y;
+    touchStart.current = null;
+    if (Math.abs(dx) < 90 || Math.abs(dx) < Math.abs(dy) * 1.4) return;
+    const direction = language === 'ar' ? -Math.sign(dx) : Math.sign(dx);
+    const nextIndex = currentTabIndex - direction;
+    if (nextIndex >= 0 && nextIndex < tabs.length) navigate(tabs[nextIndex]);
+  };
 
   return (
     <div className="app-shell min-h-full flex flex-col">
@@ -49,12 +89,16 @@ export function Layout({ children, title, back, headerAction }: LayoutProps) {
                 <div className="fixed inset-0 z-40" onClick={closeMenu} />
                 <div
                   className={
-                    'absolute top-full z-50 mt-2 w-56 rounded-2xl border border-slate-200 bg-white p-2 shadow-xl dark:border-white/10 dark:bg-[#201f1b] ' +
+                    'absolute top-full z-50 mt-2 w-72 rounded-2xl border border-slate-200 bg-white p-3 shadow-xl dark:border-white/10 dark:bg-[#201f1b] ' +
                     (language === 'ar' ? 'right-0' : 'left-0')
                   }
                 >
+                  {/* Top quick row */}
                   <div className="flex items-center justify-between gap-2 border-b border-slate-200/70 px-1 pb-2 dark:border-white/10">
                     {headerAction ? <div onClick={closeMenu}>{headerAction}</div> : <span />}
+                    <button onClick={() => { toggleSound(); }} className="btn-ghost h-11 w-11 px-0" aria-label={t.sound}>
+                      {soundEnabled ? <Volume2 className="h-5 w-5" /> : <VolumeX className="h-5 w-5 text-slate-400" />}
+                    </button>
                     <button onClick={() => { toggleLanguage(); closeMenu(); }} className="btn-ghost h-11 px-3 text-sm" aria-label="Toggle language">
                       {t.language}
                     </button>
@@ -62,19 +106,21 @@ export function Layout({ children, title, back, headerAction }: LayoutProps) {
                       {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
                     </button>
                   </div>
-                  <div className="px-1 pt-2">
+
+                  {/* Accent color */}
+                  <div className="px-1 pt-3">
                     <div className="mb-2 flex items-center gap-2 text-xs font-bold text-slate-500 dark:text-slate-400">
                       <Palette className="h-4 w-4" style={{ color: 'var(--accent-swatch)' }} />
-                      <span>{language === 'ar' ? 'لون التطبيق' : 'App color'}</span>
+                      <span>{t.appColor}</span>
                     </div>
                     <div className="grid grid-cols-5 gap-2">
                       {ACCENT_KEYS.map((key) => (
                         <button
                           key={key}
-                          onClick={() => { setAccentColor(key); closeMenu(); }}
+                          onClick={() => { setAccentColor(key); }}
                           className={
                             'h-9 w-9 rounded-full border-2 transition-all hover:scale-105 ' +
-                            (accentColor === key ? 'border-white ring-2 scale-105' : 'border-transparent')
+                            (accentColor === key ? 'border-white scale-105' : 'border-transparent')
                           }
                           style={{
                             backgroundColor: ACCENT_PRESETS[key].swatch,
@@ -82,6 +128,34 @@ export function Layout({ children, title, back, headerAction }: LayoutProps) {
                           }}
                           title={language === 'ar' ? ACCENT_PRESETS[key].labelAr : ACCENT_PRESETS[key].label}
                         />
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Skin selector */}
+                  <div className="mt-3 px-1">
+                    <div className="mb-2 flex items-center gap-2 text-xs font-bold text-slate-500 dark:text-slate-400">
+                      <Sparkles className="h-4 w-4 text-amber-500" />
+                      <span>{t.skin}</span>
+                    </div>
+                    <div className="grid grid-cols-5 gap-2">
+                      {SKIN_KEYS.map((key) => (
+                        <button
+                          key={key}
+                          onClick={() => { setSkin(key); }}
+                          className={
+                            'flex flex-col items-center gap-1 rounded-xl border px-1 py-2 text-[10px] font-bold transition ' +
+                            (skin === key
+                              ? 'border-emerald-500 bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-300'
+                              : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50 dark:border-white/10 dark:bg-white/5 dark:text-slate-300 dark:hover:bg-white/10')
+                          }
+                          title={language === 'ar' ? SKIN_PRESETS[key].descriptionAr : SKIN_PRESETS[key].description}
+                        >
+                          <span className="text-base">{SKIN_PRESETS[key].emoji}</span>
+                          <span className="truncate">
+                            {language === 'ar' ? SKIN_PRESETS[key].labelAr : SKIN_PRESETS[key].label}
+                          </span>
+                        </button>
                       ))}
                     </div>
                   </div>
@@ -109,12 +183,23 @@ export function Layout({ children, title, back, headerAction }: LayoutProps) {
         </div>
       </header>
 
-      <main className="mx-auto w-full max-w-5xl flex-1 px-3 py-4 pb-24 sm:px-4 sm:py-5">{children}</main>
+      <main
+        className="mx-auto w-full max-w-5xl flex-1 px-3 py-4 pb-24 sm:px-4 sm:py-5"
+        onTouchStart={(event) => {
+          const touch = event.touches[0];
+          touchStart.current = { x: touch.clientX, y: touch.clientY };
+        }}
+        onTouchEnd={handleTouchEnd}
+      >
+        {children}
+      </main>
 
       <nav className="fixed bottom-0 left-0 right-0 z-40 border-t border-slate-200 bg-white/95 pb-[env(safe-area-inset-bottom)] backdrop-blur dark:border-white/5 dark:bg-[#171715]/95">
         <div className="mx-auto flex max-w-5xl items-stretch justify-around">
           <NavItem to="/" active={isActive('/')} icon={<Home className="h-5 w-5" />} label={t.home} />
           <NavItem to="/history" active={isActive('/history')} icon={<History className="h-5 w-5" />} label={t.history} />
+          <NavItem to="/leaderboard" active={isActive('/leaderboard')} icon={<Trophy className="h-5 w-5" />} label={t.leaderboard} />
+          <NavItem to="/trophies" active={isActive('/trophies')} icon={<Award className="h-5 w-5" />} label={t.trophies} />
           <NavItem to="/stats" active={isActive('/stats')} icon={<BarChart3 className="h-5 w-5" />} label={t.stats} />
         </div>
       </nav>
@@ -127,13 +212,13 @@ function NavItem({ to, active, icon, label }: { to: string; active: boolean; ico
     <Link
       to={to}
       className={
-        'flex flex-1 flex-col items-center gap-1 px-1 py-2.5 text-[11px] font-semibold transition sm:py-3 sm:text-xs ' +
+        'flex flex-1 flex-col items-center gap-1 px-1 py-2.5 text-[10px] font-semibold transition sm:py-3 sm:text-xs ' +
         (active ? '' : 'text-slate-500 dark:text-slate-400')
       }
       style={active ? { color: 'var(--accent-swatch)' } : undefined}
     >
       {icon}
-      <span>{label}</span>
+      <span className="truncate max-w-full">{label}</span>
     </Link>
   );
 }

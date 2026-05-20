@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
+import { motion, type PanInfo } from 'framer-motion';
 import { Check, Pencil, X, Trash2 } from 'lucide-react';
 import type { Match } from '../types';
 import type { Round } from '../types';
@@ -11,6 +12,7 @@ import { MatchChart } from './MatchChart';
 import { countHandWins } from '../logic/hand';
 import { playHaptic } from '../utils/haptics';
 import { useConfirm } from './ConfirmDialog';
+import { CountUp } from './CountUp';
 
 interface Props {
   match: Match;
@@ -61,11 +63,61 @@ export function ScoreTable({ match, names, lowerIsBetter, editTotalRequired }: P
     setEditError('');
   };
 
+  const deleteRound = async (round: Round) => {
+    playHaptic();
+    const ok = await confirm({
+      title: en ? 'Delete round?' : 'حذف الجولة؟',
+      message: en
+        ? 'This round will be removed from the match score. This action cannot be undone.'
+        : 'سيتم حذف هذه الجولة من نتيجة المباراة. لا يمكن التراجع عن هذا الإجراء.',
+      confirmText: en ? 'Delete' : 'حذف',
+      cancelText: en ? 'Cancel' : 'إلغاء',
+      tone: 'danger',
+    });
+    if (ok) {
+      useMatches.getState().removeRound(match.id, round.id);
+    }
+  };
+
+  const handleRowSwipe = (round: Round, info: PanInfo) => {
+    if (info.offset.x > 90 || info.velocity.x > 600) {
+      startEdit(round);
+      return;
+    }
+    if (info.offset.x < -90 || info.velocity.x < -600) {
+      void deleteRound(round);
+    }
+  };
+
+  const runningTotals = (() => {
+    const isHand = match.kind === 'hand-partners' || match.kind === 'hand-solo';
+    const sides = match.players.length;
+    const wins = isHand ? countHandWins(match.rounds, sides) : new Array(sides).fill(0);
+    const winsDiff = sides === 2 ? wins[0] - wins[1] : 0;
+    return totals.map((score, i) => {
+      if (!isHand || sides !== 2) return score;
+      if (winsDiff > 0 && i === 0) return score - winsDiff * 100;
+      if (winsDiff < 0 && i === 1) return score - Math.abs(winsDiff) * 100;
+      return score;
+    });
+  })();
+
   return (
     <div className="w-full max-w-full p-0">
       <MatchChart match={match} />
+      <div className="sticky top-[4.75rem] z-30 mb-2 rounded-2xl border border-slate-200/80 bg-white/95 px-3 py-2 shadow-sm backdrop-blur dark:border-white/10 dark:bg-[#201f1b]/95 hide-on-share">
+        <div className="mb-1 text-[10px] font-black uppercase tracking-wider text-slate-400">{en ? 'Running total' : 'المجموع الحالي'}</div>
+        <div className="grid gap-2" style={{ gridTemplateColumns: `repeat(${labels.length}, minmax(0, 1fr))` }}>
+          {labels.map((label, i) => (
+            <div key={`${label}-${i}`} className="min-w-0 rounded-xl bg-slate-100/80 px-2 py-1.5 text-center dark:bg-white/[0.05]">
+              <div className="truncate text-[10px] font-semibold text-slate-500 dark:text-slate-400">{label}</div>
+              <CountUp value={runningTotals[i] ?? 0} className="text-sm font-black text-slate-900 dark:text-white" />
+            </div>
+          ))}
+        </div>
+      </div>
       <table className={(compact ? 'table-fixed text-xs' : 'text-sm') + ' w-full'}>
-        <thead>
+        <thead className="sticky top-[8.5rem] z-20">
           <tr>
             <th className={(compact ? 'w-7 px-1' : 'w-12') + ' table-cell'}>#</th>
             {labels.map((p, i) => {
@@ -113,7 +165,19 @@ export function ScoreTable({ match, names, lowerIsBetter, editTotalRequired }: P
         </thead>
         <tbody>
           {match.rounds.map((r, idx) => (
-            <tr key={r.id} className="border-t border-slate-200 dark:border-white/10">
+            <motion.tr
+              key={r.id}
+              layout
+              initial={{ opacity: 0, y: -18 }}
+              animate={{ opacity: 1, y: 0, x: 0 }}
+              exit={{ opacity: 0, y: 18 }}
+              transition={{ duration: 0.25 }}
+              drag="x"
+              dragConstraints={{ left: 0, right: 0 }}
+              dragElastic={0.32}
+              onDragEnd={(_, info) => handleRowSwipe(r, info)}
+              className="border-t border-slate-200 touch-pan-y dark:border-white/10"
+            >
               <td className={(compact ? 'px-1' : '') + ' table-cell text-slate-500'}>{idx + 1}</td>
               {r.deltas.map((d, i) => (
                 <td key={i} className={(compact ? 'px-1' : '') + ' table-cell'}>
@@ -137,28 +201,14 @@ export function ScoreTable({ match, names, lowerIsBetter, editTotalRequired }: P
                   </button>
                   <button
                     className="inline-flex h-7 w-7 items-center justify-center rounded-lg text-slate-400 transition hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-900/30"
-                    onClick={async () => {
-                      playHaptic(); // uses default ImpactStyle.Light
-                      const ok = await confirm({
-                        title: en ? 'Delete round?' : 'حذف الجولة؟',
-                        message: en
-                          ? 'This round will be removed from the match score. This action cannot be undone.'
-                          : 'سيتم حذف هذه الجولة من نتيجة المباراة. لا يمكن التراجع عن هذا الإجراء.',
-                        confirmText: en ? 'Delete' : 'حذف',
-                        cancelText: en ? 'Cancel' : 'إلغاء',
-                        tone: 'danger',
-                      });
-                      if (ok) {
-                        useMatches.getState().removeRound(match.id, r.id);
-                      }
-                    }}
+                    onClick={() => void deleteRound(r)}
                     aria-label={en ? 'Delete round' : 'حذف الجولة'}
                   >
                     <Trash2 className="h-3.5 w-3.5" />
                   </button>
                 </div>
               </td>
-            </tr>
+            </motion.tr>
           ))}
           {match.rounds.length === 0 && (
             <tr>
@@ -193,7 +243,7 @@ export function ScoreTable({ match, names, lowerIsBetter, editTotalRequired }: P
                       (dt === displayBest && match.rounds.length > 0 ? 'text-emerald-600 dark:text-emerald-400' : '')
                     }
                   >
-                    {dt}
+                    <CountUp value={dt} />
                   </td>
                 ))}
                 <td className="table-cell px-1"></td>

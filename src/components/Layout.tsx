@@ -41,6 +41,7 @@ export function Layout({ children, title, back, headerAction }: LayoutProps) {
   const en = language === 'en';
   const [showHeaderMenu, setShowHeaderMenu] = useState(false);
   const touchStart = useRef<{ x: number; y: number } | null>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     applyPreferences(theme, language, accentColor);
@@ -49,6 +50,24 @@ export function Layout({ children, title, back, headerAction }: LayoutProps) {
   useEffect(() => {
     setShowHeaderMenu(false);
   }, [location.pathname]);
+
+  useEffect(() => {
+    if (!showHeaderMenu) return;
+
+    const handleOutsideClick = (e: Event) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setShowHeaderMenu(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleOutsideClick);
+    document.addEventListener('touchstart', handleOutsideClick);
+
+    return () => {
+      document.removeEventListener('mousedown', handleOutsideClick);
+      document.removeEventListener('touchstart', handleOutsideClick);
+    };
+  }, [showHeaderMenu]);
 
   const isActive = (p: string) => location.pathname === p;
   const closeMenu = () => setShowHeaderMenu(false);
@@ -71,7 +90,7 @@ export function Layout({ children, title, back, headerAction }: LayoutProps) {
     <div className="app-shell min-h-full flex flex-col">
       <header className="sticky top-0 z-40 border-b border-slate-200/70 bg-white/85 pt-[env(safe-area-inset-top)] backdrop-blur-xl dark:border-white/5 dark:bg-[#171715]/95">
         <div className="mx-auto grid max-w-5xl grid-cols-[3.25rem_minmax(0,1fr)_3.25rem] items-center gap-2 px-3 py-2.5 sm:px-4 sm:py-3">
-          <div className="relative flex justify-start">
+          <div ref={menuRef} className="relative flex justify-start">
             <button
               onClick={() => setShowHeaderMenu((value) => !value)}
               className="btn-ghost px-2 py-2"
@@ -81,18 +100,16 @@ export function Layout({ children, title, back, headerAction }: LayoutProps) {
               <MoreVertical className="h-5 w-5" />
             </button>
             {showHeaderMenu && (
-              <>
-                <div className="fixed inset-0 z-40" onClick={closeMenu} />
-                <div
-                  className={
-                    'absolute top-full z-50 mt-2 w-72 rounded-3xl p-3.5 shadow-2xl glass-modal ' +
-                    (language === 'ar' ? 'right-0' : 'left-0')
-                  }
-                >
-                  {/* Top quick row */}
-                  <div className="flex items-center justify-between gap-2 border-b border-slate-200/70 px-1 pb-2 dark:border-white/10">
-                    {headerAction ? <div onClick={closeMenu}>{headerAction}</div> : <span />}
-                    <button onClick={() => { toggleSound(); }} className="btn-ghost h-11 w-11 px-0" aria-label={t.sound}>
+              <div
+                className={
+                  'absolute top-full z-50 mt-2 w-72 rounded-3xl p-3.5 shadow-2xl glass-modal ' +
+                  (language === 'ar' ? 'right-0' : 'left-0')
+                }
+              >
+                {/* Top quick row */}
+                <div className="flex items-center justify-between gap-2 border-b border-slate-200/70 px-1 pb-2 dark:border-white/10">
+                  {headerAction ? <div onClick={closeMenu}>{headerAction}</div> : <span />}
+                  <button onClick={() => { toggleSound(); }} className="btn-ghost h-11 w-11 px-0" aria-label={t.sound}>
                       {soundEnabled ? <Volume2 className="h-5 w-5" /> : <VolumeX className="h-5 w-5 text-slate-400" />}
                     </button>
                     <button onClick={() => { toggleLanguage(); closeMenu(); }} className="btn-ghost h-11 px-3 text-sm" aria-label="Toggle language">
@@ -128,9 +145,7 @@ export function Layout({ children, title, back, headerAction }: LayoutProps) {
                     </div>
                   </div>
 
-
                 </div>
-              </>
             )}
           </div>
           <div className="min-w-0 text-center">

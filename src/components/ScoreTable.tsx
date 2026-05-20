@@ -109,7 +109,7 @@ export function ScoreTable({ match, names, lowerIsBetter, editTotalRequired }: P
       {/* Table Container */}
       <div className="overflow-hidden rounded-2xl border border-slate-200/80 bg-white/70 shadow-sm backdrop-blur dark:border-white/10 dark:bg-[#201f1b]/70 hide-on-share mt-3">
         <table className={(compact ? 'table-fixed text-xs' : 'text-sm') + ' w-full border-collapse'}>
-          <thead className="sticky top-[4.75rem] z-20 bg-slate-50/80 dark:bg-[#1a1915]/80 backdrop-blur-md border-b border-slate-200/80 dark:border-white/10">
+          <thead className="bg-slate-50 dark:bg-[#1a1915] border-b border-slate-200/80 dark:border-white/10">
             <tr>
               <th className={(compact ? 'w-16 px-1' : 'w-20') + ' table-cell py-3 text-slate-400 font-bold text-center'}>#</th>
               {labels.map((p, i) => {

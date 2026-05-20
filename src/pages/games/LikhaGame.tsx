@@ -140,72 +140,166 @@ export default function LikhaGame() {
       )}
 
       {!matchOver && showRoundForm && (
-        <div className="card mt-4 space-y-3">
-          <h3 className="font-bold">{en ? 'New round' : 'جولة جديدة'}</h3>
-          <p className="text-xs text-slate-500">
-            {en ? 'Enter each player score directly. Round total must be 36.' : 'أدخل نقاط كل لاعب مباشرة. مجموع الجولة يجب أن يكون 36.'}
-          </p>
+        <div className="relative overflow-hidden rounded-[2.25rem] border border-slate-200/60 bg-white shadow-2xl shadow-black/10 backdrop-blur-xl dark:border-white/[0.07] dark:bg-[#18171380] dark:shadow-black/40 mt-5 animate-in fade-in slide-in-from-bottom-4 duration-300">
+          {/* Top accent gradient bar */}
+          <div className="absolute top-0 inset-x-0 h-[3px] bg-gradient-to-r from-violet-500 via-purple-400 to-pink-500 rounded-t-[2.25rem]" />
+          <div className="p-6 pt-7 space-y-5">
 
-          <div>
-            <label className="label mb-2">{en ? 'Score per player (total = 36)' : 'نقاط كل لاعب (المجموع = 36)'}</label>
-            <div className="grid grid-cols-2 gap-3">
-              {match.players.map((p, i) => (
-                <div key={i} className="flex flex-col">
-                  <div className="mb-1 truncate px-1 text-xs font-semibold text-slate-500">{p}</div>
-                  <input
-                    type="number"
-                    inputMode="numeric"
-                    min={0}
-                    max={LIKHA_PER_HAND}
-                    className="input h-12 text-center text-lg font-bold placeholder:text-slate-300 dark:bg-[#1a1915] dark:placeholder:text-slate-700"
-                    placeholder="0"
-                    value={scores[i]}
-                    onChange={(e) => {
-                      const next = [...scores];
-                      const value = e.target.value;
-                      next[i] = value === '' ? '' : String(Math.max(0, Math.min(LIKHA_PER_HAND, Number(value) || 0)));
-                      setScores(next);
-                    }}
-                    onBlur={() => setScores((current) => fillRemainingScore(current))}
-                    onFocus={() => {
-                      if (scores[i] === '' && scores.filter((score) => score === '').length === 1) {
-                        setScores((current) => fillRemainingScore(current));
-                      }
-                    }}
+            {/* Header */}
+            <div className="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-white/[0.06]">
+              <h3 className="text-base font-extrabold text-slate-800 dark:text-slate-100 flex items-center gap-2.5">
+                <span className="relative flex h-2.5 w-2.5">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-violet-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-violet-500"></span>
+                </span>
+                <span>{en ? 'New Round' : 'جولة جديدة'}</span>
+              </h3>
+              <span className="text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full bg-gradient-to-br from-slate-100 to-slate-50 dark:from-white/[0.06] dark:to-white/[0.02] text-slate-400 dark:text-slate-500 border border-slate-200/40 dark:border-white/[0.04] shadow-sm">
+                {en ? 'Likha' : 'ليخة'}
+              </span>
+            </div>
+
+            {/* Info callout */}
+            <div className="flex items-start gap-2.5 rounded-[1.25rem] border border-violet-500/10 bg-gradient-to-br from-violet-500/6 to-purple-500/4 p-3 text-xs text-violet-700/80 dark:text-violet-300/80">
+              <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-lg bg-violet-500/12 text-violet-500 mt-px">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3.5 h-3.5">
+                  <path fillRule="evenodd" d="M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0Zm-7-4a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM9 9a.75.75 0 0 0 0 1.5h.253a.25.25 0 0 1 .244.304l-.459 2.066A1.75 1.75 0 0 0 10.747 15H11a.75.75 0 0 0 0-1.5h-.253a.25.25 0 0 1-.244-.304l.459-2.066A1.75 1.75 0 0 0 9.253 9H9Z" clipRule="evenodd" />
+                </svg>
+              </span>
+              <span className="font-semibold leading-relaxed">
+                {en
+                  ? `Enter each player's card points. Total must equal ${LIKHA_PER_HAND}. The last empty field auto-fills.`
+                  : `أدخل نقاط الورق لكل لاعب. المجموع يجب أن يساوي ${LIKHA_PER_HAND}. آخر حقل فارغ يُملأ تلقائياً.`}
+              </span>
+            </div>
+
+            {/* Player Score Inputs */}
+            <div className="space-y-3">
+              <label className="flex items-center gap-1.5 text-[11px] font-black tracking-widest text-slate-400 dark:text-slate-500 uppercase">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3 h-3 text-violet-500">
+                  <path d="M1 4.25a3.733 3.733 0 0 1 2.25-.75h13.5c.844 0 1.623.279 2.25.75A2.25 2.25 0 0 0 16.75 2H3.25A2.25 2.25 0 0 0 1 4.25ZM1 7.25a3.733 3.733 0 0 1 2.25-.75h13.5c.844 0 1.623.279 2.25.75A2.25 2.25 0 0 0 16.75 5H3.25A2.25 2.25 0 0 0 1 7.25ZM7 8a1 1 0 0 1 1 1 2 2 0 1 0 4 0 1 1 0 1 1 2 0v6.75A2.25 2.25 0 0 1 11.75 18H3.25A2.25 2.25 0 0 1 1 15.75V9a1 1 0 0 1 1-1h5Z" />
+                </svg>
+                {en ? 'Points per player' : 'نقاط كل لاعب'}
+              </label>
+              <div className="grid grid-cols-2 gap-3">
+                {match.players.map((p, i) => (
+                  <div key={i} className="flex flex-col gap-2 rounded-[1.5rem] border border-slate-200/60 bg-slate-50/60 p-3 dark:border-white/[0.04] dark:bg-white/[0.02]">
+                    <div className="flex items-center justify-center gap-1.5 px-1">
+                      <PlayerAvatar name={p} size="sm" />
+                      <span className="truncate text-xs font-bold text-slate-600 dark:text-slate-300 max-w-[5rem]">{p}</span>
+                    </div>
+                    <input
+                      type="number"
+                      inputMode="numeric"
+                      min={0}
+                      max={LIKHA_PER_HAND}
+                      className="w-full h-12 text-center text-lg font-black placeholder:text-slate-300 dark:placeholder:text-slate-700 bg-white/70 dark:bg-[#1a1915]/60 border-2 border-slate-200/80 dark:border-white/5 rounded-2xl outline-none focus:border-violet-500 focus:ring-4 focus:ring-violet-500/10 dark:focus:ring-violet-500/20 transition-all duration-200"
+                      placeholder="0"
+                      value={scores[i]}
+                      onChange={(e) => {
+                        const next = [...scores];
+                        const value = e.target.value;
+                        next[i] = value === '' ? '' : String(Math.max(0, Math.min(LIKHA_PER_HAND, Number(value) || 0)));
+                        setScores(next);
+                      }}
+                      onBlur={() => setScores((current) => fillRemainingScore(current))}
+                      onFocus={() => {
+                        if (scores[i] === '' && scores.filter((score) => score === '').length === 1) {
+                          setScores((current) => fillRemainingScore(current));
+                        }
+                      }}
+                    />
+                    {/* Quick-add chips */}
+                    <div className="flex justify-center gap-1">
+                      {[5, 10, 16].map((inc) => (
+                        <button
+                          key={inc}
+                          type="button"
+                          className="flex-1 inline-flex h-6 items-center justify-center rounded-lg border border-slate-200/80 bg-white text-[10px] font-black text-slate-500 shadow-sm transition hover:bg-slate-50 active:scale-95 dark:border-white/[0.04] dark:bg-white/[0.02] dark:text-slate-400 dark:hover:bg-white/10"
+                          onClick={() => {
+                            const next = [...scores];
+                            const cur = Number(next[i]) || 0;
+                            next[i] = String(Math.min(LIKHA_PER_HAND, cur + inc));
+                            setScores(next);
+                          }}
+                        >
+                          +{inc}
+                        </button>
+                      ))}
+                      <button
+                        type="button"
+                        className="inline-flex h-6 w-6 items-center justify-center rounded-lg border border-red-200/50 bg-red-50/50 text-[10px] font-black text-red-500 shadow-sm transition hover:bg-red-50 active:scale-95 dark:border-red-500/10 dark:bg-red-500/5 dark:text-red-400"
+                        onClick={() => {
+                          const next = [...scores];
+                          next[i] = '';
+                          setScores(next);
+                        }}
+                      >
+                        ×
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Live Total Progress */}
+            <div className="overflow-hidden rounded-[1.25rem] border border-slate-200/60 dark:border-white/[0.06] bg-slate-50/80 dark:bg-white/[0.02]">
+              <div className="flex items-center justify-between px-4 py-2.5 border-b border-slate-200/60 dark:border-white/[0.04]">
+                <div className="flex items-center gap-2">
+                  <div className={`h-1.5 w-1.5 rounded-full ${roundTotal === LIKHA_PER_HAND ? 'bg-emerald-400' : 'bg-violet-400'} animate-pulse`} />
+                  <span className="text-[10px] font-black tracking-widest uppercase text-slate-400 dark:text-slate-500">
+                    {en ? 'Round Total' : 'مجموع الجولة'}
+                  </span>
+                </div>
+                <span className={`text-sm font-black ${roundTotal === LIKHA_PER_HAND ? 'text-emerald-600 dark:text-emerald-400' : roundTotal > LIKHA_PER_HAND ? 'text-red-500' : 'text-slate-600 dark:text-slate-300'}`}>
+                  {roundTotal} <span className="font-normal text-slate-400">/ {LIKHA_PER_HAND}</span>
+                </span>
+              </div>
+              {/* Progress bar */}
+              <div className="px-4 py-3">
+                <div className="h-2 w-full rounded-full bg-slate-200/60 dark:bg-white/[0.05] overflow-hidden">
+                  <div
+                    className={`h-full rounded-full transition-all duration-300 ${roundTotal === LIKHA_PER_HAND ? 'bg-gradient-to-r from-emerald-500 to-teal-400' : roundTotal > LIKHA_PER_HAND ? 'bg-red-500' : 'bg-gradient-to-r from-violet-500 to-purple-400'}`}
+                    style={{ width: `${Math.min(100, (roundTotal / LIKHA_PER_HAND) * 100)}%` }}
                   />
                 </div>
-              ))}
+                {roundTotal === LIKHA_PER_HAND && (
+                  <p className="mt-1.5 text-center text-[10px] font-black text-emerald-600 dark:text-emerald-400 animate-in fade-in duration-200">
+                    {en ? '✓ Ready to save!' : '✓ جاهز للحفظ!'}
+                  </p>
+                )}
+              </div>
             </div>
-            <div
-              className={
-                'mt-1 text-xs ' +
-                (roundTotal === LIKHA_PER_HAND ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-500')
-              }
-            >
-              {en ? 'Current total' : 'المجموع الحالي'}: {roundTotal} / {LIKHA_PER_HAND}
-            </div>
-          </div>
 
-          {error && (
-            <div className="rounded-lg bg-red-100 p-2 text-sm text-red-700 dark:bg-red-900/40 dark:text-red-300">
-              {error}
-            </div>
-          )}
+            {error && (
+              <div className="rounded-2xl bg-red-500/10 border border-red-500/20 p-3.5 text-xs font-black text-red-600 dark:text-red-400 text-center">
+                {error}
+              </div>
+            )}
 
-          <div className="flex gap-2">
-            <button className="btn-primary flex-1" onClick={submit}>
-              <Plus className="h-4 w-4" /> {en ? 'Save round' : 'حفظ الجولة'}
-            </button>
-            <button
-              className="btn-secondary"
-              onClick={() => {
-                setShowRoundForm(false);
-                setError('');
-                setScores(['', '', '', '']);
-              }}
-            >
-              {en ? 'Cancel' : 'إلغاء'}
-            </button>
+            {/* Action Buttons */}
+            <div className="flex flex-col gap-2 pt-1">
+              <button
+                type="button"
+                className="w-full py-4 rounded-2xl bg-gradient-to-r from-violet-600 to-purple-500 hover:from-violet-500 hover:to-purple-400 text-white text-[15px] font-black shadow-xl shadow-violet-600/25 hover:shadow-violet-500/35 active:scale-[0.97] transition-all duration-200 flex items-center justify-center gap-2"
+                onClick={submit}
+              >
+                <Plus className="h-5 w-5 stroke-[3]" />
+                {en ? 'Save Round' : 'حفظ الجولة'}
+              </button>
+              <button
+                type="button"
+                className="w-full py-3 rounded-2xl border border-slate-200/60 dark:border-white/[0.05] bg-transparent text-slate-400 dark:text-slate-500 text-sm font-bold hover:bg-slate-100/60 dark:hover:bg-white/[0.03] active:scale-[0.98] transition-all duration-200"
+                onClick={() => {
+                  setShowRoundForm(false);
+                  setError('');
+                  setScores(['', '', '', '']);
+                }}
+              >
+                {en ? 'Cancel' : 'إلغاء'}
+              </button>
+            </div>
           </div>
         </div>
       )}

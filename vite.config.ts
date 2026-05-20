@@ -37,8 +37,8 @@ export default defineConfig({
         ],
       },
       manifest: {
-        name: 'حسابات ألعاب الورق',
-        short_name: 'سكور',
+        name: 'FM Score',
+        short_name: 'FM Score',
         description: 'تطبيق حساب نقاط ألعاب الورق: ليخة، هند، تركس، كومبلكس',
         lang: 'ar',
         dir: 'rtl',

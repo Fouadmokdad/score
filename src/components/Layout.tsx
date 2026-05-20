@@ -34,26 +34,8 @@ export function Layout({ children, title, back, headerAction }: LayoutProps) {
   return (
     <div className="app-shell min-h-full flex flex-col">
       <header className="sticky top-0 z-40 border-b border-slate-200/70 bg-white/85 pt-[env(safe-area-inset-top)] backdrop-blur-xl dark:border-white/5 dark:bg-[#171715]/95">
-        <div className="mx-auto flex max-w-5xl items-center justify-between gap-2 px-3 py-2.5 sm:px-4 sm:py-3">
-          <div className="flex min-w-0 items-center gap-2">
-            {back && (
-              <button onClick={() => navigate(-1)} className="btn-ghost px-2 py-2" aria-label={t.back}>
-                {language === 'ar' ? <ArrowRight className="h-5 w-5" /> : <ArrowLeft className="h-5 w-5" />}
-              </button>
-            )}
-            <div className="min-w-0">
-              <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.2em]" style={{ color: 'var(--accent-swatch)' }}>
-                <img
-                  src={language === 'ar' ? '/jawaker-assets/logo/ArLogoWhite.svg' : '/jawaker-assets/logo/EngLogoWhite.svg'}
-                  alt=""
-                  className="hidden h-6 w-auto dark:block"
-                />
-                <span className="dark:hidden">Score</span>
-              </div>
-              <h1 className="truncate text-base font-extrabold leading-tight sm:text-lg">{title ?? t.appName}</h1>
-            </div>
-          </div>
-          <div className="relative shrink-0">
+        <div className="mx-auto grid max-w-5xl grid-cols-[3.25rem_minmax(0,1fr)_3.25rem] items-center gap-2 px-3 py-2.5 sm:px-4 sm:py-3">
+          <div className="relative flex justify-start">
             <button
               onClick={() => setShowHeaderMenu((value) => !value)}
               className="btn-ghost px-2 py-2"
@@ -100,6 +82,23 @@ export function Layout({ children, title, back, headerAction }: LayoutProps) {
                   </div>
                 </div>
               </>
+            )}
+          </div>
+          <div className="min-w-0 text-center">
+            <img
+              src="/app-icon.png"
+              alt=""
+              className="mx-auto mb-1 h-8 w-8 rounded-lg object-cover shadow-sm ring-1 ring-amber-400/40"
+            />
+            <h1 className="truncate text-lg font-extrabold leading-tight text-slate-900 dark:text-white sm:text-xl">
+              {title ?? t.appName}
+            </h1>
+          </div>
+          <div className="flex justify-end">
+            {back && (
+              <button onClick={() => navigate(-1)} className="btn-ghost px-2 py-2" aria-label={t.back}>
+                {language === 'ar' ? <ArrowRight className="h-6 w-6" /> : <ArrowLeft className="h-6 w-6" />}
+              </button>
             )}
           </div>
         </div>

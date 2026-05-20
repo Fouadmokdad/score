@@ -105,8 +105,8 @@ export default function LikhaGame() {
                   {totals[i]}
                 </div>
                 {/* Distance to target */}
-                <div className="mt-0.5 flex items-center justify-center gap-1 rounded-full bg-slate-100/80 px-2 py-0.5 text-[10px] font-bold text-slate-500 dark:bg-white/5 dark:text-slate-400">
-                  <Target className="h-3 w-3 text-red-400" />
+                <div className="mt-2 flex min-w-[4.5rem] items-center justify-center gap-1.5 rounded-full bg-slate-100/90 px-2.5 py-1 text-xs font-extrabold text-slate-500 shadow-sm dark:bg-white/7 dark:text-slate-400">
+                  <Target className="h-4 w-4 text-red-400" />
                   <span className={totals[i] >= target ? 'text-red-600 dark:text-red-400' : ''}>
                     {Math.max(0, target - totals[i])}
                   </span>

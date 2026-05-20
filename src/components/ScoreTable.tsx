@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, type PanInfo } from 'framer-motion';
-import { Check, Pencil, X, Trash2, Star, Trophy } from 'lucide-react';
+import { Check, Pencil, X, Trash2, Star, Trophy, Settings } from 'lucide-react';
 import type { Match } from '../types';
 import type { Round } from '../types';
 import { computeTotals, useMatches } from '../store/matches';
@@ -111,7 +111,7 @@ export function ScoreTable({ match, names, lowerIsBetter, editTotalRequired }: P
         <table className={(compact ? 'table-fixed text-xs' : 'text-sm') + ' w-full border-collapse'}>
           <thead className="sticky top-[4.75rem] z-20 bg-slate-50/80 dark:bg-[#1a1915]/80 backdrop-blur-md border-b border-slate-200/80 dark:border-white/10">
             <tr>
-              <th className={(compact ? 'w-8 px-1' : 'w-12') + ' table-cell py-3 text-slate-400 font-bold'}>#</th>
+              <th className={(compact ? 'w-16 px-1' : 'w-20') + ' table-cell py-3 text-slate-400 font-bold text-center'}>#</th>
               {labels.map((p, i) => {
                 const isTeam = labels.length === 2 && (match.kind.includes('partners') || p.includes(' و ') || p.includes(' & '));
                 let t1, t2;
@@ -127,7 +127,7 @@ export function ScoreTable({ match, names, lowerIsBetter, editTotalRequired }: P
                 }
 
                 return (
-                  <th key={i} className={(compact ? 'px-1 py-3' : 'max-w-28 sm:max-w-none py-3') + ' table-cell font-bold text-slate-700 dark:text-slate-300'}>
+                  <th key={i} className={(compact ? 'px-1 py-3' : 'max-w-28 sm:max-w-none py-3') + ' table-cell font-bold text-slate-700 dark:text-slate-300 text-center'}>
                     {compact ? (
                       <span className="flex min-w-0 flex-col items-center gap-1">
                         {isTeam && t1 && t2 ? (
@@ -152,7 +152,9 @@ export function ScoreTable({ match, names, lowerIsBetter, editTotalRequired }: P
                   </th>
                 );
               })}
-              <th className="table-cell w-16 px-1 py-3 text-slate-400 font-bold hide-on-share"></th>
+              <th className="table-cell w-20 px-1 py-3 text-slate-400 font-bold hide-on-share text-center">
+                <Settings className="h-3.5 w-3.5 mx-auto text-slate-400 dark:text-slate-500" />
+              </th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100 dark:divide-white/[0.04]">

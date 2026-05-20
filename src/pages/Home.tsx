@@ -169,8 +169,7 @@ export default function Home() {
                     return (
                       <div className="relative flex items-center justify-between px-1">
                         {/* Team 1 */}
-                        <div className="flex flex-1 flex-col items-center">
-                          <div className={"text-3xl font-black mb-2 " + (totals[0] < 0 ? 'text-red-500' : 'text-slate-800 dark:text-white')}><CountUp value={totals[0]} /></div>
+                        <div className="flex flex-1 flex-col items-center gap-2">
                           <div className="flex items-center justify-center -space-x-2 space-x-reverse">
                             <div className="z-10 rounded-full ring-2 ring-white dark:ring-[#1a1915]">
                               <PlayerAvatar name={t1p1} size="sm" />
@@ -179,34 +178,40 @@ export default function Home() {
                               <PlayerAvatar name={t1p2} size="sm" />
                             </div>
                           </div>
-                          <div className="mt-1.5 text-[10px] font-bold text-slate-500 dark:text-slate-400 truncate w-full text-center">
+                          <div className="text-[10px] font-black text-slate-500 dark:text-slate-400 truncate w-full text-center max-w-[85px]">
                             {m.players[0]}
+                          </div>
+                          <div className={`mt-0.5 px-3 py-1.5 rounded-2xl text-lg font-black leading-none shadow-sm transition-all border ${
+                            totals[0] < 0 
+                              ? 'bg-red-500/10 text-red-500 border-red-500/20 dark:bg-red-500/20' 
+                              : 'bg-slate-50 text-slate-800 border-slate-200/50 dark:bg-white/[0.03] dark:text-white dark:border-white/[0.05]'
+                          }`}>
+                            <CountUp value={totals[0]} />
                           </div>
                         </div>
                         
                         {/* Divider + Score Diff */}
-                        <div className="relative mx-2 flex flex-col items-center">
-                          <div className="h-16 w-[1px] bg-black/5 dark:bg-white/10" />
+                        <div className="relative mx-3 flex flex-col items-center">
+                          <div className="h-20 w-[1px] bg-black/5 dark:bg-white/10" />
                           {m.rounds.length > 0 && (
                             <div
                               className={
-                                'absolute top-1/2 -translate-y-1/2 flex flex-col items-center justify-center rounded-lg border-2 px-1.5 py-0.5 shadow-md backdrop-blur-sm min-w-[2rem] ' +
+                                'absolute top-1/2 -translate-y-1/2 flex flex-col items-center justify-center rounded-full border px-2.5 py-1.5 shadow-md backdrop-blur-md min-w-[2.25rem] transition-all ' +
                                 (scoreDiff >= 200
-                                  ? 'border-red-400 bg-red-500/90 text-white'
+                                  ? 'border-red-500/30 bg-red-500/95 text-white'
                                   : scoreDiff >= 100
-                                    ? 'border-amber-400 bg-amber-500/90 text-white'
-                                    : 'border-slate-200 bg-white/95 text-slate-600 dark:border-white/15 dark:bg-[#1a1915]/95 dark:text-slate-300')
+                                    ? 'border-amber-500/30 bg-amber-500/95 text-white'
+                                    : 'border-slate-200/60 bg-white/95 text-slate-600 dark:border-white/10 dark:bg-[#1a1915]/95 dark:text-slate-300')
                               }
                             >
-                              <span className="text-[7px] font-bold uppercase leading-none opacity-70">{language === 'en' ? 'DIFF' : 'فرق'}</span>
-                              <span className="text-xs font-black leading-tight">{scoreDiff}</span>
+                              <span className="text-[7px] font-black uppercase tracking-wider leading-none opacity-85">{language === 'en' ? 'DIFF' : 'فرق'}</span>
+                              <span className="text-[11px] font-black leading-tight mt-0.5">{scoreDiff}</span>
                             </div>
                           )}
                         </div>
                         
                         {/* Team 2 */}
-                        <div className="flex flex-1 flex-col items-center">
-                          <div className={"text-3xl font-black mb-2 " + (totals[1] < 0 ? 'text-red-500' : 'text-slate-800 dark:text-white')}><CountUp value={totals[1]} /></div>
+                        <div className="flex flex-1 flex-col items-center gap-2">
                           <div className="flex items-center justify-center -space-x-2 space-x-reverse">
                             <div className="z-10 rounded-full ring-2 ring-white dark:ring-[#1a1915]">
                               <PlayerAvatar name={t2p1} size="sm" />
@@ -215,21 +220,34 @@ export default function Home() {
                               <PlayerAvatar name={t2p2} size="sm" />
                             </div>
                           </div>
-                          <div className="mt-1.5 text-[10px] font-bold text-slate-500 dark:text-slate-400 truncate w-full text-center">
+                          <div className="text-[10px] font-black text-slate-500 dark:text-slate-400 truncate w-full text-center max-w-[85px]">
                             {m.players[1]}
+                          </div>
+                          <div className={`mt-0.5 px-3 py-1.5 rounded-2xl text-lg font-black leading-none shadow-sm transition-all border ${
+                            totals[1] < 0 
+                              ? 'bg-red-500/10 text-red-500 border-red-500/20 dark:bg-red-500/20' 
+                              : 'bg-slate-50 text-slate-800 border-slate-200/50 dark:bg-white/[0.03] dark:text-white dark:border-white/[0.05]'
+                          }`}>
+                            <CountUp value={totals[1]} />
                           </div>
                         </div>
                       </div>
                     );
                   })() : (
                     // Individual layout (Solo, Likha, etc)
-                    <div className="flex items-center justify-between gap-1">
+                    <div className="flex items-center justify-between gap-2 px-1">
                       {totals.map((tot, idx) => (
-                        <div key={idx} className="flex flex-1 flex-col items-center">
-                          <div className={"text-xl font-black mb-2 " + (tot < 0 ? 'text-red-500' : 'text-slate-800 dark:text-white')}><CountUp value={tot} /></div>
+                        <div key={idx} className="flex flex-1 flex-col items-center gap-2">
                           <PlayerAvatar name={m.players[idx]} size="sm" />
-                          <div className="mt-1.5 text-[10px] font-bold text-slate-500 dark:text-slate-400 truncate w-full text-center">
+                          <div className="text-[10px] font-black text-slate-500 dark:text-slate-400 truncate w-full text-center max-w-[70px]">
                             {m.players[idx]}
+                          </div>
+                          <div className={`mt-0.5 px-2.5 py-1.5 rounded-2xl text-sm font-black leading-none shadow-sm transition-all border ${
+                            tot < 0 
+                              ? 'bg-red-500/10 text-red-500 border-red-500/20 dark:bg-red-500/20' 
+                              : 'bg-slate-50 text-slate-800 border-slate-200/50 dark:bg-white/[0.03] dark:text-white dark:border-white/[0.05]'
+                          }`}>
+                            <CountUp value={tot} />
                           </div>
                         </div>
                       ))}
@@ -301,13 +319,28 @@ export default function Home() {
             <button
               key={g}
               onClick={() => navigate(`/new/${g}`)}
-              className="group flex min-h-28 w-full flex-col items-stretch justify-between overflow-hidden rounded-2xl border border-black/5 bg-white text-slate-800 shadow-sm transition-all hover:bg-slate-50 hover:shadow-md hover:-translate-y-0.5 active:scale-[0.98] dark:border-white/10 dark:bg-white/5 dark:text-white dark:hover:bg-white/10"
+              className="group relative flex w-full flex-col items-stretch overflow-hidden rounded-[1.5rem] border border-white/[0.08] bg-white shadow-md shadow-black/8 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-black/14 active:scale-[0.96] dark:bg-[#1c1b18]"
             >
-              <div className={'flex h-20 w-full shrink-0 items-center justify-center overflow-hidden rounded-t-2xl bg-gradient-to-br text-white shadow-inner ' + GRADIENTS[g]}>
-                <GameArt game={g} label={gameText[language].labels[g]} />
+              {/* Image / Icon Panel */}
+              <div className={'relative flex h-24 w-full shrink-0 items-center justify-center overflow-hidden bg-gradient-to-br text-white ' + GRADIENTS[g]}>
+                {/* Shimmer overlay */}
+                <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/10 to-white/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                {/* Inner glow bottom */}
+                <div className="absolute bottom-0 inset-x-0 h-8 bg-gradient-to-t from-black/20 to-transparent" />
+                <div className="relative z-10 drop-shadow-lg scale-110 group-hover:scale-125 transition-transform duration-300">
+                  <GameArt game={g} label={gameText[language].labels[g]} />
+                </div>
               </div>
 
-              <span className="flex min-h-10 items-center justify-center px-2 py-2 text-center text-sm font-extrabold leading-tight">{gameText[language].labels[g]}</span>
+              {/* Label */}
+              <div className="flex items-center justify-center px-2 py-3">
+                <span className="text-center text-[13px] font-black leading-tight text-slate-800 dark:text-slate-100">
+                  {gameText[language].labels[g]}
+                </span>
+              </div>
+
+              {/* Bottom accent line matching gradient */}
+              <div className={'absolute bottom-0 inset-x-0 h-[2.5px] bg-gradient-to-r opacity-0 group-hover:opacity-100 transition-opacity duration-300 ' + GRADIENTS[g]} />
             </button>
           ))}
         </div>

@@ -442,103 +442,183 @@ export default function HandGame({ variant }: Props) {
 
                     <div className="grid grid-cols-2 gap-4">
                       {/* Player 1 of Losing Team */}
-                      <div className="flex flex-col gap-2">
+                      <div className="flex flex-col gap-3">
                         <div className="truncate px-1 text-center text-xs font-bold text-slate-600 dark:text-slate-300 flex items-center justify-center gap-1.5">
                           <PlayerAvatar name={originalNames[teamIdx]} size="sm" className="h-5 w-5 ring-1 ring-slate-200 dark:ring-white/10" />
                           <span className="truncate max-w-[5rem]">{originalNames[teamIdx]}</span>
                         </div>
-                        <input
-                          type="number"
-                          inputMode="numeric"
-                          min={0}
-                          className="w-full h-12 text-center text-lg font-black placeholder:text-slate-300 dark:placeholder:text-slate-700 bg-white/70 dark:bg-[#1a1915]/60 border-2 border-slate-200/80 dark:border-white/5 rounded-2xl outline-none focus:border-red-500 focus:ring-4 focus:ring-red-500/10 dark:focus:ring-red-500/20 transition-all duration-200"
-                          placeholder="0"
-                          value={loserCards[teamIdx] ?? ''}
-                          onChange={(e) => {
-                            const next = [...loserCards];
-                            next[teamIdx] = e.target.value === '' ? '' : String(Math.max(0, Number(e.target.value) || 0));
-                            setLoserCards(next);
-                          }}
-                        />
-                        {/* Increment Shortcuts */}
-                        <div className="flex justify-center gap-1">
-                          {[10, 20, 50].map((inc) => (
-                            <button
-                              key={inc}
-                              type="button"
-                              className="flex-1 inline-flex h-6 items-center justify-center rounded-lg border border-slate-200/80 bg-white text-[10px] font-black text-slate-500 shadow-sm transition hover:bg-slate-50 active:scale-95 dark:border-white/[0.04] dark:bg-white/[0.02] dark:text-slate-400 dark:hover:bg-white/10"
-                              onClick={() => {
-                                const next = [...loserCards];
-                                const currentVal = Number(next[teamIdx]) || 0;
-                                next[teamIdx] = String(currentVal + inc);
-                                setLoserCards(next);
-                              }}
-                            >
-                              +{inc}
-                            </button>
-                          ))}
+                        
+                        {/* Segmented Control */}
+                        <div className="grid grid-cols-2 gap-0.5 rounded-xl bg-slate-200/60 p-0.5 dark:bg-white/5 text-[9px] font-black">
                           <button
                             type="button"
-                            className="inline-flex h-6 w-6 items-center justify-center rounded-lg border border-red-200/50 bg-red-50/50 text-[10px] font-black text-red-500 shadow-sm transition hover:bg-red-50 active:scale-95 dark:border-red-500/10 dark:bg-red-500/5 dark:text-red-400"
                             onClick={() => {
                               const next = [...loserCards];
                               next[teamIdx] = '';
                               setLoserCards(next);
                             }}
+                            className={`rounded-lg py-1 px-1 transition text-center ${loserCards[teamIdx] === '' ? 'bg-white text-slate-800 shadow-sm dark:bg-[#201f1b] dark:text-slate-100' : 'text-slate-400 dark:text-slate-500'}`}
                           >
-                            ×
+                            {en ? 'Not Open' : 'لم ينزل'}
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const next = [...loserCards];
+                              if (next[teamIdx] === '') next[teamIdx] = '0';
+                              setLoserCards(next);
+                            }}
+                            className={`rounded-lg py-1 px-1 transition text-center ${loserCards[teamIdx] !== '' ? 'bg-white text-slate-800 shadow-sm dark:bg-[#201f1b] dark:text-slate-100' : 'text-slate-400 dark:text-slate-500'}`}
+                          >
+                            {en ? 'Opened' : 'نزل'}
                           </button>
                         </div>
+
+                        {loserCards[teamIdx] === '' ? (
+                          <div className="flex flex-col items-center justify-center h-20 rounded-2xl border border-red-500/10 bg-red-500/5 dark:bg-red-500/10 p-2 text-center select-none animate-in fade-in duration-200">
+                            <span className="text-[9px] font-black text-red-500 dark:text-red-400 leading-tight uppercase">
+                              {en ? 'Auto Penalty' : 'عقوبة تلقائية'}
+                            </span>
+                            <span className="text-base font-black text-red-600 dark:text-red-400 mt-0.5">
+                              +{handKindDefaults[kind]}
+                            </span>
+                          </div>
+                        ) : (
+                          <div className="flex flex-col gap-1.5 animate-in fade-in duration-200">
+                            <input
+                              type="number"
+                              inputMode="numeric"
+                              min={0}
+                              className="w-full h-10 text-center text-base font-black placeholder:text-slate-300 dark:placeholder:text-slate-700 bg-white/75 dark:bg-[#1a1915]/60 border border-slate-200 dark:border-white/5 rounded-xl outline-none focus:border-red-500 focus:ring-4 focus:ring-red-500/10 dark:focus:ring-red-500/20 transition-all duration-200"
+                              placeholder="0"
+                              value={loserCards[teamIdx] ?? ''}
+                              onChange={(e) => {
+                                const next = [...loserCards];
+                                next[teamIdx] = e.target.value === '' ? '0' : String(Math.max(0, Number(e.target.value) || 0));
+                                setLoserCards(next);
+                              }}
+                            />
+                            {/* Shortcuts */}
+                            <div className="flex justify-center gap-1">
+                              {[10, 20, 50].map((inc) => (
+                                <button
+                                  key={inc}
+                                  type="button"
+                                  className="flex-1 inline-flex h-6 items-center justify-center rounded-lg border border-slate-200/80 bg-white text-[9px] font-black text-slate-500 shadow-sm transition hover:bg-slate-50 active:scale-95 dark:border-white/[0.04] dark:bg-white/[0.02] dark:text-slate-400"
+                                  onClick={() => {
+                                    const next = [...loserCards];
+                                    const currentVal = Number(next[teamIdx]) || 0;
+                                    next[teamIdx] = String(currentVal + inc);
+                                    setLoserCards(next);
+                                  }}
+                                >
+                                  +{inc}
+                                </button>
+                              ))}
+                              <button
+                                type="button"
+                                className="inline-flex h-6 w-6 items-center justify-center rounded-lg border border-red-200/50 bg-red-50/50 text-[9px] font-black text-red-500 shadow-sm transition hover:bg-red-50 active:scale-95 dark:border-red-500/10 dark:bg-red-500/5 dark:text-red-400"
+                                onClick={() => {
+                                  const next = [...loserCards];
+                                  next[teamIdx] = '0';
+                                  setLoserCards(next);
+                                }}
+                              >
+                                ×
+                              </button>
+                            </div>
+                          </div>
+                        )}
                       </div>
                       
                       {/* Player 2 of Losing Team */}
-                      <div className="flex flex-col gap-2">
+                      <div className="flex flex-col gap-3">
                         <div className="truncate px-1 text-center text-xs font-bold text-slate-600 dark:text-slate-300 flex items-center justify-center gap-1.5">
                           <PlayerAvatar name={originalNames[teamIdx + 2]} size="sm" className="h-5 w-5 ring-1 ring-slate-200 dark:ring-white/10" />
                           <span className="truncate max-w-[5rem]">{originalNames[teamIdx + 2]}</span>
                         </div>
-                        <input
-                          type="number"
-                          inputMode="numeric"
-                          min={0}
-                          className="w-full h-12 text-center text-lg font-black placeholder:text-slate-300 dark:placeholder:text-slate-700 bg-white/70 dark:bg-[#1a1915]/60 border-2 border-slate-200/80 dark:border-white/5 rounded-2xl outline-none focus:border-red-500 focus:ring-4 focus:ring-red-500/10 dark:focus:ring-red-500/20 transition-all duration-200"
-                          placeholder="0"
-                          value={loserCards[teamIdx + 2] ?? ''}
-                          onChange={(e) => {
-                            const next = [...loserCards];
-                            next[teamIdx + 2] = e.target.value === '' ? '' : String(Math.max(0, Number(e.target.value) || 0));
-                            setLoserCards(next);
-                          }}
-                        />
-                        {/* Increment Shortcuts */}
-                        <div className="flex justify-center gap-1">
-                          {[10, 20, 50].map((inc) => (
-                            <button
-                              key={inc}
-                              type="button"
-                              className="flex-1 inline-flex h-6 items-center justify-center rounded-lg border border-slate-200/80 bg-white text-[10px] font-black text-slate-500 shadow-sm transition hover:bg-slate-50 active:scale-95 dark:border-white/[0.04] dark:bg-white/[0.02] dark:text-slate-400 dark:hover:bg-white/10"
-                              onClick={() => {
-                                const next = [...loserCards];
-                                const currentVal = Number(next[teamIdx + 2]) || 0;
-                                next[teamIdx + 2] = String(currentVal + inc);
-                                setLoserCards(next);
-                              }}
-                            >
-                              +{inc}
-                            </button>
-                          ))}
+
+                        {/* Segmented Control */}
+                        <div className="grid grid-cols-2 gap-0.5 rounded-xl bg-slate-200/60 p-0.5 dark:bg-white/5 text-[9px] font-black">
                           <button
                             type="button"
-                            className="inline-flex h-6 w-6 items-center justify-center rounded-lg border border-red-200/50 bg-red-50/50 text-[10px] font-black text-red-500 shadow-sm transition hover:bg-red-50 active:scale-95 dark:border-red-500/10 dark:bg-red-500/5 dark:text-red-400"
                             onClick={() => {
                               const next = [...loserCards];
                               next[teamIdx + 2] = '';
                               setLoserCards(next);
                             }}
+                            className={`rounded-lg py-1 px-1 transition text-center ${loserCards[teamIdx + 2] === '' ? 'bg-white text-slate-800 shadow-sm dark:bg-[#201f1b] dark:text-slate-100' : 'text-slate-400 dark:text-slate-500'}`}
                           >
-                            ×
+                            {en ? 'Not Open' : 'لم ينزل'}
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const next = [...loserCards];
+                              if (next[teamIdx + 2] === '') next[teamIdx + 2] = '0';
+                              setLoserCards(next);
+                            }}
+                            className={`rounded-lg py-1 px-1 transition text-center ${loserCards[teamIdx + 2] !== '' ? 'bg-white text-slate-800 shadow-sm dark:bg-[#201f1b] dark:text-slate-100' : 'text-slate-400 dark:text-slate-500'}`}
+                          >
+                            {en ? 'Opened' : 'نزل'}
                           </button>
                         </div>
+
+                        {loserCards[teamIdx + 2] === '' ? (
+                          <div className="flex flex-col items-center justify-center h-20 rounded-2xl border border-red-500/10 bg-red-500/5 dark:bg-red-500/10 p-2 text-center select-none animate-in fade-in duration-200">
+                            <span className="text-[9px] font-black text-red-500 dark:text-red-400 leading-tight uppercase">
+                              {en ? 'Auto Penalty' : 'عقوبة تلقائية'}
+                            </span>
+                            <span className="text-base font-black text-red-600 dark:text-red-400 mt-0.5">
+                              +{handKindDefaults[kind]}
+                            </span>
+                          </div>
+                        ) : (
+                          <div className="flex flex-col gap-1.5 animate-in fade-in duration-200">
+                            <input
+                              type="number"
+                              inputMode="numeric"
+                              min={0}
+                              className="w-full h-10 text-center text-base font-black placeholder:text-slate-300 dark:placeholder:text-slate-700 bg-white/75 dark:bg-[#1a1915]/60 border border-slate-200 dark:border-white/5 rounded-xl outline-none focus:border-red-500 focus:ring-4 focus:ring-red-500/10 dark:focus:ring-red-500/20 transition-all duration-200"
+                              placeholder="0"
+                              value={loserCards[teamIdx + 2] ?? ''}
+                              onChange={(e) => {
+                                const next = [...loserCards];
+                                next[teamIdx + 2] = e.target.value === '' ? '0' : String(Math.max(0, Number(e.target.value) || 0));
+                                setLoserCards(next);
+                              }}
+                            />
+                            {/* Shortcuts */}
+                            <div className="flex justify-center gap-1">
+                              {[10, 20, 50].map((inc) => (
+                                <button
+                                  key={inc}
+                                  type="button"
+                                  className="flex-1 inline-flex h-6 items-center justify-center rounded-lg border border-slate-200/80 bg-white text-[9px] font-black text-slate-500 shadow-sm transition hover:bg-slate-50 active:scale-95 dark:border-white/[0.04] dark:bg-white/[0.02] dark:text-slate-400"
+                                  onClick={() => {
+                                    const next = [...loserCards];
+                                    const currentVal = Number(next[teamIdx + 2]) || 0;
+                                    next[teamIdx + 2] = String(currentVal + inc);
+                                    setLoserCards(next);
+                                  }}
+                                >
+                                  +{inc}
+                                </button>
+                              ))}
+                              <button
+                                type="button"
+                                className="inline-flex h-6 w-6 items-center justify-center rounded-lg border border-red-200/50 bg-red-50/50 text-[9px] font-black text-red-500 shadow-sm transition hover:bg-red-50 active:scale-95 dark:border-red-500/10 dark:bg-red-500/5 dark:text-red-400"
+                                onClick={() => {
+                                  const next = [...loserCards];
+                                  next[teamIdx + 2] = '0';
+                                  setLoserCards(next);
+                                }}
+                              >
+                                ×
+                              </button>
+                            </div>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -550,48 +630,88 @@ export default function HandGame({ variant }: Props) {
                       <PlayerAvatar name={p} size="sm" className="h-5 w-5 ring-1 ring-slate-200 dark:ring-white/10" />
                       <span className="truncate max-w-[5rem]">{p}</span>
                     </div>
-                    <input
-                      type="number"
-                      inputMode="numeric"
-                      min={0}
-                      className="w-full h-12 text-center text-lg font-black placeholder:text-slate-300 dark:placeholder:text-slate-700 bg-white/70 dark:bg-[#1a1915]/60 border-2 border-slate-200/80 dark:border-white/5 rounded-2xl outline-none focus:border-red-500 focus:ring-4 focus:ring-red-500/10 dark:focus:ring-red-500/20 transition-all duration-200"
-                      placeholder="0"
-                      value={loserCards[i] ?? ''}
-                      onChange={(e) => {
-                        const next = [...loserCards];
-                        next[i] = e.target.value === '' ? '' : String(Math.max(0, Number(e.target.value) || 0));
-                        setLoserCards(next);
-                      }}
-                    />
-                    {/* Increment Shortcuts */}
-                    <div className="flex justify-center gap-1">
-                      {[10, 20, 50].map((inc) => (
-                        <button
-                          key={inc}
-                          type="button"
-                          className="flex-1 inline-flex h-6 items-center justify-center rounded-lg border border-slate-200/80 bg-white text-[10px] font-black text-slate-500 shadow-sm transition hover:bg-slate-50 active:scale-95 dark:border-white/[0.04] dark:bg-white/[0.02] dark:text-slate-400 dark:hover:bg-white/10"
-                          onClick={() => {
-                            const next = [...loserCards];
-                            const currentVal = Number(next[i]) || 0;
-                            next[i] = String(currentVal + inc);
-                            setLoserCards(next);
-                          }}
-                        >
-                          +{inc}
-                        </button>
-                      ))}
+
+                    {/* Segmented Control */}
+                    <div className="grid grid-cols-2 gap-0.5 rounded-xl bg-slate-200/60 p-0.5 dark:bg-white/5 text-[9px] font-black">
                       <button
                         type="button"
-                        className="inline-flex h-6 w-6 items-center justify-center rounded-lg border border-red-200/50 bg-red-50/50 text-[10px] font-black text-red-500 shadow-sm transition hover:bg-red-50 active:scale-95 dark:border-red-500/10 dark:bg-red-500/5 dark:text-red-400"
                         onClick={() => {
                           const next = [...loserCards];
                           next[i] = '';
                           setLoserCards(next);
                         }}
+                        className={`rounded-lg py-1 px-1 transition text-center ${loserCards[i] === '' ? 'bg-white text-slate-800 shadow-sm dark:bg-[#201f1b] dark:text-slate-100' : 'text-slate-400 dark:text-slate-500'}`}
                       >
-                        ×
+                        {en ? 'Not Open' : 'لم ينزل'}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const next = [...loserCards];
+                          if (next[i] === '') next[i] = '0';
+                          setLoserCards(next);
+                        }}
+                        className={`rounded-lg py-1 px-1 transition text-center ${loserCards[i] !== '' ? 'bg-white text-slate-800 shadow-sm dark:bg-[#201f1b] dark:text-slate-100' : 'text-slate-400 dark:text-slate-500'}`}
+                      >
+                        {en ? 'Opened' : 'نزل'}
                       </button>
                     </div>
+
+                    {loserCards[i] === '' ? (
+                      <div className="flex flex-col items-center justify-center h-20 rounded-2xl border border-red-500/10 bg-red-500/5 dark:bg-red-500/10 p-2 text-center select-none animate-in fade-in duration-200">
+                        <span className="text-[9px] font-black text-red-500 dark:text-red-400 leading-tight uppercase">
+                          {en ? 'Auto Penalty' : 'عقوبة تلقائية'}
+                        </span>
+                        <span className="text-base font-black text-red-600 dark:text-red-400 mt-0.5">
+                          +{handKindDefaults[kind]}
+                        </span>
+                      </div>
+                    ) : (
+                      <div className="flex flex-col gap-1.5 animate-in fade-in duration-200">
+                        <input
+                          type="number"
+                          inputMode="numeric"
+                          min={0}
+                          className="w-full h-10 text-center text-base font-black placeholder:text-slate-300 dark:placeholder:text-slate-700 bg-white/75 dark:bg-[#1a1915]/60 border border-slate-200 dark:border-white/5 rounded-xl outline-none focus:border-red-500 focus:ring-4 focus:ring-red-500/10 dark:focus:ring-red-500/20 transition-all duration-200"
+                          placeholder="0"
+                          value={loserCards[i] ?? ''}
+                          onChange={(e) => {
+                            const next = [...loserCards];
+                            next[i] = e.target.value === '' ? '0' : String(Math.max(0, Number(e.target.value) || 0));
+                            setLoserCards(next);
+                          }}
+                        />
+                        {/* Shortcuts */}
+                        <div className="flex justify-center gap-1">
+                          {[10, 20, 50].map((inc) => (
+                            <button
+                              key={inc}
+                              type="button"
+                              className="flex-1 inline-flex h-6 items-center justify-center rounded-lg border border-slate-200/80 bg-white text-[9px] font-black text-slate-500 shadow-sm transition hover:bg-slate-50 active:scale-95 dark:border-white/[0.04] dark:bg-white/[0.02] dark:text-slate-400"
+                              onClick={() => {
+                                const next = [...loserCards];
+                                const currentVal = Number(next[i]) || 0;
+                                next[i] = String(currentVal + inc);
+                                setLoserCards(next);
+                              }}
+                            >
+                              +{inc}
+                            </button>
+                          ))}
+                          <button
+                            type="button"
+                            className="inline-flex h-6 w-6 items-center justify-center rounded-lg border border-red-200/50 bg-red-50/50 text-[9px] font-black text-red-500 shadow-sm transition hover:bg-red-50 active:scale-95 dark:border-red-500/10 dark:bg-red-500/5 dark:text-red-400"
+                            onClick={() => {
+                              const next = [...loserCards];
+                              next[i] = '0';
+                              setLoserCards(next);
+                            }}
+                          >
+                            ×
+                          </button>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 ))
               )}

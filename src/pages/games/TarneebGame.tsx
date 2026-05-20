@@ -221,11 +221,35 @@ function RegularRoundForm({
       <div className="grid grid-cols-2 gap-3">
         <div>
           <label className="label">{en ? 'Bid' : 'الطلب'}</label>
-          <select className="input" value={bidTricks} onChange={(e) => setBidTricks(Number(e.target.value))}>
-            {[7, 8, 9, 10, 11, 12, 13].map((value) => (
-              <option key={value} value={value}>{value}</option>
-            ))}
-          </select>
+          <div className="flex items-center justify-center gap-1 mt-1">
+            <button
+              type="button"
+              onClick={() => { if (bidTricks > 7) setBidTricks(bidTricks - 1); }}
+              className={`flex h-11 w-10 items-center justify-center rounded-l-2xl text-lg font-black transition-all active:scale-90 ${
+                bidTricks <= 7
+                  ? 'bg-black/5 dark:bg-white/5 text-slate-300 dark:text-slate-600 cursor-not-allowed'
+                  : 'bg-black/10 dark:bg-white/10 text-slate-700 dark:text-white hover:bg-black/15 dark:hover:bg-white/15'
+              }`}
+              disabled={bidTricks <= 7}
+            >
+              −
+            </button>
+            <div className="flex h-11 w-12 items-center justify-center bg-emerald-500/15 dark:bg-emerald-500/20 text-xl font-black text-emerald-700 dark:text-emerald-400 border-y border-emerald-500/20">
+              {bidTricks}
+            </div>
+            <button
+              type="button"
+              onClick={() => { if (bidTricks < 13) setBidTricks(bidTricks + 1); }}
+              className={`flex h-11 w-10 items-center justify-center rounded-r-2xl text-lg font-black transition-all active:scale-90 ${
+                bidTricks >= 13
+                  ? 'bg-black/5 dark:bg-white/5 text-slate-300 dark:text-slate-600 cursor-not-allowed'
+                  : 'bg-black/10 dark:bg-white/10 text-slate-700 dark:text-white hover:bg-black/15 dark:hover:bg-white/15'
+              }`}
+              disabled={bidTricks >= 13}
+            >
+              +
+            </button>
+          </div>
         </div>
         <div>
           <label className="label">{en ? 'Tricks won' : 'لمات الفريق'}</label>
@@ -291,27 +315,58 @@ function Tarneeb400RoundForm({
         </div>
         {players.map((player, i) => {
           const minBid = tarneeb400MinBid(totals[i]);
+          const maxBid = 13;
+          const currentBid = Number(bids[i]) || minBid;
           return (
-            <div key={player} className="grid grid-cols-[1fr_5rem_5.5rem] items-center gap-2 border-b border-slate-200 px-3 py-2 last:border-b-0 dark:border-white/10">
+            <div key={player} className="grid grid-cols-[1fr_5rem_5.5rem] items-center gap-2 border-b border-slate-200 px-3 py-2.5 last:border-b-0 dark:border-white/10">
               <div className="min-w-0">
                 <div className="truncate text-sm font-extrabold text-slate-800 dark:text-slate-100">{player}</div>
                 <div className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">
                   {en ? 'Score' : 'النقاط'}: {totals[i] ?? 0}
                 </div>
               </div>
-              <select
-                className="input h-11 px-2 text-center text-base font-bold"
-                value={bids[i]}
-                onChange={(e) => {
-                  const next = [...bids];
-                  next[i] = e.target.value;
-                  setBids(next);
-                }}
-              >
-                {Array.from({ length: 14 - minBid }, (_, idx) => minBid + idx).map((value) => (
-                  <option key={value} value={value}>{value}</option>
-                ))}
-              </select>
+              {/* Bid Stepper */}
+              <div className="flex items-center justify-center gap-0.5">
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (currentBid > minBid) {
+                      const next = [...bids];
+                      next[i] = String(currentBid - 1);
+                      setBids(next);
+                    }
+                  }}
+                  className={`flex h-9 w-7 items-center justify-center rounded-l-xl text-sm font-black transition-all active:scale-90 ${
+                    currentBid <= minBid
+                      ? 'bg-black/5 dark:bg-white/5 text-slate-300 dark:text-slate-600 cursor-not-allowed'
+                      : 'bg-black/10 dark:bg-white/10 text-slate-700 dark:text-white hover:bg-black/15 dark:hover:bg-white/15'
+                  }`}
+                  disabled={currentBid <= minBid}
+                >
+                  −
+                </button>
+                <div className="flex h-9 w-9 items-center justify-center bg-emerald-500/15 dark:bg-emerald-500/20 text-base font-black text-emerald-700 dark:text-emerald-400 border-y border-emerald-500/20">
+                  {currentBid}
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (currentBid < maxBid) {
+                      const next = [...bids];
+                      next[i] = String(currentBid + 1);
+                      setBids(next);
+                    }
+                  }}
+                  className={`flex h-9 w-7 items-center justify-center rounded-r-xl text-sm font-black transition-all active:scale-90 ${
+                    currentBid >= maxBid
+                      ? 'bg-black/5 dark:bg-white/5 text-slate-300 dark:text-slate-600 cursor-not-allowed'
+                      : 'bg-black/10 dark:bg-white/10 text-slate-700 dark:text-white hover:bg-black/15 dark:hover:bg-white/15'
+                  }`}
+                  disabled={currentBid >= maxBid}
+                >
+                  +
+                </button>
+              </div>
               <input
                 type="number"
                 inputMode="numeric"

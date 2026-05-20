@@ -96,8 +96,13 @@ export default function Home() {
 
   return (
     <Layout title={t.appName}>
-      <section className="hero-card mb-5 overflow-hidden rounded-3xl p-4 text-white shadow-sm sm:mb-6 sm:p-5">
-        <div className="flex items-start justify-between gap-4">
+      <section className="hero-card mb-5 overflow-hidden rounded-3xl p-4 text-white shadow-sm sm:mb-6 sm:p-5 relative">
+        {/* Floating card suit decorations */}
+        <div className="absolute -right-4 -top-4 text-[80px] font-black text-white/[0.04] pointer-events-none select-none rotate-12">♠</div>
+        <div className="absolute -left-2 -bottom-3 text-[60px] font-black text-white/[0.04] pointer-events-none select-none -rotate-12">♥</div>
+        <div className="absolute right-12 bottom-1 text-[40px] font-black text-white/[0.04] pointer-events-none select-none rotate-6">♦</div>
+
+        <div className="relative flex items-start justify-between gap-4">
           <div>
             <div className="mb-2 inline-flex items-center gap-1.5 rounded-full bg-white/15 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white backdrop-blur">
               <Sparkles className="h-3 w-3" /> {t.appName}
@@ -105,8 +110,8 @@ export default function Home() {
             <h2 className="text-xl font-black tracking-tight sm:text-2xl">{t.professionalTitle}</h2>
             <p className="mt-1 max-w-md text-xs leading-relaxed text-white/80">{t.professionalSubtitle}</p>
           </div>
-          <div className="flex shrink-0 flex-col items-center justify-center rounded-2xl bg-white/10 px-3 py-2 text-center backdrop-blur border border-white/10">
-            <div className="text-xl font-black leading-none"><CountUp value={matches.length} /></div>
+          <div className="flex shrink-0 flex-col items-center justify-center rounded-2xl bg-white/10 px-4 py-3 text-center backdrop-blur border border-white/10 shadow-inner">
+            <div className="text-2xl font-black leading-none"><CountUp value={matches.length} /></div>
             <div className="mt-1 text-[9px] font-bold uppercase tracking-wider text-white/70">{t.matches}</div>
           </div>
         </div>
@@ -127,14 +132,14 @@ export default function Home() {
                 <Link
                   key={m.id}
                   to={`/match/${m.id}/${m.kind}`}
-                  className="group relative block overflow-hidden rounded-3xl border border-black/5 dark:border-white/5 bg-white dark:bg-[#1a1915] p-4 shadow-sm transition-transform hover:-translate-y-1 hover:shadow-md"
+                  className={`group relative block overflow-hidden rounded-3xl border border-black/5 dark:border-white/5 bg-white dark:bg-[#1a1915] p-4 shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg`}
                 >
-                  {/* Top row: Date and Game Pill */}
+                  {/* Top row: Game Pill and Date */}
                   <div className="mb-4 flex items-center justify-between">
-                    <span className="text-[10px] font-semibold text-slate-500">{dateStr}</span>
-                    <span className={'rounded-full px-4 py-1 text-xs font-bold text-white bg-gradient-to-br shadow-inner ' + GRADIENTS[m.kind]}>
+                    <span className={'rounded-full px-4 py-1.5 text-xs font-bold text-white bg-gradient-to-br shadow-md ' + GRADIENTS[m.kind]}>
                       {gameText[language].labels[m.kind]}
                     </span>
+                    <span className="text-[10px] font-semibold text-slate-400">{dateStr}</span>
                   </div>
                   
                   {/* Scores and Players */}
@@ -296,7 +301,7 @@ export default function Home() {
             <button
               key={g}
               onClick={() => navigate(`/new/${g}`)}
-              className="group flex min-h-28 w-full flex-col items-stretch justify-between overflow-hidden rounded-2xl border border-black/5 bg-white text-slate-800 shadow-sm transition-colors hover:bg-slate-50 active:scale-[0.98] dark:border-white/10 dark:bg-white/5 dark:text-white dark:hover:bg-white/10"
+              className="group flex min-h-28 w-full flex-col items-stretch justify-between overflow-hidden rounded-2xl border border-black/5 bg-white text-slate-800 shadow-sm transition-all hover:bg-slate-50 hover:shadow-md hover:-translate-y-0.5 active:scale-[0.98] dark:border-white/10 dark:bg-white/5 dark:text-white dark:hover:bg-white/10"
             >
               <div className={'flex h-20 w-full shrink-0 items-center justify-center overflow-hidden rounded-t-2xl bg-gradient-to-br text-white shadow-inner ' + GRADIENTS[g]}>
                 <GameArt game={g} label={gameText[language].labels[g]} />

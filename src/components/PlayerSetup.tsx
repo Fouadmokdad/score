@@ -58,10 +58,10 @@ export function PlayerSetup({ count, initial, labels, onSubmit, submitLabel, ext
         {/* Player row */}
         <div
           className={
-            'flex items-center gap-3 rounded-2xl border px-3 py-2.5 transition-all duration-200 ' +
+            'flex items-center gap-3 rounded-2xl border px-3 py-2.5 transition-all duration-300 cursor-pointer ' +
             (isActive
-              ? 'border-[rgba(var(--accent),0.6)] bg-[rgba(var(--accent),0.05)] ring-2 ring-[rgba(var(--accent),0.2)] dark:bg-[rgba(var(--accent),0.05)]'
-              : 'border-slate-300/60 bg-white/60 dark:border-white/10 dark:bg-white/[0.03]')
+              ? 'border-[rgb(var(--accent))] bg-[rgba(var(--accent),0.08)] shadow-[0_0_15px_rgba(var(--accent),0.12)] ring-1 ring-[rgb(var(--accent))] dark:bg-[rgba(var(--accent),0.04)] dark:shadow-[0_0_20px_rgba(var(--accent),0.08)]'
+              : 'border-slate-200/80 bg-white/80 dark:border-white/[0.05] dark:bg-white/[0.02] hover:bg-slate-50 dark:hover:bg-white/[0.03] hover:border-slate-300 dark:hover:border-white/[0.08]')
           }
           onClick={() => setActiveSlot(index)}
         >
@@ -69,10 +69,10 @@ export function PlayerSetup({ count, initial, labels, onSubmit, submitLabel, ext
           <button
             type="button"
             className={
-              'inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border transition-all duration-200 ' +
+              'inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border transition-all duration-300 active:scale-95 ' +
               (isActive
-                ? 'border-[rgba(var(--accent),0.4)] text-[rgb(var(--accent))] hover:bg-[rgba(var(--accent),0.1)]'
-                : 'border-slate-300 text-slate-400 hover:border-[rgb(var(--accent))] hover:text-[rgb(var(--accent))] dark:border-slate-700')
+                ? 'border-[rgb(var(--accent))] bg-[rgba(var(--accent),0.12)] text-[rgb(var(--accent))] shadow-[0_2px_8px_rgba(var(--accent),0.08)]'
+                : 'border-slate-200 bg-slate-50/50 text-slate-400 hover:border-[rgb(var(--accent))] hover:text-[rgb(var(--accent))] hover:bg-[rgba(var(--accent),0.05)] dark:border-white/[0.08] dark:bg-white/[0.01] dark:text-slate-500 dark:hover:bg-white/[0.04]')
             }
             onClick={(e) => {
               e.stopPropagation();
@@ -81,7 +81,7 @@ export function PlayerSetup({ count, initial, labels, onSubmit, submitLabel, ext
             }}
             aria-label={t.savedPlayers}
           >
-            <Plus className="h-4 w-4" />
+            <Plus className={`h-4 w-4 transition-transform duration-300 ${pickerSlot === index ? 'rotate-45 text-red-500 dark:text-red-400' : ''}`} />
           </button>
 
           {/* Input */}
@@ -136,7 +136,7 @@ export function PlayerSetup({ count, initial, labels, onSubmit, submitLabel, ext
                     <button
                       key={player.name}
                       type="button"
-                      className="inline-flex max-w-full items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-xs font-semibold transition hover:border-[rgba(var(--accent),0.5)] hover:bg-[rgba(var(--accent),0.08)] dark:border-white/10 dark:bg-white/5 dark:hover:bg-white/10"
+                      className="group inline-flex max-w-full items-center gap-2 rounded-full border border-slate-200/80 bg-slate-50/50 dark:border-white/[0.05] dark:bg-white/[0.01] px-3.5 py-1.5 text-xs font-bold text-slate-700 dark:text-slate-300 transition-all duration-200 hover:border-[rgba(var(--accent),0.4)] hover:bg-[rgba(var(--accent),0.06)] hover:text-[rgb(var(--accent))] hover:scale-[1.02] active:scale-[0.98]"
                       onClick={() => setAt(index, player.name)}
                     >
                       <PlayerAvatar name={player.name} size="sm" />
@@ -159,20 +159,36 @@ export function PlayerSetup({ count, initial, labels, onSubmit, submitLabel, ext
       const team1 = [0, 2];
       const team2 = [1, 3];
       return (
-        <div className="space-y-5">
+        <div className="space-y-6">
           {/* Team 1 */}
-          <div className="space-y-3">
-            <h3 className="text-center text-sm font-bold text-slate-600 dark:text-slate-300">
-              {en ? 'Team 1' : 'الفريق الأول'}
-            </h3>
+          <div className="space-y-4">
+            <div className="flex items-center gap-3">
+              <div className="h-[1px] flex-1 bg-gradient-to-r from-transparent to-slate-200/80 dark:to-white/[0.06]" />
+              <h3 className="text-xs font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 flex items-center gap-1.5 shrink-0">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[rgb(var(--accent))] opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-[rgb(var(--accent))]"></span>
+                </span>
+                {en ? 'Team 1' : 'الفريق الأول'}
+              </h3>
+              <div className="h-[1px] flex-1 bg-gradient-to-l from-transparent to-slate-200/80 dark:to-white/[0.06]" />
+            </div>
             {team1.map((i) => renderPlayerRow(i))}
           </div>
 
           {/* Team 2 */}
-          <div className="space-y-3">
-            <h3 className="text-center text-sm font-bold text-slate-600 dark:text-slate-300">
-              {en ? 'Team 2' : 'الفريق الثاني'}
-            </h3>
+          <div className="space-y-4">
+            <div className="flex items-center gap-3">
+              <div className="h-[1px] flex-1 bg-gradient-to-r from-transparent to-slate-200/80 dark:to-white/[0.06]" />
+              <h3 className="text-xs font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 flex items-center gap-1.5 shrink-0">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[rgb(var(--accent))] opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-[rgb(var(--accent))]"></span>
+                </span>
+                {en ? 'Team 2' : 'الفريق الثاني'}
+              </h3>
+              <div className="h-[1px] flex-1 bg-gradient-to-l from-transparent to-slate-200/80 dark:to-white/[0.06]" />
+            </div>
             {team2.map((i) => renderPlayerRow(i))}
           </div>
         </div>
@@ -232,7 +248,7 @@ export function PlayerSetup({ count, initial, labels, onSubmit, submitLabel, ext
           </div>
         </div>
         {players.length === 0 ? (
-          <div className="rounded-2xl border border-dashed border-slate-300 p-4 text-center text-sm text-slate-500 dark:border-slate-700">
+          <div className="rounded-2xl border border-dashed border-slate-200 dark:border-white/[0.08] p-5 text-center text-xs text-slate-400 dark:text-slate-500 font-medium bg-slate-50/20 dark:bg-transparent">
             {t.noSavedPlayers}
           </div>
         ) : (
@@ -250,7 +266,7 @@ export function PlayerSetup({ count, initial, labels, onSubmit, submitLabel, ext
                 .map((player) => (
                   <button
                     key={player.name}
-                    className="group inline-flex max-w-full items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-semibold transition hover:border-[rgba(var(--accent),0.5)] hover:bg-[rgba(var(--accent),0.08)] dark:border-white/10 dark:bg-white/5 dark:hover:bg-white/10"
+                    className="group inline-flex max-w-full items-center gap-2 rounded-full border border-slate-200/80 bg-slate-50/50 dark:border-white/[0.05] dark:bg-white/[0.01] px-3.5 py-1.5 text-xs font-bold text-slate-700 dark:text-slate-300 transition-all duration-200 hover:border-[rgba(var(--accent),0.4)] hover:bg-[rgba(var(--accent),0.06)] hover:text-[rgb(var(--accent))] hover:scale-[1.02] active:scale-[0.98]"
                     onClick={() => setAt(activeSlot, player.name)}
                   >
                     <PlayerAvatar name={player.name} size="sm" />
